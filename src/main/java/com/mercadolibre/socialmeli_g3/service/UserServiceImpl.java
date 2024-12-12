@@ -1,15 +1,15 @@
 package com.mercadolibre.socialmeli_g3.service;
 
+import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements IUserService{
 
-    @Autowired
-    private IUserService userService;
+    private final IUserRepository userRepository;
 
-    public UserServiceImpl(IUserService userService) {
-        this.userService = userService;
+    public UserServiceImpl(IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 }
