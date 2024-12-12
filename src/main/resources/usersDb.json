@@ -1,0 +1,58 @@
+[
+  {
+    "userId": 1,
+    "userName": "vendedor1",
+    "followers": [
+      {
+        "userId": 2,
+        "userName": "usuario1"
+      },
+      {
+        "userId": 3,
+        "userName": "usuario2"
+      }
+    ],
+    "followed": [
+      {
+        "userId": 4,
+        "userName": "vendedor2"
+      },
+      {
+        "userId": 5,
+        "userName": "vendedor3"
+      }
+    ]
+  },
+  {
+    "userId": 2,
+    "userName": "usuario1",
+    "followers": [
+      {
+        "userId": 1,
+        "userName": "vendedor1"
+      }
+    ],
+    "followed": [
+      {
+        "userId": 1,
+        "userName": "vendedor1"
+      }
+    ]
+  },
+  {
+    "userId": 3,
+    "userName": "usuario2",
+    "followers": [
+      {
+        "userId": 1,
+        "userName": "vendedor1"
+      }
+    ],
+    "followed": [
+      {
+        "userId": 1,
+        "userName": "vendedor1"
+      }
+    ]
+  }
+]

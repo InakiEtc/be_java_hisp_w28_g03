@@ -1,0 +1,47 @@
+[
+  {
+    "postId": 201,
+    "userId": 1,
+    "date": "2023-08-01",
+    "product": {
+      "productId": 101,
+      "productName": "Silla Gamer",
+      "type": "Gamer",
+      "brand": "Racer",
+      "color": "Red & Black",
+      "notes": "Special Edition"
+    },
+    "category": 100,
+    "price": 1500.50
+  },
+  {
+    "postId": 202,
+    "userId": 1,
+    "date": "2023-08-02",
+    "product": {
+      "productId": 102,
+      "productName": "Teclado Mecánico",
+      "type": "Teclado",
+      "brand": "Logitech",
+      "color": "Black",
+      "notes": "RGB Backlit"
+    },
+    "category": 58,
+    "price": 250.00
+  },
+  {
+    "postId": 203,
+    "userId": 1,
+    "date": "2023-08-03",
+    "product": {
+      "productId": 103,
+      "productName": "Mouse Gamer",
+      "type": "Gamer",
+      "brand": "Razer",
+      "color": "Green",
+      "notes": "Wireless"
+    },
+    "category": 60,
+    "price": 120.00
+  }
+]
