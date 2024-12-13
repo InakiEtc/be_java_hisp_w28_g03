@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
@@ -31,5 +32,11 @@ public class UserRepositoryImpl implements IUserRepository{
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
 
         usersList = users;
+    }
+
+    @Override
+    public Optional<User> findUserById(int id) {
+        Optional<User> user = usersList.stream().filter(u->u.getUserId()==id).findFirst();
+        return user;
     }
 }
