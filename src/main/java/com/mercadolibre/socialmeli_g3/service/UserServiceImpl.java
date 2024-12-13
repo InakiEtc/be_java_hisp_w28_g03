@@ -3,7 +3,10 @@ package com.mercadolibre.socialmeli_g3.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.UserDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
+import com.mercadolibre.socialmeli_g3.exception.ConflictException;
 import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
@@ -14,7 +17,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements IUserService{
 
-    ObjectMapper mapper = new ObjectMapper();
     private final IUserRepository userRepository;
 
     public UserServiceImpl(IUserRepository userRepository) {
@@ -72,4 +74,29 @@ public class UserServiceImpl implements IUserService{
 
         userRepository.unfollow(user, userToUnfollow);
     }
+
+    @Override
+    public FollowDTO follow(int userId, int userIdToFollow) {
+        if (userId <= 0) {
+            throw new BadRequestException("El id del seguidor no es valido");
+        }
+        if(userIdToFollow <= 0) {
+            throw new BadRequestException("El id de usuario a seguir no es valido");
+        }
+
+        User user = userRepository.findUserById(userId);
+        if (user == null) throw new NotFoundException("El usuario no existe");
+        User userToFollow = userRepository.findUserById(userIdToFollow);
+        if (userToFollow == null) throw new NotFoundException("El usuario no existe");
+
+        if (userId == userIdToFollow) throw new InvalidOperationException("No puedes seguirte a ti mismo");
+
+        if (user.getFollowed().contains(userToFollow) || userToFollow.getFollowers().contains(user)) {
+            throw new ConflictException("El usuario ya esta en la lista de seguidos");
+        }
+
+        userRepository.follow(user, userToFollow);
+        return new FollowDTO(userId, userIdToFollow);
+    }
+
 }

@@ -8,4 +8,5 @@ public interface IUserRepository {
     User getFollowers(int userId);
     User findUserById(int userId);
     void unfollow(User user, User userToUnfollow);
+    User follow(User user, User userToFollow);
 }
