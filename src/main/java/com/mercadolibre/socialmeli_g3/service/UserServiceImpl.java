@@ -35,4 +35,8 @@ public class UserServiceImpl implements IUserService{
         return new FollowersListDTO(userFollowers.getUserId(), userFollowers.getUserName(), followersList);
     }
 
+    @Override
+    public void unfollow(int userId, int userIdToUnfollow) {
+        userRepository.unfollow(userId, userIdToUnfollow);
+    }
 }
