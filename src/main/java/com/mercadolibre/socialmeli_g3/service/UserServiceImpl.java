@@ -28,14 +28,11 @@ public class UserServiceImpl implements IUserService{
 
         User userFollowers = userRepository.getFollowers(userId);
 
-        if (userFollowers == null) {
-            throw new NotFoundException("No se encontró el vendedor");
-        }
-
         List<UserDTO> followersList = userFollowers.getFollowers().stream()
                 .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
                 .collect(Collectors.toList());
 
         return new FollowersListDTO(userFollowers.getUserId(), userFollowers.getUserName(), followersList);
     }
+
 }
