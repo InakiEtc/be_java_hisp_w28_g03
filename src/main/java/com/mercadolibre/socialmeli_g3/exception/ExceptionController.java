@@ -20,4 +20,16 @@ public class ExceptionController {
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> invalidOperation(BadRequestException e){
+        ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<?> invalidOperation(ConflictException e){
+        ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.CONFLICT);
+    }
 }

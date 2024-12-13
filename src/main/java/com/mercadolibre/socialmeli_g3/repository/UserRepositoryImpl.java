@@ -53,4 +53,12 @@ public class UserRepositoryImpl implements IUserRepository{
         user.getFollowed().remove(userToUnfollow);
         userToUnfollow.getFollowers().remove(user);
     }
+
+    @Override
+    public User follow(User user, User userToFollow) {
+        user.getFollowers().add(userToFollow);
+        userToFollow.getFollowed().add(user);
+
+        return user;
+    }
 }
