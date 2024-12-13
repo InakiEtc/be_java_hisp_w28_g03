@@ -40,7 +40,7 @@ public class UserRepositoryImpl implements IUserRepository{
         return usersList.stream()
                 .filter(userData -> userData.getUserId() == userId)
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId));
+                .orElse(null);
     }
 
     @Override
