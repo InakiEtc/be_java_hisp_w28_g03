@@ -35,7 +35,7 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public MessageDTO createPost(ProductPostDTO productPostDTO) {
-        if (userRepository.findUserById(productPostDTO.getUserId()).isEmpty()) {
+        if (userRepository.findUserById(productPostDTO.getUserId()) == null) {
             throw new BadRequestException("User not found");
         }
 

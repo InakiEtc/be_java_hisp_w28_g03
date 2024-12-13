@@ -3,6 +3,8 @@ package com.mercadolibre.socialmeli_g3.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
+import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -35,7 +37,21 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
-    public Optional<User> findUserById(int UserId) {
-        return usersList.stream().filter(user -> user.getUserId() == UserId).findFirst();
+    public User findUserById(int userId) {
+        return usersList.stream()
+                .filter(userData -> userData.getUserId() == userId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public User getFollowers(int userId) {
+        return findUserById(userId);
+    }
+
+    @Override
+    public void unfollow(User user, User userToUnfollow) {
+        user.getFollowed().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
     }
 }
