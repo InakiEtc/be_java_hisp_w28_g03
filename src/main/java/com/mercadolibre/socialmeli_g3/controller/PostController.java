@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.controller;
 
 import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductoByIdUserResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.service.IPostService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,8 +36,8 @@ public class PostController {
     }
 
     @GetMapping("/products/promo-post/count")
-    public ResponseEntity<PromoProductsCountDTO> findProductsPromoCount(@RequestParam int user_id){
-        return new ResponseEntity<PromoProductsCountDTO>(postService.findProductsPromoCount(user_id), HttpStatus.OK);
+    public ResponseEntity<findProductsPromoResponseDTO> findProductsPromoCount(@RequestParam int user_id){
+        return new ResponseEntity<findProductsPromoResponseDTO>(postService.findProductsPromoCount(user_id), HttpStatus.OK);
     }
 
 }
