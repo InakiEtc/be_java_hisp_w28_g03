@@ -12,7 +12,9 @@
       "notes": "Special Edition"
     },
     "category": 100,
-    "price": 1500.50
+    "price": 1500.50,
+    "has_promo": true,
+    "discount": 0.40
   },
   {
     "postId": 202,
@@ -27,7 +29,9 @@
       "notes": "RGB Backlit"
     },
     "category": 58,
-    "price": 250.00
+    "price": 250.00,
+    "has_promo": true,
+    "discount": 0.30
   },
   {
     "postId": 203,
@@ -43,6 +47,7 @@
     },
     "category": 60,
     "price": 120.00,
-
+    "has_promo": true,
+    "discount": 0.25
   }
 ]

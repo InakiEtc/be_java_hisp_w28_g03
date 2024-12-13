@@ -40,6 +40,8 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public PromoProductsCountDTO findProductsPromoCount(int userId) {
+        PromoProductsCountDTO response = new PromoProductsCountDTO();
+        //response.setUserName();
         return null;
     }
 }

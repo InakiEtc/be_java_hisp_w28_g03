@@ -9,5 +9,4 @@ public interface IPostRepository {
 
    List<Post> findAllPosts();
    public  List<Post> findProductByIdUser(int userId);
-   PromoProductsCountDTO findProductsPromoCount(int userId);
 }

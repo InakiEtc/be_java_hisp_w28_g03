@@ -2,6 +2,7 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
@@ -43,4 +44,5 @@ public class PostRepositoryImpl implements IPostRepository{
     public List<Post> findProductByIdUser(int userId) {
         return postsList.stream().filter( post ->  post.getUserId() == userId).sorted((post1, post2) -> post2.getDate().compareTo(post1.getDate())).collect(Collectors.toList());
     }
+
 }
