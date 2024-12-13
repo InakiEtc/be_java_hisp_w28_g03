@@ -7,11 +7,13 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Post {
+public class PromoPost {
     private int postId;
     private int userId;
     private String date;
     private Product product;
     private int category;
     private double price;
+    private boolean hasPromo;
+    private double discount;
 }

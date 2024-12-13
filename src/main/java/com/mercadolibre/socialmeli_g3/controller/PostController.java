@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
 
+import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductoByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.service.IPostService;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -28,8 +30,13 @@ public class PostController {
     }
 
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<ProductoByIdUserResponseDTO> getPosts(@PathVariable int userId){
+    public ResponseEntity<ProductoByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId){
         return new ResponseEntity<ProductoByIdUserResponseDTO>(postService.findProductByIdUser(userId), HttpStatus.OK);
     }
+
+    /*@GetMapping("/products/promo-post/count")
+    public ResponseEntity<PromoProductsCountDTO> findProductsPromoCount(@RequestParam int user_id){
+        return new ResponseEntity<PromoProductsCountDTO>(, HttpStatus.OK);
+    }*/
 
 }

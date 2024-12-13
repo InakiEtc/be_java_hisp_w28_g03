@@ -2,6 +2,7 @@ package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.PostDTO;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductoByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
@@ -35,5 +36,10 @@ public class PostServiceImpl implements IPostService {
             throw new NotFoundException("Post no encontrados");
         }
         return response;
+    }
+
+    @Override
+    public PromoProductsCountDTO findProductsPromoCount(int userId) {
+        return null;
     }
 }
