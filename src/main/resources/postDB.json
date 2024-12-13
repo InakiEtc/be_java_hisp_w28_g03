@@ -13,7 +13,7 @@
     },
     "category": 100,
     "price": 1500.50,
-    "hasPromo": true,
+    "has_promo": true,
     "discount": 0.40
   },
   {
@@ -30,7 +30,7 @@
     },
     "category": 58,
     "price": 250.00,
-    "hasPromo": true,
+    "has_promo": true,
     "discount": 0.30
   },
   {
@@ -47,7 +47,7 @@
     },
     "category": 60,
     "price": 120.00,
-    "hasPromo": true,
+    "has_promo": true,
     "discount": 0.25
   }
 ]

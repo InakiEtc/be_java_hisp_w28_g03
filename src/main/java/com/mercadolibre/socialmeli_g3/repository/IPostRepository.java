@@ -3,14 +3,12 @@ package com.mercadolibre.socialmeli_g3.repository;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface IPostRepository {
 
    List<Post> findAllPosts();
-   public  List<Post> findProductByIdUser(int userId);
-   public int findProductsPromoCount(int userId);
-   Optional<Post> findPostById(Integer postId);
+   List<Post> findProductByIdUser(int userId);
+   int findProductsPromoCount(int userId);
+   Post findPostById(Integer postId);
    void createPost(Post post);
-   List<Post> findAllPostByUser(int userId);
 }

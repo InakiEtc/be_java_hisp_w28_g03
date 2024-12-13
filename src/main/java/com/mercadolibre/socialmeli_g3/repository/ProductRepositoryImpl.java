@@ -2,9 +2,7 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.Product;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 

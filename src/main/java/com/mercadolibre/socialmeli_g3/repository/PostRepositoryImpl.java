@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
@@ -58,17 +57,9 @@ public class PostRepositoryImpl implements IPostRepository{
         return count;
     }
 
-
     @Override
-    public List<Post> findAllPostByUser(int userId) {
-
-//        List<Post> postsList.stream().filter(p->p.getUserId()==userId).toList();
-        return null;
-    }
-
-    @Override
-    public Optional<Post> findPostById(Integer postId) {
-        return postsList.stream().filter(p -> p.getPostId() == postId).findFirst();
+    public Post findPostById(Integer postId) {
+        return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }
 
     @Override
@@ -77,6 +68,4 @@ public class PostRepositoryImpl implements IPostRepository{
         post.setPostId(CONTADOR_POSTS);
         postsList.add(post);
     }
-
-
 }

@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
+import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
@@ -40,5 +41,10 @@ public class PostController {
     @PostMapping("/products/post")
     public ResponseEntity<?> createPost(@RequestBody ProductPostDTO productPostDTO){
         return new ResponseEntity<>(postService.createPost(productPostDTO),HttpStatus.OK);
+    }
+
+    @PostMapping("/products/promo-post")
+    public ResponseEntity<?> createPromoPost(@RequestBody PromoProductPostDTO promoProductPostDTO){
+        return new ResponseEntity<>(postService.createPromoPost(promoProductPostDTO),HttpStatus.OK);
     }
 }

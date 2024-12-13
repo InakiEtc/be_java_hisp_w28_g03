@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
@@ -17,8 +18,6 @@ import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,7 +26,7 @@ public class PostServiceImpl implements IPostService {
     private final IPostRepository postRepository;
     private final IUserRepository userRepository;
     private final IProductRepository productRepository;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public PostServiceImpl(IPostRepository postRepository, IProductRepository productRepository, IUserRepository userRepository) {
         this.postRepository = postRepository;
@@ -39,14 +38,15 @@ public class PostServiceImpl implements IPostService {
     @Override
     public List<Post> getPosts() {
         return postRepository.findAllPosts();
-   }
+    }
+
     @Override
     public ProductByIdUserResponseDTO findProductByIdUser(int userId) {
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
         ObjectMapper obj = new ObjectMapper();
         response.setUser_id(userId);
-        response.setPosts(postRepository.findProductByIdUser(userId).stream().map( post -> {
-        PostResponseDto res = new PostResponseDto();
+        response.setPosts(postRepository.findProductByIdUser(userId).stream().map(post -> {
+            PostResponseDto res = new PostResponseDto();
             ProductResponseDTO prodResponse = new ProductResponseDTO();
             prodResponse.setProduct_id(post.getProduct().getProductId());
             prodResponse.setType(post.getProduct().getType());
@@ -65,7 +65,7 @@ public class PostServiceImpl implements IPostService {
             );
             return res;
         }).toList());
-        if(response.getPosts().isEmpty()){
+        if (response.getPosts().isEmpty()) {
             throw new NotFoundException("Post no encontrados");
         }
         return response;
@@ -75,7 +75,7 @@ public class PostServiceImpl implements IPostService {
     public findProductsPromoResponseDTO findProductsPromoCount(int userId) {
         findProductsPromoResponseDTO response = new findProductsPromoResponseDTO();
         User usuario = userRepository.findUserById(userId);
-        if(usuario == null){
+        if (usuario == null) {
             throw new NotFoundException("El usuario no existe");
         }
         response.setUser_id(userId);
@@ -86,38 +86,65 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public MessageDTO createPost(ProductPostDTO productPostDTO) {
-        if (userRepository.findUserById(productPostDTO.getUserId()) == null) {
-            throw new BadRequestException("User not found");
-        }
-
-        if (postRepository.findAllPosts().stream().anyMatch(p -> p.getUserId() == productPostDTO.getUserId() &&
-                p.getProduct().getProductId() == productPostDTO.getProduct().getProductId())) {
-            throw new BadRequestException("Post already exists for this user and product");
-        }
-
-        if (productPostDTO.getProduct() == null || productRepository.findProductById(productPostDTO.getProduct().getProductId()).isEmpty()) {
-            throw new BadRequestException("Bad request in Product");
-        }
-
-        try {
-            int category = Integer.parseInt(String.valueOf(productPostDTO.getCategory()));
-            if (category < 0) {
-                throw new BadRequestException("Category must be positive");
-            }
-        } catch (NumberFormatException e) {
-            throw new BadRequestException("Category must be an integer");
-        }
-
-        try {
-            double price = Double.parseDouble(String.valueOf(productPostDTO.getPrice()));
-            if (price < 0) {
-                throw new BadRequestException("Price must be positive");
-            }
-        } catch (NumberFormatException e) {
-            throw new BadRequestException("Price must be a double");
-        }
+        validateUser(productPostDTO.getUserId());
+        validatePostExistence(productPostDTO.getUserId(), productPostDTO.getProduct().getProductId(), false);
+        validateProduct(productPostDTO.getProduct().getProductId());
+        validateCategory(productPostDTO.getCategory());
+        validatePrice(productPostDTO.getPrice());
 
         postRepository.createPost(objectMapper.convertValue(productPostDTO, Post.class));
         return new MessageDTO("Post created successfully");
     }
+
+    @Override
+    public MessageDTO createPromoPost(PromoProductPostDTO promoProductPostDTO) {
+        validateUser(promoProductPostDTO.getUserId());
+        validatePostExistence(promoProductPostDTO.getUserId(), promoProductPostDTO.getProduct().getProductId(), true);
+        validateProduct(promoProductPostDTO.getProduct().getProductId());
+        validateCategory(promoProductPostDTO.getCategory());
+        validatePrice(promoProductPostDTO.getPrice());
+        validateDiscount(promoProductPostDTO.getDiscount());
+
+        postRepository.createPost(objectMapper.convertValue(promoProductPostDTO, Post.class));
+        return new MessageDTO("Post Promo created successfully");
+    }
+
+    // region Validations for Post methods
+    private void validateUser(int userId) {
+        if (userRepository.findUserById(userId) == null) {
+            throw new BadRequestException("User not found");
+        }
+    }
+
+    private void validatePostExistence(int userId, int productId, boolean isPromo) {
+        if (postRepository.findAllPosts().stream().anyMatch(p -> p.getUserId() == userId &&
+                p.getProduct().getProductId() == productId)) {
+            throw new BadRequestException(isPromo ? "Post Promo already exists for this user and product" : "Post already exists for this user and product");
+        }
+    }
+
+    private void validateProduct(int productId) {
+        if (productRepository.findProductById(productId).isEmpty()) {
+            throw new BadRequestException("Bad request in Product");
+        }
+    }
+
+    private void validateCategory(int category) {
+        if (category < 0) {
+            throw new BadRequestException("Category must be positive");
+        }
+    }
+
+    private void validatePrice(double price) {
+        if (price < 0) {
+            throw new BadRequestException("Price must be positive");
+        }
+    }
+
+    private void validateDiscount(double discount) {
+        if (discount < 0 || discount > 1) {
+            throw new BadRequestException("Discount must be between 0 and 1");
+        }
+    }
+    // endregion
 }
