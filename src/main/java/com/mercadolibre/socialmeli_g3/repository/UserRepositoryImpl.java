@@ -2,7 +2,9 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -32,4 +34,25 @@ public class UserRepositoryImpl implements IUserRepository{
 
         usersList = users;
     }
+
+
+    @Override
+    public List<User> findAllUsers() {
+
+        return usersList;
+    }
+
+    @Override
+    public List<User> getFollowers() {
+        return getFollowers();
+    }
+
+    @Override
+    public User findUserById(int userId) {
+        return usersList.stream()
+                .filter(userData -> userData.getUserId() == userId)
+                .findFirst()
+                .orElse(null);
+    }
+
 }
