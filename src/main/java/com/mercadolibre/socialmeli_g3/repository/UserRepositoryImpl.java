@@ -12,10 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
-
 
     private List<User> usersList;
 
@@ -28,11 +28,36 @@ public class UserRepositoryImpl implements IUserRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<User> users ;
-
         file= ResourceUtils.getFile("classpath:usersDb.json");
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
-
         usersList = users;
+    }
+
+    @Override
+    public User findUserById(int userId) {
+        return usersList.stream()
+                .filter(userData -> userData.getUserId() == userId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public User getFollowers(int userId) {
+        return findUserById(userId);
+    }
+
+    @Override
+    public void unfollow(User user, User userToUnfollow) {
+        user.getFollowed().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
+    }
+
+    @Override
+    public User follow(User user, User userToFollow) {
+        user.getFollowed().add(userToFollow);
+        userToFollow.getFollowers().add(user);
+
+        return user;
     }
 
 
@@ -47,12 +72,5 @@ public class UserRepositoryImpl implements IUserRepository{
         return getFollowers();
     }
 
-    @Override
-    public User findUserById(int userId) {
-        return usersList.stream()
-                .filter(userData -> userData.getUserId() == userId)
-                .findFirst()
-                .orElse(null);
-    }
 
 }

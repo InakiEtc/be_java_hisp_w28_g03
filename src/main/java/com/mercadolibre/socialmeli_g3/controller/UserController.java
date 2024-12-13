@@ -1,23 +1,49 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
+import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.service.IUserService;
-import com.mercadolibre.socialmeli_g3.service.UserServiceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/users")
 public class UserController {
-    IUserService userService;
 
-    public UserController(UserServiceImpl userService) {
+    private final IUserService userService;
+
+    public UserController(IUserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/{userId}/followed/list")
+    public ResponseEntity<FollowedListDTO> getSellersFollowedByUser(@PathVariable int userId){
+        return new ResponseEntity<>(userService.getFollowedByUserId(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/followers/list")
+    public ResponseEntity<?> getPosts(@PathVariable int userId){
+        return new ResponseEntity<>(userService.getSellerFollowers(userId), HttpStatus.OK);
     }
 
     @GetMapping("/users/{userId}/followers/count")
     public ResponseEntity<?> getControllerFollowers(@PathVariable int userId){
         return new ResponseEntity<> (userService.getNumberFollowers(userId), HttpStatus.OK);
     }
+
+    @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
+    public ResponseEntity<?> unfollow(@PathVariable int userId, @PathVariable int userIdToUnfollow){
+        userService.unfollow(userId, userIdToUnfollow);
+        return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+    }
+
+    @PostMapping("/{userId}/follow/{userIdToFollow}")
+    public ResponseEntity<FollowDTO> follow(@PathVariable int userId, @PathVariable int userIdToFollow) {
+        return new ResponseEntity<>(userService.follow(userId, userIdToFollow), HttpStatus.OK);
+    }
+
 }
