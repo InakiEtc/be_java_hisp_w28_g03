@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
@@ -36,5 +37,10 @@ public class PostRepositoryImpl implements IPostRepository{
     public List<Post> findAllPosts() {
 
         return postsList;
+    }
+
+    @Override
+    public List<Post> findProductByIdUser(int userId) {
+        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted((post1, post2) -> post2.getDate().compareTo(post1.getDate())).collect(Collectors.toList());
     }
 }
