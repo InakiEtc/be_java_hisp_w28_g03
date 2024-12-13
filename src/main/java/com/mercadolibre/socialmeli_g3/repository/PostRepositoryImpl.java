@@ -10,10 +10,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
     private List<Post> postsList;
+    private static Integer CONTADOR_POSTS;
 
     public PostRepositoryImpl() throws IOException {
         postsList=new ArrayList<>();
@@ -29,12 +31,25 @@ public class PostRepositoryImpl implements IPostRepository{
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
 
         postsList = posts;
+        CONTADOR_POSTS = postsList.size() + 200;
     }
-
 
     @Override
     public List<Post> findAllPosts() {
-
         return postsList;
     }
+
+    @Override
+    public Optional<Post> findPostById(Integer postId) {
+        return postsList.stream().filter(p -> p.getPostId() == postId).findFirst();
+    }
+
+    @Override
+    public void createPost(Post post) {
+        CONTADOR_POSTS++;
+        post.setPostId(CONTADOR_POSTS);
+        postsList.add(post);
+    }
+
+
 }

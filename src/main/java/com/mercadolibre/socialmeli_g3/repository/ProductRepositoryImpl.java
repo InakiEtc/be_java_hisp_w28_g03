@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class ProductRepositoryImpl implements IProductRepository{
@@ -34,5 +35,8 @@ public class ProductRepositoryImpl implements IProductRepository{
         productsList = products;
     }
 
-
+    @Override
+    public Optional<Product> findProductById(int productId) {
+        return productsList.stream().filter(p -> p.getProductId() == productId).findFirst();
+    }
 }
