@@ -10,4 +10,5 @@ public interface IPostRepository {
    List<Post> findAllPosts();
    Optional<Post> findPostById(Integer postId);
    void createPost(Post post);
+   List<Post> findAllPostByUser(int userId);
 }
