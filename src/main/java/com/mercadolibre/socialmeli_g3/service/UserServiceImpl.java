@@ -5,6 +5,7 @@ import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,15 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void unfollow(int userId, int userIdToUnfollow) {
-        userRepository.unfollow(userId, userIdToUnfollow);
+        if (userId == userIdToUnfollow) throw new InvalidOperationException("No puedes dejar de seguirte a ti mismo");
+
+        User user = userRepository.findUserById(userId);
+        User userToUnfollow = userRepository.findUserById(userIdToUnfollow);
+
+        if (!user.getFollowed().contains(userToUnfollow) || !userToUnfollow.getFollowers().contains(user)) {
+            throw new NotFoundException("El usuario no esta en la lista de seguidos");
+        }
+
+        userRepository.unfollow(user, userToUnfollow);
     }
 }

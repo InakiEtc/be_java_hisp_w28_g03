@@ -36,50 +36,21 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
-    public User getFollowers(int userId) {
-
-        User user = usersList
-                .stream()
+    public User findUserById(int userId) {
+        return usersList.stream()
                 .filter(userData -> userData.getUserId() == userId)
                 .findFirst()
-                .orElse(null);
-
-        if (user == null) throw new NotFoundException("No se encontró el vendedor");
-
-        return user;
+                .orElseThrow(() -> new NotFoundException("Usuario no encontrado con ID: " + userId));
     }
 
     @Override
-    public void unfollow(int userId, int userIdToUnfollow) {
+    public User getFollowers(int userId) {
+        return findUserById(userId);
+    }
 
-        if (userId == userIdToUnfollow) throw new InvalidOperationException("No puedes dejar de seguirte a ti mismo");
-
-        User user = usersList
-                .stream()
-                .filter(userData -> userData.getUserId() == userId)
-                .findFirst()
-                .orElse(null);
-
-        if (user == null) throw new NotFoundException("No se encontró el vendedor");
-
-        User userToUnfollow = usersList
-                .stream()
-                .filter(userData -> userData.getUserId() == userIdToUnfollow)
-                .findFirst()
-                .orElse(null);
-
-        if (userToUnfollow == null) throw new NotFoundException("No se encontró el vendedor a dejar de seguir");
-
-        if (user.getFollowed().contains(userToUnfollow)) {
-            user.getFollowed().remove(userToUnfollow);
-        } else {
-            throw new NotFoundException("El usuario no esta en tu lista de seguidos");
-        }
-
-        if (userToUnfollow.getFollowers().contains(user)) {
-            userToUnfollow.getFollowers().remove(user);
-        } else {
-            throw new NotFoundException("El usuario no esta en la lista de seguidores");
-        }
+    @Override
+    public void unfollow(User user, User userToUnfollow) {
+        user.getFollowed().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
     }
 }
