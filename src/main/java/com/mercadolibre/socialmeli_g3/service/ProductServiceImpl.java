@@ -1,12 +1,8 @@
 package com.mercadolibre.socialmeli_g3.service;
 
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
-import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.repository.IPostRepository;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class ProductServiceImpl implements IProductService {
