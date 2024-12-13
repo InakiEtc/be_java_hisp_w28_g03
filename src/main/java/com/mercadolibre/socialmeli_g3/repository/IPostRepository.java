@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface IPostRepository {
 
    List<Post> findAllPosts();
+   public  List<Post> findProductByIdUser(int userId);
+   public int findProductsPromoCount(int userId);
    Optional<Post> findPostById(Integer postId);
    void createPost(Post post);
    List<Post> findAllPostByUser(int userId);

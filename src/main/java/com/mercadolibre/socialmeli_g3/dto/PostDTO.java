@@ -18,5 +18,4 @@ public class PostDTO {
     private ProductPostDTO product;
     private int category;
     private double price;
-
 }

@@ -1,30 +1,38 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
+import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mercadolibre.socialmeli_g3.dto.MessageDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
+import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.IPostRepository;
-import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
+import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 public class PostServiceImpl implements IPostService {
 
     private final IPostRepository postRepository;
-    private final IProductRepository productRepository;
     private final IUserRepository userRepository;
+    private final IProductRepository productRepository;
     private ObjectMapper objectMapper;
 
     public PostServiceImpl(IPostRepository postRepository, IProductRepository productRepository, IUserRepository userRepository) {
         this.postRepository = postRepository;
-        this.productRepository = productRepository;
         this.userRepository = userRepository;
+        this.productRepository = productRepository;
         this.objectMapper = new ObjectMapper().registerModule(new JavaTimeModule());
     }
 
@@ -32,6 +40,49 @@ public class PostServiceImpl implements IPostService {
     public List<Post> getPosts() {
         return postRepository.findAllPosts();
    }
+    @Override
+    public ProductByIdUserResponseDTO findProductByIdUser(int userId) {
+        ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
+        ObjectMapper obj = new ObjectMapper();
+        response.setUser_id(userId);
+        response.setPosts(postRepository.findProductByIdUser(userId).stream().map( post -> {
+        PostResponseDto res = new PostResponseDto();
+            ProductResponseDTO prodResponse = new ProductResponseDTO();
+            prodResponse.setProduct_id(post.getProduct().getProductId());
+            prodResponse.setType(post.getProduct().getType());
+            prodResponse.setBrand(post.getProduct().getBrand());
+            prodResponse.setColor(post.getProduct().getColor());
+            prodResponse.setNotes(post.getProduct().getNotes());
+            prodResponse.setProduct_name(post.getProduct().getProductName());
+
+            res.setPost_id(post.getPostId());
+            res.setUser_id(post.getUserId());
+            res.setProduct(prodResponse);
+            res.setCategory(post.getCategory());
+            res.setPrice(post.getPrice());
+            res.setDate(
+                    post.getDate()
+            );
+            return res;
+        }).toList());
+        if(response.getPosts().isEmpty()){
+            throw new NotFoundException("Post no encontrados");
+        }
+        return response;
+    }
+
+    @Override
+    public findProductsPromoResponseDTO findProductsPromoCount(int userId) {
+        findProductsPromoResponseDTO response = new findProductsPromoResponseDTO();
+        User usuario = userRepository.findUserById(userId);
+        if(usuario == null){
+            throw new NotFoundException("El usuario no existe");
+        }
+        response.setUser_id(userId);
+        response.setUser_name(usuario.getUserName());
+        response.setPromos_products_count(postRepository.findProductsPromoCount(userId));
+        return response;
+    }
 
     @Override
     public MessageDTO createPost(ProductPostDTO productPostDTO) {
