@@ -3,8 +3,6 @@ package com.mercadolibre.socialmeli_g3.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.User;
-import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
-import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -12,10 +10,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
-
 
     private List<User> usersList;
 
@@ -28,10 +26,8 @@ public class UserRepositoryImpl implements IUserRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<User> users ;
-
         file= ResourceUtils.getFile("classpath:usersDb.json");
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
-
         usersList = users;
     }
 
@@ -52,5 +48,13 @@ public class UserRepositoryImpl implements IUserRepository{
     public void unfollow(User user, User userToUnfollow) {
         user.getFollowed().remove(userToUnfollow);
         userToUnfollow.getFollowers().remove(user);
+    }
+
+    @Override
+    public User follow(User user, User userToFollow) {
+        user.getFollowed().add(userToFollow);
+        userToFollow.getFollowers().add(user);
+
+        return user;
     }
 }

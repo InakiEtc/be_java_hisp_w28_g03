@@ -1,20 +1,17 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
-
-import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductoByIdUserResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
-import com.mercadolibre.socialmeli_g3.entity.Post;
+import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.service.IPostService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 @RestController
 public class PostController {
@@ -31,8 +28,8 @@ public class PostController {
     }
 
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<ProductoByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId){
-        return new ResponseEntity<ProductoByIdUserResponseDTO>(postService.findProductByIdUser(userId), HttpStatus.OK);
+    public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId){
+        return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId), HttpStatus.OK);
     }
 
     @GetMapping("/products/promo-post/count")
@@ -40,4 +37,8 @@ public class PostController {
         return new ResponseEntity<findProductsPromoResponseDTO>(postService.findProductsPromoCount(user_id), HttpStatus.OK);
     }
 
+    @PostMapping("/products/post")
+    public ResponseEntity<?> createPost(@RequestBody ProductPostDTO productPostDTO){
+        return new ResponseEntity<>(postService.createPost(productPostDTO),HttpStatus.OK);
+    }
 }

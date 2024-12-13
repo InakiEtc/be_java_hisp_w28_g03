@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +11,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostDTO {
     private int postId;
+    @JsonProperty("user_id")
     private int userId;
     private String date;
-    private ProductDTO product;
+    @JsonProperty("product")
+    private ProductPostDTO product;
     private int category;
     private double price;
 }

@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductPostDTO {
+    @JsonProperty("user_id")
     private int userId;
     private String date;
     private ProductDTO product;
