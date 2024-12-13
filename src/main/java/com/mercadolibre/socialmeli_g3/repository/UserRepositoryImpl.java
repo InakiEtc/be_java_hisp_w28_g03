@@ -27,10 +27,8 @@ public class UserRepositoryImpl implements IUserRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<User> users ;
-
         file= ResourceUtils.getFile("classpath:usersDb.json");
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
-
         usersList = users;
     }
 
