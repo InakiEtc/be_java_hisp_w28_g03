@@ -15,14 +15,14 @@ public class ExceptionController {
         return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(InvalidOperationException.class)
-    public ResponseEntity<?> invalidOperation(InvalidOperationException e){
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<?> badRequest(BadRequestException e){
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<?> invalidOperation(BadRequestException e){
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<?> invalidOperation(InvalidOperationException e){
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }

@@ -37,4 +37,13 @@ public class PostRepositoryImpl implements IPostRepository{
 
         return postsList;
     }
+
+    @Override
+    public List<Post> findAllPostByUser(int userId) {
+
+//        List<Post> postsList.stream().filter(p->p.getUserId()==userId).toList();
+        return null;
+    }
+
+
 }

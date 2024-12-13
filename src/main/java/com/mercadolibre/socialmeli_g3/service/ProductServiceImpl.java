@@ -1,16 +1,26 @@
 package com.mercadolibre.socialmeli_g3.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
+import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.repository.IPostRepository;
+import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class ProductServiceImpl implements IProductService {
 
-    @Autowired
-    private IUserService iUserService;
+    private final IUserRepository userRepository;
+    private final IPostRepository postRepository;
 
-    public ProductServiceImpl(IUserService iUserService) {
-        this.iUserService = iUserService;
+
+    public ProductServiceImpl(IUserRepository userRepository, IPostRepository postRepository) {
+        this.userRepository = userRepository;
+        this.postRepository = postRepository;
     }
+
+
+
 
 }
