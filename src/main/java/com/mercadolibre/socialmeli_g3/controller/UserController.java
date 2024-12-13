@@ -30,7 +30,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getSellerFollowers(userId), HttpStatus.OK);
     }
 
-    @GetMapping("/users/{userId}/followers/count")
+    @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> getControllerFollowers(@PathVariable int userId){
         return new ResponseEntity<> (userService.getNumberFollowers(userId), HttpStatus.OK);
     }
