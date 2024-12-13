@@ -5,8 +5,11 @@ import com.mercadolibre.socialmeli_g3.dto.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductsCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductoByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
+import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
+import com.mercadolibre.socialmeli_g3.repository.IPostPromoRepository;
 import com.mercadolibre.socialmeli_g3.repository.IPostRepository;
+import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +19,13 @@ import java.util.List;
 public class PostServiceImpl implements IPostService {
 
     private final IPostRepository postRepository;
+    private final IUserRepository userRepository;
+    private final IPostPromoRepository promoPostRepository;
 
-    public PostServiceImpl(IPostRepository postRepository) {
+    public PostServiceImpl(IPostRepository postRepository, IUserRepository userRepository, IPostPromoRepository promoPostRepository) {
         this.postRepository = postRepository;
+        this.userRepository = userRepository;
+        this.promoPostRepository = promoPostRepository;
     }
 
     @Override
@@ -41,7 +48,13 @@ public class PostServiceImpl implements IPostService {
     @Override
     public PromoProductsCountDTO findProductsPromoCount(int userId) {
         PromoProductsCountDTO response = new PromoProductsCountDTO();
-        //response.setUserName();
-        return null;
+        User usuario = userRepository.findUserById(userId);
+        if(usuario == null){
+            throw new NotFoundException("El usuario no existe");
+        }
+        response.setUserId(userId);
+        response.setUserName(usuario.getUserName());
+        response.setPromoProductsCount(promoPostRepository.findProductsPromoCount(userId));
+        return response;
     }
 }
