@@ -14,4 +14,10 @@ public class ExceptionController {
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(InvalidOperationException.class)
+    public ResponseEntity<?> invalidOperation(InvalidOperationException e){
+        ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
 }
