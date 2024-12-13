@@ -8,6 +8,7 @@ import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,12 +31,13 @@ public class UserServiceImpl implements IUserService{
         }
 
         FollowedListDTO followedListDTO = new FollowedListDTO();
-        UserDTO userDTO = new UserDTO();
 
-        List<UserDTO> followedUsersDTOS= user.get().getFollowed().stream().map(u->mapper.convertValue(u, UserDTO.class)).toList();
+        List<UserDTO> followedUsersDTOS= user.get().getFollowed().stream().map(u-> new UserDTO(user.get().getUserId(), user.get().getUserName())).toList();
+//        @Test manual prueba de error
+//        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
         if(followedUsersDTOS == null || followedUsersDTOS.isEmpty()){
-            throw new NotFoundException("El usuario "+ userDTO.getUserName() + " no sigue a ningun vendedor");
+            throw new NotFoundException("El usuario "+ user.get().getUserName() + " no sigue a ningun vendedor");
         }
 
         followedListDTO.setUserId(user.get().getUserId());
