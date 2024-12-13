@@ -4,13 +4,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
+import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService{
@@ -22,28 +23,57 @@ public class UserServiceImpl implements IUserService{
         this.userRepository = userRepository;
     }
 
+
+
     @Override
     public FollowedListDTO getFollowedByUserId(int id) {
 
-        Optional<User> user =userRepository.findUserById(id);
-        if(user == null || user.isEmpty()){
-            throw new NotFoundException("Usuario no encontrado");
-        }
+        User user = userRepository.findUserById(id);
+        if (user == null) throw new NotFoundException("El usuario no existe");
 
         FollowedListDTO followedListDTO = new FollowedListDTO();
 
-        List<UserDTO> followedUsersDTOS= user.get().getFollowed().stream().map(u-> new UserDTO(user.get().getUserId(), user.get().getUserName())).toList();
+        List<UserDTO> followedUsersDTOS = user.getFollowed().stream().map(u -> new UserDTO(user.getUserId(), user.getUserName())).toList();
 //        @Test manual prueba de error
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
-        if(followedUsersDTOS == null || followedUsersDTOS.isEmpty()){
-            throw new NotFoundException("El usuario "+ user.get().getUserName() + " no sigue a ningun vendedor");
+        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty()) {
+            throw new NotFoundException("El usuario " + user.getUserName() + " no sigue a ningun vendedor");
         }
 
-        followedListDTO.setUserId(user.get().getUserId());
-        followedListDTO.setUserName(user.get().getUserName());
+        followedListDTO.setUserId(user.getUserId());
+        followedListDTO.setUserName(user.getUserName());
         followedListDTO.setFollowed(followedUsersDTOS);
 
         return followedListDTO;
+    }
+
+    @Override
+    public FollowersListDTO getSellerFollowers(int userId) {
+
+        User userFollowers = userRepository.getFollowers(userId);
+        if (userFollowers == null) throw new NotFoundException("El usuario no existe");
+
+        List<UserDTO> followersList = userFollowers.getFollowers().stream()
+                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
+                .toList();
+
+        return new FollowersListDTO(userFollowers.getUserId(), userFollowers.getUserName(), followersList);
+    }
+
+    @Override
+    public void unfollow(int userId, int userIdToUnfollow) {
+        if (userId == userIdToUnfollow) throw new InvalidOperationException("No puedes dejar de seguirte a ti mismo");
+
+        User user = userRepository.findUserById(userId);
+        if (user == null) throw new NotFoundException("El usuario no existe");
+        User userToUnfollow = userRepository.findUserById(userIdToUnfollow);
+        if (userToUnfollow == null) throw new NotFoundException("El usuario no existe");
+
+        if (!user.getFollowed().contains(userToUnfollow) || !userToUnfollow.getFollowers().contains(user)) {
+            throw new NotFoundException("El usuario no esta en la lista de seguidos");
+        }
+
+        userRepository.unfollow(user, userToUnfollow);
     }
 }

@@ -20,7 +20,5 @@ public class ProductController {
         this.iProductService = iProductService;
     }
 
-//    @GetMapping("/promo-post")
-//    public ResponseEntity<List<PromoProductPostDTO>> getProductsOnPromoByUser();
 
 }

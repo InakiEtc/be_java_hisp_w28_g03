@@ -10,11 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements IUserRepository{
-
 
     private List<User> usersList;
 
@@ -33,8 +31,21 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
-    public Optional<User> findUserById(int id) {
-        Optional<User> user = usersList.stream().filter(u->u.getUserId()==id).findFirst();
-        return user;
+    public User findUserById(int userId) {
+        return usersList.stream()
+                .filter(userData -> userData.getUserId() == userId)
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public User getFollowers(int userId) {
+        return findUserById(userId);
+    }
+
+    @Override
+    public void unfollow(User user, User userToUnfollow) {
+        user.getFollowed().remove(userToUnfollow);
+        userToUnfollow.getFollowers().remove(user);
     }
 }
