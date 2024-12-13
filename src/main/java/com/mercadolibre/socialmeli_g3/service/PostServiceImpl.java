@@ -17,6 +17,8 @@ import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -38,7 +40,6 @@ public class PostServiceImpl implements IPostService {
     public List<Post> getPosts() {
         return postRepository.findAllPosts();
    }
-
     @Override
     public ProductByIdUserResponseDTO findProductByIdUser(int userId) {
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
@@ -59,6 +60,9 @@ public class PostServiceImpl implements IPostService {
             res.setProduct(prodResponse);
             res.setCategory(post.getCategory());
             res.setPrice(post.getPrice());
+            res.setDate(
+                    post.getDate()
+            );
             return res;
         }).toList());
         if(response.getPosts().isEmpty()){
