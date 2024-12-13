@@ -32,4 +32,16 @@ public class UserRepositoryImpl implements IUserRepository{
 
         usersList = users;
     }
+
+    @Override
+    public User getFollowers(int userId) {
+
+        User usuario = usersList
+                .stream()
+                .filter(user -> user.getUserId() == userId)
+                .findFirst()
+                .orElse(null);
+
+        return usuario;
+    }
 }
