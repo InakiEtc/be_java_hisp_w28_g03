@@ -8,10 +8,8 @@ import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements IUserService{
@@ -24,16 +22,15 @@ public class UserServiceImpl implements IUserService{
     }
 
 
-
     @Override
     public FollowedListDTO getFollowedByUserId(int id) {
-
         User user = userRepository.findUserById(id);
         if (user == null) throw new NotFoundException("El usuario no existe");
-
         FollowedListDTO followedListDTO = new FollowedListDTO();
 
-        List<UserDTO> followedUsersDTOS = user.getFollowed().stream().map(u -> new UserDTO(user.getUserId(), user.getUserName())).toList();
+        List<UserDTO> followedUsersDTOS = user.getFollowed()
+                                                .stream().map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                                                .toList();
 //        @Test manual prueba de error
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
@@ -44,7 +41,6 @@ public class UserServiceImpl implements IUserService{
         followedListDTO.setUserId(user.getUserId());
         followedListDTO.setUserName(user.getUserName());
         followedListDTO.setFollowed(followedUsersDTOS);
-
         return followedListDTO;
     }
 
