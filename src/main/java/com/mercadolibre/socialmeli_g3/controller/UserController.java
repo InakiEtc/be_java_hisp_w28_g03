@@ -48,13 +48,13 @@ public class UserController {
     }
 
     //CU : 008
-    @PostMapping("/{UserID}/followers/list")
+    @GetMapping("/{UserID}/followers/list/order")
     public ResponseEntity<?> followersOrderBy(@PathVariable int UserID, @RequestParam String order) {
         return new ResponseEntity<>(userService.followersOrderBy(UserID, order), HttpStatus.OK);
     }
 
     //CU:008
-    @PostMapping("/{UserID}/followed/list")
+    @GetMapping("/{UserID}/followeds/list/order")
     public ResponseEntity<?> followedOrderBy(@PathVariable int UserID, @RequestParam String order) {
         return new ResponseEntity<>(userService.followedsOrderBy(UserID, order), HttpStatus.OK);
     }

@@ -155,12 +155,12 @@ public class UserServiceImpl implements IUserService {
 
     // CU: 008 - ordenamiento de followers según asc y desc dependiendo el parametro
     @Override
-    public List<UserDTO> followersOrderBy(int userId, String order) {
-        List<UserDTO> listFilter;
-        if(order.equals("name_asc")){
+    public FollowersListDTO followersOrderBy(int userId, String order) {
+        FollowersListDTO listFilter;
+        if(order.equalsIgnoreCase("name_asc")){
             listFilter= ListOrderFollowerAsc(userId);
         }
-        else if(order.equals("name_desc")){
+        else if(order.equalsIgnoreCase("name_desc")){
             listFilter =ListOrderFollowerDesc(userId);
         }
         else{
@@ -172,12 +172,12 @@ public class UserServiceImpl implements IUserService {
 
     // CU: 008 - ordenamiento de followeds según asc y desc dependiendo el parametro
     @Override
-    public List<UserDTO> followedsOrderBy(int userId, String order) {
-        List<UserDTO> listFilter;
-        if(order.equals("name_asc")){
+    public FollowedListDTO followedsOrderBy(int userId, String order) {
+        FollowedListDTO listFilter;
+        if(order.equalsIgnoreCase("name_asc")){
             listFilter= ListOrderFollowedAsc(userId);
         }
-        else if(order.equals("name_desc")){
+        else if(order.equalsIgnoreCase("name_desc")){
             listFilter =ListOrderFollowedDesc(userId);
         }
         else{
@@ -188,28 +188,53 @@ public class UserServiceImpl implements IUserService {
 
 
     // filtra los followers de forma asc
-    private List<UserDTO> ListOrderFollowerAsc(int id ){
-        List<UserDTO> listFollowers= getSellerFollowers(id).getFollowers();
-        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId))).toList();
+    private FollowersListDTO ListOrderFollowerAsc(int id ){
+        FollowersListDTO listFollowers= getSellerFollowers(id);
+        List<UserDTO> followersList = listFollowers.getFollowers().stream()
+                        .sorted((Comparator.comparing(UserDTO::getUserId)))
+                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
+                .toList();
+
+        return new FollowersListDTO(listFollowers.getUserId(), listFollowers.getUserName(), followersList);
 
     }
     // filtra los followers de forma desc
-    private List<UserDTO> ListOrderFollowerDesc(int id ){
-        List<UserDTO> listFollowers= getSellerFollowers(id).getFollowers();
-        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId)).reversed()).toList();
+    private FollowersListDTO ListOrderFollowerDesc(int id ){
+        FollowersListDTO listFollowers= getSellerFollowers(id);
+        List<UserDTO> followersList = listFollowers.getFollowers().stream()
+                .sorted((Comparator.comparing(UserDTO::getUserId)).reversed())
+                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
+                .toList();
+
+        return new FollowersListDTO(listFollowers.getUserId(), listFollowers.getUserName(), followersList);
+
+
     }
+
+
+
+
+
 
     // filtra los followeds de forma asc
-    private List<UserDTO> ListOrderFollowedAsc(int id ){
-        List<UserDTO> listFollowers= getFollowedByUserId(id).getFollowed();
-        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId))).toList();
+    private FollowedListDTO ListOrderFollowedAsc(int id ){
+        FollowedListDTO listFolloweds= getFollowedByUserId(id);
+        List<UserDTO> followedsList = listFolloweds.getFollowed().stream()
+                .sorted((Comparator.comparing(UserDTO::getUserId)))
+                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
+                .toList();
 
-
+        return new FollowedListDTO(listFolloweds.getUserId(), listFolloweds.getUserName(), followedsList);
     }
     // filtra los followeds de forma desc
-    private List<UserDTO> ListOrderFollowedDesc(int id ){
-        List<UserDTO> listFollowers= getFollowedByUserId(id).getFollowed();
-        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId)).reversed()).toList();
+    private FollowedListDTO ListOrderFollowedDesc(int id ){
+        FollowedListDTO listFolloweds= getFollowedByUserId(id);
+        List<UserDTO> followedsList = listFolloweds.getFollowed().stream()
+                .sorted((Comparator.comparing(UserDTO::getUserId)).reversed())
+                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
+                .toList();
+
+        return new FollowedListDTO(listFolloweds.getUserId(), listFolloweds.getUserName(), followedsList);
     }
 
 

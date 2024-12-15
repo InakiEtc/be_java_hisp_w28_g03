@@ -10,6 +10,10 @@
       {
         "userId": 3,
         "userName": "usuario2"
+      },
+      {
+        "userId": 6,
+        "userName": "usuario 6"
       }
     ],
     "followed": [
@@ -73,6 +77,17 @@
   {
     "userId": 5,
     "userName": "vendedor3",
+    "followers": [
+      {
+        "userId": 1,
+        "userName": "vendedor1"
+      }
+    ],
+    "followed": []
+  },
+  {
+    "userId": 6,
+    "userName": "usuario 6",
     "followers": [
       {
         "userId": 1,
