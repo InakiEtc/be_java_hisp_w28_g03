@@ -30,6 +30,7 @@ public class UserController {
         return new ResponseEntity<>(userService.getSellerFollowers(userId), HttpStatus.OK);
     }
 
+    //CU 002
     @GetMapping("/{userId}/followers/count")
     public ResponseEntity<?> getControllerFollowers(@PathVariable int userId){
         return new ResponseEntity<> (userService.getNumberFollowers(userId), HttpStatus.OK);
@@ -46,10 +47,19 @@ public class UserController {
         return new ResponseEntity<>(userService.follow(userId, userIdToFollow), HttpStatus.OK);
     }
 
+    //CU : 008
     @PostMapping("/{UserID}/followers/list")
-    public ResponseEntity<?> follow(@PathVariable int UserID, @RequestParam String order) {
-        return new ResponseEntity<>(userService.folloewersOrderBy(UserID, order), HttpStatus.OK);
+    public ResponseEntity<?> followersOrderBy(@PathVariable int UserID, @RequestParam String order) {
+        return new ResponseEntity<>(userService.followersOrderBy(UserID, order), HttpStatus.OK);
     }
+
+    //CU:008
+    @PostMapping("/{UserID}/followed/list")
+    public ResponseEntity<?> followedOrderBy(@PathVariable int UserID, @RequestParam String order) {
+        return new ResponseEntity<>(userService.followedsOrderBy(UserID, order), HttpStatus.OK);
+    }
+
+
 
 
 

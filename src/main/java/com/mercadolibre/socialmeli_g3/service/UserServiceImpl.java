@@ -155,7 +155,7 @@ public class UserServiceImpl implements IUserService {
 
     // CU: 008 - ordenamiento de followers según asc y desc dependiendo el parametro
     @Override
-    public List<UserDTO> folloewersOrderBy(int userId, String order) {
+    public List<UserDTO> followersOrderBy(int userId, String order) {
         List<UserDTO> listFilter;
         if(order.equals("name_asc")){
             listFilter= ListOrderFollowerAsc(userId);
@@ -172,7 +172,7 @@ public class UserServiceImpl implements IUserService {
 
     // CU: 008 - ordenamiento de followeds según asc y desc dependiendo el parametro
     @Override
-    public List<UserDTO> folloewedsOrderBy(int userId, String order) {
+    public List<UserDTO> followedsOrderBy(int userId, String order) {
         List<UserDTO> listFilter;
         if(order.equals("name_asc")){
             listFilter= ListOrderFollowedAsc(userId);
