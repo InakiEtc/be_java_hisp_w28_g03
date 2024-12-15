@@ -11,6 +11,7 @@ import org.springframework.util.ResourceUtils;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -60,7 +61,6 @@ public class UserRepositoryImpl implements IUserRepository{
         return user;
     }
 
-
     @Override
     public List<User> findAllUsers() {
 
@@ -68,9 +68,10 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
-    public List<User> getFollowers() {
-        return getFollowers();
+    public List<User> getFollowersByID(int id) {
+        return findUserById(id).getFollowers().stream().toList();
     }
+
 
 
 }

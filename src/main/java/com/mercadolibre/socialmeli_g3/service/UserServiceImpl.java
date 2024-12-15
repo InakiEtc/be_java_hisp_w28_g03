@@ -18,23 +18,31 @@ import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.Comparator;
 import java.util.List;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.util.Arrays.stream;
+
 @Service
-public class UserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService {
 
     private final IUserRepository userRepository;
+    private final ListableBeanFactory listableBeanFactory;
 
-    public UserServiceImpl(IUserRepository userRepository) {
+    public UserServiceImpl(IUserRepository userRepository, ListableBeanFactory listableBeanFactory) {
         this.userRepository = userRepository;
+        this.listableBeanFactory = listableBeanFactory;
     }
 
 
+    // CU 004
     @Override
     public FollowedListDTO getFollowedByUserId(int id) {
         User user = userRepository.findUserById(id);
@@ -42,8 +50,8 @@ public class UserServiceImpl implements IUserService{
         FollowedListDTO followedListDTO = new FollowedListDTO();
 
         List<UserDTO> followedUsersDTOS = user.getFollowed()
-                                                .stream().map(u -> new UserDTO(u.getUserId(), u.getUserName()))
-                                                .toList();
+                .stream().map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .toList();
 //        @Test manual prueba de error
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
@@ -57,6 +65,7 @@ public class UserServiceImpl implements IUserService{
         return followedListDTO;
     }
 
+    // CU 003
     @Override
     public FollowersListDTO getSellerFollowers(int userId) {
 
@@ -143,4 +152,65 @@ public class UserServiceImpl implements IUserService{
         // Devolver el DTO de followersCountDTO
         return countDTO;
     }
+
+    // CU: 008 - ordenamiento de followers según asc y desc dependiendo el parametro
+    @Override
+    public List<UserDTO> folloewersOrderBy(int userId, String order) {
+        List<UserDTO> listFilter;
+        if(order.equals("name_asc")){
+            listFilter= ListOrderFollowerAsc(userId);
+        }
+        else if(order.equals("name_desc")){
+            listFilter =ListOrderFollowerDesc(userId);
+        }
+        else{
+            throw new BadRequestException("El parametro pasado no es el indicado");
+        }
+       return listFilter;
+
+    }
+
+    // CU: 008 - ordenamiento de followeds según asc y desc dependiendo el parametro
+    @Override
+    public List<UserDTO> folloewedsOrderBy(int userId, String order) {
+        List<UserDTO> listFilter;
+        if(order.equals("name_asc")){
+            listFilter= ListOrderFollowedAsc(userId);
+        }
+        else if(order.equals("name_desc")){
+            listFilter =ListOrderFollowedDesc(userId);
+        }
+        else{
+            throw new BadRequestException("El parametro pasado no es el indicado");
+        }
+        return listFilter;
+    }
+
+
+    // filtra los followers de forma asc
+    private List<UserDTO> ListOrderFollowerAsc(int id ){
+        List<UserDTO> listFollowers= getSellerFollowers(id).getFollowers();
+        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId))).toList();
+
+    }
+    // filtra los followers de forma desc
+    private List<UserDTO> ListOrderFollowerDesc(int id ){
+        List<UserDTO> listFollowers= getSellerFollowers(id).getFollowers();
+        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId)).reversed()).toList();
+    }
+
+    // filtra los followeds de forma asc
+    private List<UserDTO> ListOrderFollowedAsc(int id ){
+        List<UserDTO> listFollowers= getFollowedByUserId(id).getFollowed();
+        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId))).toList();
+
+
+    }
+    // filtra los followeds de forma desc
+    private List<UserDTO> ListOrderFollowedDesc(int id ){
+        List<UserDTO> listFollowers= getFollowedByUserId(id).getFollowed();
+        return listFollowers.stream().sorted((Comparator.comparing(UserDTO::getUserId)).reversed()).toList();
+    }
+
+
 }
