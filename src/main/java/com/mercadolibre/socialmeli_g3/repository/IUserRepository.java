@@ -12,6 +12,6 @@ public interface IUserRepository {
     User findUserById(int userId);
     void unfollow(User user, User userToUnfollow);
     User follow(User user, User userToFollow);
-    List<User> getFollowersByID(int id);
-
+    List<User> findFollowersOrderedByName(int id, String order);
+    List<User> findFollowedOrderedByName(int id, String order);
 }

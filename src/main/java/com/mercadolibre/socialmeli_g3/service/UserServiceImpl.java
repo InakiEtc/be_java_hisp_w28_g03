@@ -21,11 +21,9 @@ import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static java.util.Arrays.stream;
@@ -34,11 +32,11 @@ import static java.util.Arrays.stream;
 public class UserServiceImpl implements IUserService {
 
     private final IUserRepository userRepository;
-    private final ListableBeanFactory listableBeanFactory;
+    private final ObjectMapper mapper;
 
-    public UserServiceImpl(IUserRepository userRepository, ListableBeanFactory listableBeanFactory) {
+    public UserServiceImpl(IUserRepository userRepository) {
         this.userRepository = userRepository;
-        this.listableBeanFactory = listableBeanFactory;
+        mapper= new ObjectMapper();
     }
 
 
@@ -156,59 +154,104 @@ public class UserServiceImpl implements IUserService {
     // CU: 008 - ordenamiento de followers según asc y desc dependiendo el parametro
     @Override
     public FollowersListDTO followersOrderBy(int userId, String order) {
-        FollowersListDTO listFilter;
-        if(order.equalsIgnoreCase("name_asc")){
-            listFilter= ListOrderFollowerAsc(userId);
+        FollowersListDTO listFilter= new FollowersListDTO();
+        // se valida
+        validateNameOrderParam(order);
+        if(order== null){
+            listFilter= getSellerFollowers(userId);
+        }
+        else if(order.equalsIgnoreCase("name_asc")){
+            listFilter= orderFollowersBy(userId,"name_asc");
         }
         else if(order.equalsIgnoreCase("name_desc")){
-            listFilter =ListOrderFollowerDesc(userId);
-        }
-        else{
-            throw new BadRequestException("El parametro pasado no es el indicado");
+            listFilter =orderFollowersBy(userId,"name_desc");
         }
        return listFilter;
 
     }
 
-    // CU: 008 - ordenamiento de followeds según asc y desc dependiendo el parametro
     @Override
-    public FollowedListDTO followedsOrderBy(int userId, String order) {
-        FollowedListDTO listFilter;
-        if(order.equalsIgnoreCase("name_asc")){
-            listFilter= ListOrderFollowedAsc(userId);
+    public FollowedListDTO followedOrderBy(int userId, String order) {
+        FollowedListDTO listFilter = new FollowedListDTO();
+        validateNameOrderParam(order);
+        if(order== null){
+            listFilter= getFollowedByUserId(userId);
         }
-        else if(order.equalsIgnoreCase("name_desc")){
-            listFilter =ListOrderFollowedDesc(userId);
+        else if(order.equalsIgnoreCase("name_asc")){
+
+            listFilter= orderFollowedBy(userId,"name_asc");
         }
-        else{
-            throw new BadRequestException("El parametro pasado no es el indicado");
+       else if(order.equalsIgnoreCase("name_desc")){
+
+            listFilter =orderFollowedBy(userId,"name_desc");
         }
+
         return listFilter;
     }
 
+    // CU: 008 - ordenamiento de followeds según asc y desc dependiendo el parametro
 
-    // filtra los followers de forma asc
-    private FollowersListDTO ListOrderFollowerAsc(int id ){
-        FollowersListDTO listFollowers= getSellerFollowers(id);
-        List<UserDTO> followersList = listFollowers.getFollowers().stream()
-                        .sorted((Comparator.comparing(UserDTO::getUserId)))
-                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
-                .toList();
+    private FollowersListDTO orderFollowersBy(int userId, String order) {
+        User user = userRepository.findUserById(userId);
+        // si no lo encuentra NOT fount
+         if (user== null){
+             throw  new NotFoundException("User not found");
+         }
 
-        return new FollowersListDTO(listFollowers.getUserId(), listFollowers.getUserName(), followersList);
+        List<User> listFollowers = userRepository.findFollowersOrderedByName(userId, order);
 
+        List<UserDTO> listOrderFollowers;
+
+        // mapeo la lista
+        listOrderFollowers= listFollowers
+                .stream()
+                .map(v-> new UserDTO(v.getUserId(), v.getUserName()))
+                .collect(Collectors.toList());
+
+        // se agrega a FollowersLIstDTO
+        FollowersListDTO response= new FollowersListDTO();
+        response.setUserId(user.getUserId());
+        response.setUserName(user.getUserName());
+        response.setFollowers(listOrderFollowers);
+
+        return response;
     }
-    // filtra los followers de forma desc
-    private FollowersListDTO ListOrderFollowerDesc(int id ){
-        FollowersListDTO listFollowers= getSellerFollowers(id);
-        List<UserDTO> followersList = listFollowers.getFollowers().stream()
-                .sorted((Comparator.comparing(UserDTO::getUserId)).reversed())
-                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
-                .toList();
-
-        return new FollowersListDTO(listFollowers.getUserId(), listFollowers.getUserName(), followersList);
 
 
+    private FollowedListDTO orderFollowedBy(int userId, String order) {
+        User user = userRepository.findUserById(userId);
+        // si no lo encuentra NOT fount
+        if (user== null){
+            throw  new NotFoundException("User not found");
+        }
+
+        List<User> listFollowed = userRepository.findFollowedOrderedByName(userId, order);
+
+        List<UserDTO> listOrderFollowed;
+
+        // mapeo la lista
+        listOrderFollowed= listFollowed
+                .stream()
+                .map(v-> new UserDTO(v.getUserId(), v.getUserName()))
+                .collect(Collectors.toList());
+
+        // se agrega a FollowersLIstDTO
+        FollowedListDTO response= new FollowedListDTO();
+        response.setUserId(user.getUserId());
+        response.setUserName(user.getUserName());
+        response.setFollowed(listOrderFollowed);
+
+        return response;
+    }
+
+
+
+
+    private  void validateNameOrderParam(String order){
+
+        if(order!= null && !order.equalsIgnoreCase("name_asc") && !order.equalsIgnoreCase("name_desc")){
+            throw new BadRequestException("The provided filter param is not valid ");
+        }
     }
 
 
@@ -216,26 +259,7 @@ public class UserServiceImpl implements IUserService {
 
 
 
-    // filtra los followeds de forma asc
-    private FollowedListDTO ListOrderFollowedAsc(int id ){
-        FollowedListDTO listFolloweds= getFollowedByUserId(id);
-        List<UserDTO> followedsList = listFolloweds.getFollowed().stream()
-                .sorted((Comparator.comparing(UserDTO::getUserId)))
-                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
-                .toList();
 
-        return new FollowedListDTO(listFolloweds.getUserId(), listFolloweds.getUserName(), followedsList);
-    }
-    // filtra los followeds de forma desc
-    private FollowedListDTO ListOrderFollowedDesc(int id ){
-        FollowedListDTO listFolloweds= getFollowedByUserId(id);
-        List<UserDTO> followedsList = listFolloweds.getFollowed().stream()
-                .sorted((Comparator.comparing(UserDTO::getUserId)).reversed())
-                .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
-                .toList();
-
-        return new FollowedListDTO(listFolloweds.getUserId(), listFolloweds.getUserName(), followedsList);
-    }
 
 
 }

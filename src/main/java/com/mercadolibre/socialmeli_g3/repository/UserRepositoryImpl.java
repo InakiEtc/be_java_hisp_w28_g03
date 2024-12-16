@@ -2,6 +2,8 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
@@ -43,6 +45,31 @@ public class UserRepositoryImpl implements IUserRepository{
     }
 
     @Override
+    public List<User> findFollowersOrderedByName(int id, String order){
+
+        List<User> listFilter= findUserById(id).getFollowers();
+        if( order.equalsIgnoreCase("name_asc")){
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
+        }
+         else if( order.equalsIgnoreCase("name_desc")){
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
+        }
+        return listFilter ;
+    }
+
+    @Override
+    public List<User> findFollowedOrderedByName(int id, String order){
+        List<User> listFilter= findUserById(id).getFollowed();
+        if( order.equalsIgnoreCase("name_asc")){
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
+        }
+        else if( order.equalsIgnoreCase("name_desc")){
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
+        }
+        return listFilter ;
+    }
+
+    @Override
     public User getFollowers(int userId) {
         return findUserById(userId);
     }
@@ -65,11 +92,6 @@ public class UserRepositoryImpl implements IUserRepository{
     public List<User> findAllUsers() {
 
         return usersList;
-    }
-
-    @Override
-    public List<User> getFollowersByID(int id) {
-        return findUserById(id).getFollowers().stream().toList();
     }
 
 

@@ -20,14 +20,16 @@ public class UserController {
         this.userService = userService;
     }
 
+    // CU 004 / 008
     @GetMapping("/{userId}/followed/list")
-    public ResponseEntity<FollowedListDTO> getSellersFollowedByUser(@PathVariable int userId){
-        return new ResponseEntity<>(userService.getFollowedByUserId(userId), HttpStatus.OK);
+    public ResponseEntity<FollowedListDTO> getSellersFollowedByUser(@PathVariable int userId, @RequestParam (required = false) String order){
+        return new ResponseEntity<>(userService.followedOrderBy(userId, order), HttpStatus.OK);
     }
 
+    //CU 003 / 008
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<?> getPosts(@PathVariable int userId){
-        return new ResponseEntity<>(userService.getSellerFollowers(userId), HttpStatus.OK);
+    public ResponseEntity<?> getSellersFollowersByUser(@PathVariable int userId, @RequestParam (required = false) String order){
+        return new ResponseEntity<>(userService.followersOrderBy(userId, order), HttpStatus.OK);
     }
 
     //CU 002
@@ -36,28 +38,20 @@ public class UserController {
         return new ResponseEntity<> (userService.getNumberFollowers(userId), HttpStatus.OK);
     }
 
+    //CU 007
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
     public ResponseEntity<?> unfollow(@PathVariable int userId, @PathVariable int userIdToUnfollow){
         userService.unfollow(userId, userIdToUnfollow);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
+    // CU 001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
     public ResponseEntity<FollowDTO> follow(@PathVariable int userId, @PathVariable int userIdToFollow) {
         return new ResponseEntity<>(userService.follow(userId, userIdToFollow), HttpStatus.OK);
     }
 
-    //CU : 008
-    @GetMapping("/{UserID}/followers/list/order")
-    public ResponseEntity<?> followersOrderBy(@PathVariable int UserID, @RequestParam String order) {
-        return new ResponseEntity<>(userService.followersOrderBy(UserID, order), HttpStatus.OK);
-    }
 
-    //CU:008
-    @GetMapping("/{UserID}/followeds/list/order")
-    public ResponseEntity<?> followedOrderBy(@PathVariable int UserID, @RequestParam String order) {
-        return new ResponseEntity<>(userService.followedsOrderBy(UserID, order), HttpStatus.OK);
-    }
 
 
 
