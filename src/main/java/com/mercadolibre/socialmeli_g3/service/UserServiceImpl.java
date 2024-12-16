@@ -38,7 +38,7 @@ public class UserServiceImpl implements IUserService{
     @Override
     public FollowedListDTO getFollowedByUserId(int id) {
         User user = userRepository.findUserById(id);
-        if (user == null) throw new NotFoundException("El usuario no existe");
+        if (user == null) throw new NotFoundException("The user does not exist");
         FollowedListDTO followedListDTO = new FollowedListDTO();
 
         List<UserDTO> followedUsersDTOS = user.getFollowed()
@@ -48,7 +48,7 @@ public class UserServiceImpl implements IUserService{
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
         if (followedUsersDTOS == null || followedUsersDTOS.isEmpty()) {
-            throw new NotFoundException("El usuario " + user.getUserName() + " no sigue a ningun vendedor");
+            throw new NotFoundException("The user" + user.getUserName() + " does not follow anyone");
         }
 
         followedListDTO.setUserId(user.getUserId());
@@ -61,7 +61,7 @@ public class UserServiceImpl implements IUserService{
     public FollowersListDTO getSellerFollowers(int userId) {
 
         User userFollowers = userRepository.getFollowers(userId);
-        if (userFollowers == null) throw new NotFoundException("El usuario no existe");
+        if (userFollowers == null) throw new NotFoundException("The user doesnt exist");
 
         List<UserDTO> followersList = userFollowers.getFollowers().stream()
                 .map(user -> new UserDTO(user.getUserId(), user.getUserName()))
@@ -72,15 +72,15 @@ public class UserServiceImpl implements IUserService{
 
     @Override
     public void unfollow(int userId, int userIdToUnfollow) {
-        if (userId == userIdToUnfollow) throw new InvalidOperationException("No puedes dejar de seguirte a ti mismo");
+        if (userId == userIdToUnfollow) throw new InvalidOperationException("You cannot unfollow yourself");
 
         User user = userRepository.findUserById(userId);
-        if (user == null) throw new NotFoundException("El usuario no existe");
+        if (user == null) throw new NotFoundException("The user doesnt exist");
         User userToUnfollow = userRepository.findUserById(userIdToUnfollow);
-        if (userToUnfollow == null) throw new NotFoundException("El usuario no existe");
+        if (userToUnfollow == null) throw new NotFoundException("The user doesnt exist");
 
         if (!user.getFollowed().contains(userToUnfollow) || !userToUnfollow.getFollowers().contains(user)) {
-            throw new NotFoundException("El usuario no esta en la lista de seguidos");
+            throw new NotFoundException("The user is not in the following list");
         }
 
         userRepository.unfollow(user, userToUnfollow);
@@ -89,21 +89,21 @@ public class UserServiceImpl implements IUserService{
     @Override
     public FollowDTO follow(int userId, int userIdToFollow) {
         if (userId <= 0) {
-            throw new BadRequestException("El id del seguidor no es valido");
+            throw new BadRequestException("The id of the follower is not valid");
         }
         if(userIdToFollow <= 0) {
-            throw new BadRequestException("El id de usuario a seguir no es valido");
+            throw new BadRequestException("The id of the user to follow is not valid");
         }
 
         User user = userRepository.findUserById(userId);
-        if (user == null) throw new NotFoundException("El usuario no existe");
+        if (user == null) throw new NotFoundException("The user does not exist");
         User userToFollow = userRepository.findUserById(userIdToFollow);
-        if (userToFollow == null) throw new NotFoundException("El usuario no existe");
+        if (userToFollow == null) throw new NotFoundException("The user does not exist");
 
-        if (userId == userIdToFollow) throw new InvalidOperationException("No puedes seguirte a ti mismo");
+        if (userId == userIdToFollow) throw new InvalidOperationException("You cant follow yourself");
 
         if (user.getFollowed().contains(userToFollow) || userToFollow.getFollowers().contains(user)) {
-            throw new ConflictException("El usuario ya esta en la lista de seguidos");
+            throw new ConflictException("The user is already in the following list");
         }
 
         userRepository.follow(user, userToFollow);
@@ -116,7 +116,7 @@ public class UserServiceImpl implements IUserService{
         ObjectMapper mapper = new ObjectMapper();
         List<User> vehicleList = userRepository.findAllUsers();
         if(vehicleList.isEmpty()){
-            throw new NotFoundException("No se encontró ningun auto en el sistema.");
+            throw new NotFoundException("Car not found");
         }
         return vehicleList.stream()
                 .map(v -> mapper.convertValue(v,UserDTO.class))
@@ -128,7 +128,7 @@ public class UserServiceImpl implements IUserService{
        User user = userRepository.findUserById(userId);
        // si el usuario devuelve vacio
         if (user ==null){
-            throw new NotFoundException("El usuario con ID " + userId + " no fuen encontrado.");
+            throw new NotFoundException("The user with the id " + userId + "was not founded");
         }
         // Obtengo la cantidad de followers
         List<User> followers = user.getFollowers();

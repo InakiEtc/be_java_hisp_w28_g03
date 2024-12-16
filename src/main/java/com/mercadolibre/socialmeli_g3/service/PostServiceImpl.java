@@ -1,6 +1,8 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.PostDTO;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
@@ -16,9 +18,6 @@ import com.mercadolibre.socialmeli_g3.repository.IPostRepository;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -66,7 +65,7 @@ public class PostServiceImpl implements IPostService {
             return res;
         }).toList());
         if(response.getPosts().isEmpty()){
-            throw new NotFoundException("Post no encontrados");
+            throw new NotFoundException("Post not found");
         }
         return response;
     }
@@ -76,7 +75,7 @@ public class PostServiceImpl implements IPostService {
         findProductsPromoResponseDTO response = new findProductsPromoResponseDTO();
         User usuario = userRepository.findUserById(userId);
         if(usuario == null){
-            throw new NotFoundException("El usuario no existe");
+            throw new NotFoundException("User not found");
         }
         response.setUser_id(userId);
         response.setUser_name(usuario.getUserName());
@@ -87,7 +86,7 @@ public class PostServiceImpl implements IPostService {
     @Override
     public MessageDTO createPost(ProductPostDTO productPostDTO) {
         if (userRepository.findUserById(productPostDTO.getUserId()) == null) {
-            throw new BadRequestException("User not found");
+            throw new NotFoundException("User not found");
         }
 
         if (postRepository.findAllPosts().stream().anyMatch(p -> p.getUserId() == productPostDTO.getUserId() &&
@@ -119,5 +118,27 @@ public class PostServiceImpl implements IPostService {
 
         postRepository.createPost(objectMapper.convertValue(productPostDTO, Post.class));
         return new MessageDTO("Post created successfully");
+    }
+
+    @Override
+    public PromoProductPostDTO getProductsOnPromoByUser(int userId) {
+        PromoProductPostDTO promoProductPostDto= new PromoProductPostDTO();
+        User user = userRepository.findUserById(userId);
+        if(user == null){
+            throw new NotFoundException("User not found by userId");
+        }
+        List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userId);
+        if(postsOnPromoByUser == null || postsOnPromoByUser.isEmpty()){
+            throw new NotFoundException("Post on promo not found by userId");
+        }
+        promoProductPostDto.setUserId(user.getUserId());
+        promoProductPostDto.setUsername(user.getUserName());
+        List<PostDTO> postDtos =postsOnPromoByUser
+               .stream()
+               .map(p->objectMapper.convertValue(p, PostDTO.class))
+               .toList();
+
+       promoProductPostDto.setPosts(postDtos);
+        return promoProductPostDto;
     }
 }
