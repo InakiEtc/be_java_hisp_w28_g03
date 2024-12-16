@@ -13,5 +13,5 @@ public interface IPostRepository {
    public int findProductsPromoCount(int userId);
    Optional<Post> findPostById(Integer postId);
    void createPost(Post post);
-   List<Post> findAllPostByUser(int userId);
+   List<Post> findAllPostsOnPromoByUser(int userId);
 }

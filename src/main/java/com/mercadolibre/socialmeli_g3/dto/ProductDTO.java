@@ -17,5 +17,4 @@ public class ProductDTO {
     private String brand;
     private String color;
     private String notes;
-
 }
