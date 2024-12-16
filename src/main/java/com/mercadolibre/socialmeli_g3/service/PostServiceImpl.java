@@ -152,7 +152,7 @@ public class PostServiceImpl implements IPostService {
     }
     private void validateOrder(String order) {
         if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
-            throw new BadRequestException("El orden provisto para ordenar por fecha no es válido");
+            throw new BadRequestException("The provided order for sorting by date is not valid");
         }
     }
 }
