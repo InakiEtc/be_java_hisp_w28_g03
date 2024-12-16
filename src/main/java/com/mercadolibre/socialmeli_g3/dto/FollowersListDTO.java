@@ -20,7 +20,6 @@ public class FollowersListDTO {
     @JsonProperty("user_name")
     private String userName;
 
-    @JsonProperty("followers")
     private List<UserDTO> followers;
 
 }
