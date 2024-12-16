@@ -5,6 +5,9 @@ import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.service.IUserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,6 +28,11 @@ public class UserController {
     @GetMapping("/{userId}/followers/list")
     public ResponseEntity<?> getPosts(@PathVariable int userId){
         return new ResponseEntity<>(userService.getSellerFollowers(userId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{userId}/followers/count")
+    public ResponseEntity<?> getControllerFollowers(@PathVariable int userId){
+        return new ResponseEntity<> (userService.getNumberFollowers(userId), HttpStatus.OK);
     }
 
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
