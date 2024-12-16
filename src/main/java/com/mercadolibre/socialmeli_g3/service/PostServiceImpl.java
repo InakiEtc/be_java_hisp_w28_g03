@@ -133,6 +133,7 @@ public class PostServiceImpl implements IPostService {
 
     @Override
     public PromoProductPostDTO getProductsOnPromoByUser(int userId) {
+        if(userId> 0) throw new BadRequestException("User ID has a type error");
         PromoProductPostDTO promoProductPostDto= new PromoProductPostDTO();
         User user = userRepository.findUserById(userId);
         if(user == null) throw new NotFoundException("User not found by userId");
