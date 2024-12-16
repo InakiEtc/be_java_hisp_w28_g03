@@ -18,7 +18,7 @@ public interface IPostService {
     findProductsPromoResponseDTO findProductsPromoCount(int userId);
     MessageDTO createPost(ProductPostDTO productPostDTO);
 
-    PromoProductPostDTO getProductsOnPromoByUser(int userId);
+    PromoProductPostDTO getProductsOnPromoByUser(String userId);
 
 
 }

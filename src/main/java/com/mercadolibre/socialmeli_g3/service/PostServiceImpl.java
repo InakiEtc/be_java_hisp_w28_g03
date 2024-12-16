@@ -132,25 +132,35 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public PromoProductPostDTO getProductsOnPromoByUser(int userId) {
-        if(userId> 0) throw new BadRequestException("User ID has a type error");
-        PromoProductPostDTO promoProductPostDto= new PromoProductPostDTO();
-        User user = userRepository.findUserById(userId);
-        if(user == null) throw new NotFoundException("User not found by userId");
+    public PromoProductPostDTO getProductsOnPromoByUser(String userId) {
+        if (userId == null) {
+            throw new BadRequestException("User ID cannot be null");
+        }
+        try {
+            int userIdParsed = Integer.parseInt(userId);
+            PromoProductPostDTO promoProductPostDto = new PromoProductPostDTO();
+            User user = userRepository.findUserById(userIdParsed);
+            if (user == null) throw new NotFoundException("User not found by userId");
 
-        List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userId);
-        if(postsOnPromoByUser == null || postsOnPromoByUser.isEmpty()) throw new NotFoundException("Post on promo not found by userId");
+            List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userIdParsed);
+            if (postsOnPromoByUser == null || postsOnPromoByUser.isEmpty())
+                throw new NotFoundException("Post on promo not found by userId");
 
-        promoProductPostDto.setUserId(user.getUserId());
-        promoProductPostDto.setUsername(user.getUserName());
-        List<PostDTO> postDtos =postsOnPromoByUser
-               .stream()
-               .map(p->objectMapper.convertValue(p, PostDTO.class))
-               .toList();
+            promoProductPostDto.setUserId(user.getUserId());
+            promoProductPostDto.setUsername(user.getUserName());
+            List<PostDTO> postDtos = postsOnPromoByUser
+                    .stream()
+                    .map(p -> objectMapper.convertValue(p, PostDTO.class))
+                    .toList();
 
-       promoProductPostDto.setPosts(postDtos);
-        return promoProductPostDto;
+            promoProductPostDto.setPosts(postDtos);
+            return promoProductPostDto;
+
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("User ID must be a valid integer.");
+        }
     }
+
     private void validateOrder(String order) {
         if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
             throw new BadRequestException("The provided order for sorting by date is not valid");
