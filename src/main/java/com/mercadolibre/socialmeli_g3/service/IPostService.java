@@ -14,7 +14,7 @@ import java.util.List;
 public interface IPostService {
 
     List<Post> getPosts();
-    ProductByIdUserResponseDTO findProductByIdUser(int userId);
+    ProductByIdUserResponseDTO findProductByIdUser(int userId, String order);
     findProductsPromoResponseDTO findProductsPromoCount(int userId);
     MessageDTO createPost(ProductPostDTO productPostDTO);
 

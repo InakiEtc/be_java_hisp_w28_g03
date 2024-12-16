@@ -38,18 +38,18 @@ public class UserServiceImpl implements IUserService{
     @Override
     public FollowedListDTO getFollowedByUserId(int id) {
         User user = userRepository.findUserById(id);
+        // @Test manual prueba de error
+        // user= null;
         if (user == null) throw new NotFoundException("The user does not exist");
         FollowedListDTO followedListDTO = new FollowedListDTO();
 
         List<UserDTO> followedUsersDTOS = user.getFollowed()
-                                                .stream().map(u -> new UserDTO(u.getUserId(), u.getUserName()))
-                                                .toList();
-//        @Test manual prueba de error
-//        List<UserDTO> followedUsersDTOS= new ArrayList<>();
+                .stream().map(u -> new UserDTO(u.getUserId(), u.getUserName()))
+                .toList();
+        // @Test manual prueba de error
+        // List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
-        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty()) {
-            throw new NotFoundException("The user" + user.getUserName() + " does not follow anyone");
-        }
+        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty())  throw new NotFoundException("The user" + user.getUserName() + " does not follow anyone");
 
         followedListDTO.setUserId(user.getUserId());
         followedListDTO.setUserName(user.getUserName());

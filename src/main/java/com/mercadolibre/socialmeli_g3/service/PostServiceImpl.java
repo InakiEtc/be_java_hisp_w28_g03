@@ -26,7 +26,7 @@ public class PostServiceImpl implements IPostService {
     private final IPostRepository postRepository;
     private final IUserRepository userRepository;
     private final IProductRepository productRepository;
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
 
     public PostServiceImpl(IPostRepository postRepository, IProductRepository productRepository, IUserRepository userRepository) {
         this.postRepository = postRepository;
@@ -39,13 +39,24 @@ public class PostServiceImpl implements IPostService {
     public List<Post> getPosts() {
         return postRepository.findAllPosts();
    }
+
     @Override
-    public ProductByIdUserResponseDTO findProductByIdUser(int userId) {
+    public ProductByIdUserResponseDTO findProductByIdUser(int userId, String order) {
+        if(userId <= 0) {
+            throw new BadRequestException("El user id proporcionado no es válido");
+        }
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
-        ObjectMapper obj = new ObjectMapper();
         response.setUser_id(userId);
-        response.setPosts(postRepository.findProductByIdUser(userId).stream().map( post -> {
-        PostResponseDto res = new PostResponseDto();
+        List<Post> listOfPosts;
+        if(order == null) {
+            listOfPosts = postRepository.findProductByIdUser(userId);
+        }
+        else {
+            validateOrder(order);
+            listOfPosts = postRepository.findProductByIdUserOrderedByDate(userId, order);
+        }
+        List<PostResponseDto> posts = listOfPosts.stream().map( post -> {
+            PostResponseDto res = new PostResponseDto();
             ProductResponseDTO prodResponse = new ProductResponseDTO();
             prodResponse.setProduct_id(post.getProduct().getProductId());
             prodResponse.setType(post.getProduct().getType());
@@ -59,11 +70,11 @@ public class PostServiceImpl implements IPostService {
             res.setProduct(prodResponse);
             res.setCategory(post.getCategory());
             res.setPrice(post.getPrice());
-            res.setDate(
-                    post.getDate()
-            );
+            res.setDate(post.getDate());
             return res;
-        }).toList());
+        }).toList();
+
+        response.setPosts(posts);
         if(response.getPosts().isEmpty()){
             throw new NotFoundException("Post not found");
         }
@@ -124,13 +135,11 @@ public class PostServiceImpl implements IPostService {
     public PromoProductPostDTO getProductsOnPromoByUser(int userId) {
         PromoProductPostDTO promoProductPostDto= new PromoProductPostDTO();
         User user = userRepository.findUserById(userId);
-        if(user == null){
-            throw new NotFoundException("User not found by userId");
-        }
+        if(user == null) throw new NotFoundException("User not found by userId");
+
         List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userId);
-        if(postsOnPromoByUser == null || postsOnPromoByUser.isEmpty()){
-            throw new NotFoundException("Post on promo not found by userId");
-        }
+        if(postsOnPromoByUser == null || postsOnPromoByUser.isEmpty()) throw new NotFoundException("Post on promo not found by userId");
+
         promoProductPostDto.setUserId(user.getUserId());
         promoProductPostDto.setUsername(user.getUserName());
         List<PostDTO> postDtos =postsOnPromoByUser
@@ -140,5 +149,10 @@ public class PostServiceImpl implements IPostService {
 
        promoProductPostDto.setPosts(postDtos);
         return promoProductPostDto;
+    }
+    private void validateOrder(String order) {
+        if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
+            throw new BadRequestException("El orden provisto para ordenar por fecha no es válido");
+        }
     }
 }
