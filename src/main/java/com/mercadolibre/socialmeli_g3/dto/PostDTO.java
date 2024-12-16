@@ -14,9 +14,9 @@ public class PostDTO {
     @JsonProperty("user_id")
     private int userId;
     private String date;
-    @JsonProperty("product")
-    private ProductPostDTO product;
+    private ProductDTO product;
     private int category;
     private double price;
-
+    private boolean hasPromo;
+    private double discount;
 }
