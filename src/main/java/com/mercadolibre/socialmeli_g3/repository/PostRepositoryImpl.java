@@ -67,6 +67,13 @@ public class PostRepositoryImpl implements IPostRepository{
     }
 
     @Override
+    public List<Post> findAllPostsOnPromoByUser(int userId) {
+        return postsList.stream()
+                .filter(p -> p.getUserId() == userId && p.isHasPromo())
+                .toList();
+    }
+
+    @Override
     public Post findPostById(Integer postId) {
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }

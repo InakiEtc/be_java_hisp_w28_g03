@@ -7,6 +7,7 @@ import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.MessageDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
+import com.mercadolibre.socialmeli_g3.entity.User;
 
 import java.util.List;
 
@@ -17,4 +18,5 @@ public interface IPostService {
     findProductsPromoResponseDTO findProductsPromoCount(int userId);
     MessageDTO createPost(ProductPostDTO productPostDTO);
     MessageDTO createPromoPost(PromoProductPostDTO promoProductPostDTO);
+    PromoProductPostDTO getProductsOnPromoByUser(String userId);
 }

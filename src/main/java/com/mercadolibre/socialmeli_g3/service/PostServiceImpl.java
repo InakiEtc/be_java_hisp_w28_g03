@@ -2,6 +2,7 @@ package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
+import com.mercadolibre.socialmeli_g3.dto.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
@@ -76,7 +77,7 @@ public class PostServiceImpl implements IPostService {
 
         response.setPosts(posts);
         if(response.getPosts().isEmpty()){
-            throw new NotFoundException("Post no encontrados");
+            throw new NotFoundException("Post not found");
         }
         return response;
     }
@@ -85,8 +86,8 @@ public class PostServiceImpl implements IPostService {
     public findProductsPromoResponseDTO findProductsPromoCount(int userId) {
         findProductsPromoResponseDTO response = new findProductsPromoResponseDTO();
         User usuario = userRepository.findUserById(userId);
-        if (usuario == null) {
-            throw new NotFoundException("El usuario no existe");
+        if(usuario == null){
+            throw new NotFoundException("User not found");
         }
         response.setUser_id(userId);
         response.setUser_name(usuario.getUserName());
@@ -158,9 +159,39 @@ public class PostServiceImpl implements IPostService {
     }
     // endregion
 
+    @Override
+    public PromoProductPostDTO getProductsOnPromoByUser(String userId) {
+        if (userId == null) {
+            throw new BadRequestException("User ID cannot be null");
+        }
+        try {
+            int userIdParsed = Integer.parseInt(userId);
+            PromoProductPostDTO promoProductPostDto = new PromoProductPostDTO();
+            User user = userRepository.findUserById(userIdParsed);
+            if (user == null) throw new NotFoundException("User not found by userId");
+
+            List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userIdParsed);
+            if (postsOnPromoByUser == null || postsOnPromoByUser.isEmpty())
+                throw new NotFoundException("Post on promo not found by userId");
+
+            promoProductPostDto.setUserId(user.getUserId());
+            promoProductPostDto.setUsername(user.getUserName());
+            List<PostDTO> postDtos = postsOnPromoByUser
+                    .stream()
+                    .map(p -> objectMapper.convertValue(p, PostDTO.class))
+                    .toList();
+
+            promoProductPostDto.setPosts(postDtos);
+            return promoProductPostDto;
+
+        } catch (NumberFormatException e) {
+            throw new BadRequestException("User ID must be a valid integer.");
+        }
+    }
+
     private void validateOrder(String order) {
         if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
-            throw new BadRequestException("El orden provisto para ordenar por fecha no es válido");
+            throw new BadRequestException("The provided order for sorting by date is not valid");
         }
     }
 }
