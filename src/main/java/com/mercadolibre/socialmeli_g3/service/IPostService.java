@@ -1,15 +1,13 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
+import com.mercadolibre.socialmeli_g3.dto.*;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.MessageDTO;
-import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
 import java.util.List;
+import java.util.Map;
 
 public interface IPostService {
 
@@ -19,4 +17,5 @@ public interface IPostService {
     MessageDTO createPost(ProductPostDTO productPostDTO);
     MessageDTO createPromoPost(PromoProductPostDTO promoProductPostDTO);
     PromoProductPostListDTO getProductsOnPromoByUser(String userId);
+    List<PostDTO> getPostsByProductAttributes(Map<String, String> filterParams);
 }

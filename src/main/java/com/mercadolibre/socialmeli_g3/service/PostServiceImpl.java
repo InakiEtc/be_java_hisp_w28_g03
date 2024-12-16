@@ -16,7 +16,9 @@ import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class PostServiceImpl implements IPostService {
@@ -184,6 +186,17 @@ public class PostServiceImpl implements IPostService {
         } catch (NumberFormatException e) {
             throw new BadRequestException("User ID must be a valid integer.");
         }
+    }
+
+    @Override
+    public List<PostDTO> getPostsByProductAttributes(Map<String, String> filterParams) {
+        List<Post> postList = postRepository.findPostsByProductAttributes(filterParams);
+
+        if(postList.isEmpty()) {
+            throw new NotFoundException("No posts have been found with the provided filters");
+        }
+
+        return postList.stream().map(post -> objectMapper.convertValue(post, PostDTO.class)).toList();
     }
 
     private void validateOrder(String order) {

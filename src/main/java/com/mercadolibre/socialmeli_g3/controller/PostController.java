@@ -1,10 +1,8 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
+import com.mercadolibre.socialmeli_g3.dto.*;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.service.IPostService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 public class PostController {
@@ -50,9 +51,13 @@ public class PostController {
     }
 
     @GetMapping("/products/promo-post/list")
-    public ResponseEntity<PromoProductPostListDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
+    public ResponseEntity<PromoProductPostListDTO> findProductsOnPromoByUser(@RequestParam String user_id){
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 
-
+    // US017
+    @GetMapping("/products/posts/by-product-attributes/")
+    public ResponseEntity<List<PostDTO>> findProductsByProductAttributes(@RequestParam Map<String, String> filterParams) {
+        return new ResponseEntity<>(postService.getPostsByProductAttributes(filterParams), HttpStatus.OK);
+    }
 }
