@@ -41,11 +41,21 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public ProductByIdUserResponseDTO findProductByIdUser(int userId) {
+    public ProductByIdUserResponseDTO findProductByIdUser(int userId, String order) {
+        if(userId <= 0) {
+            throw new BadRequestException("El user id proporcionado no es válido");
+        }
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
-        ObjectMapper obj = new ObjectMapper();
         response.setUser_id(userId);
-        response.setPosts(postRepository.findProductByIdUser(userId).stream().map(post -> {
+        List<Post> listOfPosts;
+        if(order == null) {
+            listOfPosts = postRepository.findProductByIdUser(userId);
+        }
+        else {
+            validateOrder(order);
+            listOfPosts = postRepository.findProductByIdUserOrderedByDate(userId, order);
+        }
+        List<PostResponseDto> posts = listOfPosts.stream().map( post -> {
             PostResponseDto res = new PostResponseDto();
             ProductResponseDTO prodResponse = new ProductResponseDTO();
             prodResponse.setProduct_id(post.getProduct().getProductId());
@@ -60,12 +70,12 @@ public class PostServiceImpl implements IPostService {
             res.setProduct(prodResponse);
             res.setCategory(post.getCategory());
             res.setPrice(post.getPrice());
-            res.setDate(
-                    post.getDate()
-            );
+            res.setDate(post.getDate());
             return res;
-        }).toList());
-        if (response.getPosts().isEmpty()) {
+        }).toList();
+
+        response.setPosts(posts);
+        if(response.getPosts().isEmpty()){
             throw new NotFoundException("Post no encontrados");
         }
         return response;
@@ -147,4 +157,10 @@ public class PostServiceImpl implements IPostService {
         }
     }
     // endregion
+
+    private void validateOrder(String order) {
+        if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
+            throw new BadRequestException("El orden provisto para ordenar por fecha no es válido");
+        }
+    }
 }
