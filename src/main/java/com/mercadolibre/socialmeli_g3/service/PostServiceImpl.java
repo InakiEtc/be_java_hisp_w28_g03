@@ -1,15 +1,12 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
-import com.mercadolibre.socialmeli_g3.dto.PostDTO;
+import com.mercadolibre.socialmeli_g3.dto.*;
 import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.mercadolibre.socialmeli_g3.dto.MessageDTO;
-import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
@@ -160,13 +157,13 @@ public class PostServiceImpl implements IPostService {
     // endregion
 
     @Override
-    public PromoProductPostDTO getProductsOnPromoByUser(String userId) {
+    public PromoProductPostListDTO getProductsOnPromoByUser(String userId) {
         if (userId == null) {
             throw new BadRequestException("User ID cannot be null");
         }
         try {
             int userIdParsed = Integer.parseInt(userId);
-            PromoProductPostDTO promoProductPostDto = new PromoProductPostDTO();
+            PromoProductPostListDTO promoProductPostListDTO = new PromoProductPostListDTO();
             User user = userRepository.findUserById(userIdParsed);
             if (user == null) throw new NotFoundException("User not found by userId");
 
@@ -174,15 +171,15 @@ public class PostServiceImpl implements IPostService {
             if (postsOnPromoByUser == null || postsOnPromoByUser.isEmpty())
                 throw new NotFoundException("Post on promo not found by userId");
 
-            promoProductPostDto.setUserId(user.getUserId());
-            promoProductPostDto.setUsername(user.getUserName());
+            promoProductPostListDTO.setUserId(user.getUserId());
+            promoProductPostListDTO.setUsername(user.getUserName());
             List<PostDTO> postDtos = postsOnPromoByUser
                     .stream()
                     .map(p -> objectMapper.convertValue(p, PostDTO.class))
                     .toList();
 
-            promoProductPostDto.setPosts(postDtos);
-            return promoProductPostDto;
+            promoProductPostListDTO.setPosts(postDtos);
+            return promoProductPostListDTO;
 
         } catch (NumberFormatException e) {
             throw new BadRequestException("User ID must be a valid integer.");

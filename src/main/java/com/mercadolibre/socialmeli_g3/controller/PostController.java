@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
+import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
@@ -49,7 +50,7 @@ public class PostController {
     }
 
     @GetMapping("/products/promo-post/list")
-    public ResponseEntity<PromoProductPostDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
+    public ResponseEntity<PromoProductPostListDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 }

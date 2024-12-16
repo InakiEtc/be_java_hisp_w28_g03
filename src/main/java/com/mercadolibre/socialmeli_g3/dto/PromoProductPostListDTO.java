@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PromoProductPostDTO {
+public class PromoProductPostListDTO {
     @JsonProperty("user_id")
     private int userId;
     private String date;
@@ -20,4 +20,6 @@ public class PromoProductPostDTO {
     @JsonProperty("has_promo")
     private boolean hasPromo;
     private double discount;
+    private String username;
+    private List<PostDTO> posts;
 }

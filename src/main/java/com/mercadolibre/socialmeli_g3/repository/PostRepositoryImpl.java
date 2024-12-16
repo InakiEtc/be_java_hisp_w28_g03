@@ -73,8 +73,7 @@ public class PostRepositoryImpl implements IPostRepository{
                 .toList();
     }
 
-    @Override
-    public Post findPostById(Integer postId) {
+    private Post findPostById(Integer postId) {
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }
 
