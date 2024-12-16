@@ -133,7 +133,7 @@ public class PostServiceImpl implements IPostService {
 
     private void validateProduct(int productId) {
         if (productRepository.findProductById(productId).isEmpty()) {
-            throw new BadRequestException("Bad request in Product");
+            throw new NotFoundException("Product Not Found");
         }
     }
 
