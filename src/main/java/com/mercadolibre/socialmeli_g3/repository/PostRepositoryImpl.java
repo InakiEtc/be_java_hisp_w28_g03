@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
@@ -67,17 +66,15 @@ public class PostRepositoryImpl implements IPostRepository{
         return count;
     }
 
-
     @Override
     public List<Post> findAllPostsOnPromoByUser(int userId) {
         return postsList.stream()
-                .filter(p->p.getUserId()==userId && p.isHasPromo())
+                .filter(p -> p.getUserId() == userId && p.isHasPromo())
                 .toList();
     }
 
-    @Override
-    public Optional<Post> findPostById(Integer postId) {
-        return postsList.stream().filter(p -> p.getPostId() == postId).findFirst();
+    private Post findPostById(Integer postId) {
+        return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }
 
     @Override
@@ -86,6 +83,4 @@ public class PostRepositoryImpl implements IPostRepository{
         post.setPostId(POSTS_COUNTER);
         postsList.add(post);
     }
-
-
 }

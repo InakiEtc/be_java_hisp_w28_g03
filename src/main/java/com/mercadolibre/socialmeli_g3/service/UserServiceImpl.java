@@ -1,22 +1,15 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.FollowedPostsDTO;
 import com.mercadolibre.socialmeli_g3.dto.FollowersCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
-import com.mercadolibre.socialmeli_g3.dto.UserDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
-import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.exception.ConflictException;
-import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
-import com.mercadolibre.socialmeli_g3.exception.InvalidOperationException;
-import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
@@ -79,7 +72,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void unfollow(int userId, int userIdToUnfollow) {
-        if (userId == userIdToUnfollow) throw new InvalidOperationException("You cannot unfollow yourself");
+        if (userId == userIdToUnfollow) throw new BadRequestException("You cannot unfollow yourself");
 
         User user = userRepository.findUserById(userId);
         if (user == null) throw new NotFoundException("The user doesnt exist");
@@ -107,7 +100,7 @@ public class UserServiceImpl implements IUserService {
         User userToFollow = userRepository.findUserById(userIdToFollow);
         if (userToFollow == null) throw new NotFoundException("The user does not exist");
 
-        if (userId == userIdToFollow) throw new InvalidOperationException("You cant follow yourself");
+        if (userId == userIdToFollow) throw new BadRequestException("You cant follow yourself");
 
         if (user.getFollowed().contains(userToFollow) || userToFollow.getFollowers().contains(user)) {
             throw new ConflictException("The user is already in the following list");
