@@ -21,12 +21,6 @@ public class ExceptionController {
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidOperationException.class)
-    public ResponseEntity<?> invalidOperation(InvalidOperationException e){
-        ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
-        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<?> invalidOperation(ConflictException e){
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
