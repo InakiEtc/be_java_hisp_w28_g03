@@ -28,8 +28,8 @@ public class PostController {
     }
 
     @GetMapping("/products/followed/{userId}/list")
-    public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId){
-        return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId), HttpStatus.OK);
+    public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId, @RequestParam String order){
+        return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
     }
 
     @GetMapping("/products/promo-post/count")
