@@ -110,18 +110,6 @@ public class UserServiceImpl implements IUserService {
         return new FollowDTO(userId, userIdToFollow);
     }
 
-
-    @Override
-    public List<UserDTO> searchAllUser() {
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> vehicleList = userRepository.findAllUsers();
-        if(vehicleList.isEmpty()){
-            throw new NotFoundException("Car not found");
-        }
-        return vehicleList.stream()
-                .map(v -> mapper.convertValue(v,UserDTO.class))
-                .collect(Collectors.toList());
-    }
     @Override
     public FollowersCountDTO getNumberFollowers(int userId) {
 
@@ -254,21 +242,10 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-
-
     private  void validateNameOrderParam(String order){
 
         if(order!= null && !order.equalsIgnoreCase("name_asc") && !order.equalsIgnoreCase("name_desc")){
             throw new BadRequestException("The provided filter param is not valid ");
         }
     }
-
-
-
-
-
-
-
-
-
 }

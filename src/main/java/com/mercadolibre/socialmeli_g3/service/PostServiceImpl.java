@@ -45,7 +45,7 @@ public class PostServiceImpl implements IPostService {
     @Override
     public ProductByIdUserResponseDTO findProductByIdUser(int userId, String order) {
         if(userId <= 0) {
-            throw new BadRequestException("El user id proporcionado no es válido");
+            throw new BadRequestException("The user id provided is not valid");
         }
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
         response.setUser_id(userId);

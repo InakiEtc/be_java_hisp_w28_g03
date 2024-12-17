@@ -16,7 +16,6 @@ public interface IUserService {
 
     void unfollow(int userId, int userIdToUnfollow);
     FollowDTO follow(int userId, int userIdToFollow);
-    List<UserDTO> searchAllUser();
     FollowersCountDTO getNumberFollowers(int userId);
     FollowersListDTO followersOrderBy(int userId, String order);
     FollowedListDTO followedOrderBy(int userId, String order);

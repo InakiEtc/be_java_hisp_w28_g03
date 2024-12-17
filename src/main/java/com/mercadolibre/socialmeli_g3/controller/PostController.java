@@ -26,52 +26,60 @@ public class PostController {
         this.postService = postService;
     }
 
+    // US006
     @GetMapping("/posts")
     public ResponseEntity<?> getPosts(){
         return new ResponseEntity<>(postService.getPosts(), HttpStatus.OK);
     }
 
+    // US0011
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
     }
 
+    // US0015
     @GetMapping("/products/filter")
     public ResponseEntity<List<PostDTO>> findProductByPrice(@RequestParam double minPrice, @RequestParam double maxPrice){
         return new ResponseEntity<List<PostDTO>>(postService.findProductByPrice(minPrice,maxPrice), HttpStatus.OK);
     }
 
+    // US0011
     @GetMapping("/products/promo-post/count")
     public ResponseEntity<findProductsPromoResponseDTO> findProductsPromoCount(@RequestParam int user_id){
         return new ResponseEntity<findProductsPromoResponseDTO>(postService.findProductsPromoCount(user_id), HttpStatus.OK);
     }
 
+    // US0005
     @PostMapping("/products/post")
     public ResponseEntity<?> createPost(@RequestBody ProductPostDTO productPostDTO){
         return new ResponseEntity<>(postService.createPost(productPostDTO),HttpStatus.OK);
     }
 
+    // US0010
     @PostMapping("/products/promo-post")
     public ResponseEntity<?> createPromoPost(@RequestBody PromoProductPostDTO promoProductPostDTO){
         return new ResponseEntity<>(postService.createPromoPost(promoProductPostDTO),HttpStatus.OK);
     }
 
+    // US0012
     @GetMapping("/products/promo-post/list")
     public ResponseEntity<PromoProductPostListDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 
-    // US017
+    // US0017
     @GetMapping("/products/posts/by-product-attributes/")
     public ResponseEntity<List<PostDTO>> findProductsByProductAttributes(@RequestParam Map<String, String> filterParams) {
         return new ResponseEntity<>(postService.getPostsByProductAttributes(filterParams), HttpStatus.OK);
     }
-    //CU 016
+    // US 0016
     @GetMapping ("/products/post/category/{category}")
     public ResponseEntity<?> findProductByCategory(@PathVariable  int category){
         return new ResponseEntity<>(postService.findProductsByCategory(category), HttpStatus.OK);
     }
 
+    // US 0013
     @PutMapping("/products/post/{postId}")
     public ResponseEntity<PromoProductPostDTO> makePostAPromo(@PathVariable int postId, @RequestParam double discount){
         return new ResponseEntity<>(postService.makePostAPromo(postId,discount), HttpStatus.OK);
