@@ -14,4 +14,5 @@ public interface IPostRepository {
    List<Post> findAllPostsOnPromoByUser(int userId);
    Post findPostById(Integer postId);
    void updatePost(Post post);
+   List<Post> findPostbyCategory(int category);
 }
