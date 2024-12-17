@@ -37,4 +37,11 @@ public class ProductRepositoryImpl implements IProductRepository{
     public Optional<Product> findProductById(int productId) {
         return productsList.stream().filter(p -> p.getProductId() == productId).findFirst();
     }
+
+    @Override
+    public List<Product> findByProductNameContaining(String keyword) {
+        return productsList.stream()
+                .filter(product -> product.getProductName().toLowerCase().contains(keyword.toLowerCase()))
+                .toList();
+    }
 }
