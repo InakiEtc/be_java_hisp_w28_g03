@@ -191,4 +191,23 @@ public class PostServiceImpl implements IPostService {
             throw new BadRequestException("The provided order for sorting by date is not valid");
         }
     }
+
+    @Override
+    public PromoProductPostDTO makePostAPromo(int postId, double discount) {
+        validateDiscount(discount);
+
+        Post post = postRepository.findPostById(postId);
+        if (post == null) {
+            throw new NotFoundException("Post not found");
+        }
+
+        if (post.isHasPromo()) {
+            throw new BadRequestException("Post is already a promo post");
+        }
+
+        post.setHasPromo(true);
+        post.setDiscount(discount);
+        postRepository.updatePost(post);
+        return objectMapper.convertValue(post, PromoProductPostDTO.class);
+    }
 }

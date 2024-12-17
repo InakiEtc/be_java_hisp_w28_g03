@@ -12,5 +12,4 @@ import java.util.List;
 public class FollowedPostsDTO {
     private int userId;
     private List<PostDTO> posts;
-
 }

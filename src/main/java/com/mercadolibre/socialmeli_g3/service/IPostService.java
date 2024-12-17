@@ -19,4 +19,5 @@ public interface IPostService {
     MessageDTO createPost(ProductPostDTO productPostDTO);
     MessageDTO createPromoPost(PromoProductPostDTO promoProductPostDTO);
     PromoProductPostListDTO getProductsOnPromoByUser(String userId);
+    PromoProductPostDTO makePostAPromo(int postId,double discount);
 }
