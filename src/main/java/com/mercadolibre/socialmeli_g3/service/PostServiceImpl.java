@@ -195,11 +195,13 @@ public class PostServiceImpl implements IPostService {
     }
 
 
-
-    @Override
-    public List<PostDTO > findProductsByCategory(int category) {
-        List<Post> listPost= postRepository.findPostbyCategory(category);
-        if (listPost.isEmpty()){
+//CU 016
+@Override
+public List<PostDTO > findProductsByCategory(int category) {
+    try {
+        validateCategory(category);
+        List<Post> listPost = postRepository.findPostbyCategory(category);
+        if (listPost.isEmpty()) {
             throw new NotFoundException("Category not found");
         }
 
@@ -207,6 +209,10 @@ public class PostServiceImpl implements IPostService {
         return listPost.stream()
                 .map(post -> objectMapper.convertValue(post, PostDTO.class))
                 .collect(Collectors.toList());
+    }catch (NumberFormatException e) {
+        throw new BadRequestException("The category must be a valid integer.");
     }
+
+}
 
 }
