@@ -22,5 +22,13 @@
     "brand": "Razer",
     "color": "Green",
     "notes": "Wireless"
+  },
+  {
+    "product_id": 104,
+    "product_name": "Monitor Gamer",
+    "type": "Gamer",
+    "brand": "AOC",
+    "color": "Black",
+    "notes": "Curved"
   }
 ]

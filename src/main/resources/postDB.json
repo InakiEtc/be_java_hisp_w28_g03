@@ -1,6 +1,6 @@
 [
   {
-    "postId": 201,
+    "post_id": 201,
     "user_id": 1,
     "date": "2023-08-04",
     "product": {
@@ -17,7 +17,7 @@
     "discount": 0.40
   },
   {
-    "postId": 202,
+    "post_id": 202,
     "user_id": 1,
     "date": "2023-08-02",
     "product": {
@@ -34,7 +34,7 @@
     "discount": 0.30
   },
   {
-    "postId": 203,
+    "post_id": 203,
     "user_id": 1,
     "date": "2023-08-03",
     "product": {
@@ -49,5 +49,22 @@
     "price": 120.00,
     "has_promo": true,
     "discount": 0.25
+  },
+  {
+    "post_id": 204,
+    "user_id": 2,
+    "date": "2023-09-12",
+    "product": {
+      "product_id": 104,
+      "product_name": "Monitor Gamer",
+      "type": "Gamer",
+      "brand": "AOC",
+      "color": "Black",
+      "notes": "Curved"
+    },
+    "category": 60,
+    "price": 240.00,
+    "has_promo": false,
+    "discount": 0.00
   }
 ]

@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostDTO {
+    @JsonProperty("post_id")
     private int postId;
     @JsonProperty("user_id")
     private int userId;

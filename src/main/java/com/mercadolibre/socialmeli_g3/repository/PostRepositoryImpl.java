@@ -104,7 +104,8 @@ public class PostRepositoryImpl implements IPostRepository{
         return postsList.stream().filter( p-> p.getCategory()== category).toList();
     }
 
-    private Post findPostById(Integer postId) {
+    @Override
+    public Post findPostById(Integer postId) {
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }
 
@@ -116,5 +117,14 @@ public class PostRepositoryImpl implements IPostRepository{
         postsList.add(post);
     }
 
+    @Override
+    public void updatePost(Post post) {
+        Post postToUpdate = postsList.stream().filter(x -> x.getPostId() == post.getPostId()).findFirst().orElse(null);
+        if (postToUpdate != null) {
+            // updateo solo estos campos, pero aca deberian ser todos los campos.
+            postToUpdate.setHasPromo(post.isHasPromo());
+            postToUpdate.setDiscount(post.getDiscount());
+        }
+    }
 
 }

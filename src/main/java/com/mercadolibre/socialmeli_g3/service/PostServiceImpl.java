@@ -221,25 +221,42 @@ public class PostServiceImpl implements IPostService {
         }
     }
 
+    //CU 016
+    @Override
+    public List<PostDTO > findProductsByCategory(int category) {
+        try {
+            validateCategory(category);
+            List<Post> listPost = postRepository.findPostbyCategory(category);
+            if (listPost.isEmpty()) {
+                throw new NotFoundException("Category not found");
+            }
 
-//CU 016
-@Override
-public List<PostDTO > findProductsByCategory(int category) {
-    try {
-        validateCategory(category);
-        List<Post> listPost = postRepository.findPostbyCategory(category);
-        if (listPost.isEmpty()) {
-            throw new NotFoundException("Category not found");
+            // Convierte la lista de Post a una lista de PostDTO y la devuelve
+            return listPost.stream()
+                    .map(post -> objectMapper.convertValue(post, PostDTO.class))
+                    .collect(Collectors.toList());
+        }catch (NumberFormatException e) {
+            throw new BadRequestException("The category must be a valid integer.");
         }
 
-        // Convierte la lista de Post a una lista de PostDTO y la devuelve
-        return listPost.stream()
-                .map(post -> objectMapper.convertValue(post, PostDTO.class))
-                .collect(Collectors.toList());
-    }catch (NumberFormatException e) {
-        throw new BadRequestException("The category must be a valid integer.");
     }
 
-}
+    @Override
+    public PromoProductPostDTO makePostAPromo(int postId, double discount) {
+        validateDiscount(discount);
 
+        Post post = postRepository.findPostById(postId);
+        if (post == null) {
+            throw new NotFoundException("Post not found");
+        }
+
+        if (post.isHasPromo()) {
+            throw new BadRequestException("Post is already a promo post");
+        }
+
+        post.setHasPromo(true);
+        post.setDiscount(discount);
+        postRepository.updatePost(post);
+        return objectMapper.convertValue(post, PromoProductPostDTO.class);
+    }
 }
