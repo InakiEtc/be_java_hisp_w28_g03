@@ -1,8 +1,10 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
+import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
 import com.mercadolibre.socialmeli_g3.service.IProductService;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -10,12 +12,20 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-
     private final IProductService iProductService;
 
     public ProductController(IProductService iProductService) {
         this.iProductService = iProductService;
     }
 
+    @GetMapping("/test")
+    public ResponseEntity<List<ProductDTO>> test(){
+        return new ResponseEntity<>(iProductService.searchProducts("Silla"), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String keyword) {
+        return new ResponseEntity<>(iProductService.searchProducts(keyword), HttpStatus.OK);
+    }
 
 }
