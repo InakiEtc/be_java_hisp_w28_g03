@@ -11,11 +11,15 @@ import java.util.List;
 public interface IUserService {
 
     FollowersListDTO getSellerFollowers(int userId);
+
     FollowedListDTO getFollowedByUserId(int id);
+
     void unfollow(int userId, int userIdToUnfollow);
     FollowDTO follow(int userId, int userIdToFollow);
     List<UserDTO> searchAllUser();
     FollowersCountDTO getNumberFollowers(int userId);
     FollowersListDTO followersOrderBy(int userId, String order);
     FollowedListDTO followedOrderBy(int userId, String order);
+    FollowersListDTO getFollowersByUsername(int userId, String username);
+
 }

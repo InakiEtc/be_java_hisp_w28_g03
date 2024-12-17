@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements IPostService {
@@ -200,9 +201,32 @@ public class PostServiceImpl implements IPostService {
         return response;
     }
 
+
     private void validateOrder(String order) {
         if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {
             throw new BadRequestException("The provided order for sorting by date is not valid");
         }
     }
+
+
+//CU 016
+@Override
+public List<PostDTO > findProductsByCategory(int category) {
+    try {
+        validateCategory(category);
+        List<Post> listPost = postRepository.findPostbyCategory(category);
+        if (listPost.isEmpty()) {
+            throw new NotFoundException("Category not found");
+        }
+
+        // Convierte la lista de Post a una lista de PostDTO y la devuelve
+        return listPost.stream()
+                .map(post -> objectMapper.convertValue(post, PostDTO.class))
+                .collect(Collectors.toList());
+    }catch (NumberFormatException e) {
+        throw new BadRequestException("The category must be a valid integer.");
+    }
+
+}
+
 }
