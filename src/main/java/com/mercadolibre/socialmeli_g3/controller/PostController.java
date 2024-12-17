@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.controller;
 import com.mercadolibre.socialmeli_g3.dto.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
+import com.mercadolibre.socialmeli_g3.dto.*;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
+
 
 @RestController
 public class PostController {
@@ -63,6 +66,11 @@ public class PostController {
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 
+    // US017
+    @GetMapping("/products/posts/by-product-attributes/")
+    public ResponseEntity<List<PostDTO>> findProductsByProductAttributes(@RequestParam Map<String, String> filterParams) {
+        return new ResponseEntity<>(postService.getPostsByProductAttributes(filterParams), HttpStatus.OK);
+    }
     //CU 016
     @GetMapping ("/products/post/category/{category}")
     public ResponseEntity<?> findProductByCategory(@PathVariable  int category){

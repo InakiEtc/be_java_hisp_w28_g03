@@ -17,7 +17,9 @@ import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -201,6 +203,17 @@ public class PostServiceImpl implements IPostService {
         return response;
     }
 
+
+    @Override
+    public List<PostDTO> getPostsByProductAttributes(Map<String, String> filterParams) {
+        List<Post> postList = postRepository.findPostsByProductAttributes(filterParams);
+
+        if(postList.isEmpty()) {
+            throw new NotFoundException("No posts have been found with the provided filters");
+        }
+
+        return postList.stream().map(post -> objectMapper.convertValue(post, PostDTO.class)).toList();
+    }
 
     private void validateOrder(String order) {
         if(!order.equalsIgnoreCase("date_asc") && !order.equalsIgnoreCase("date_desc")) {

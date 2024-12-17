@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
+import com.mercadolibre.socialmeli_g3.repository.filters.FilterFactory;
+import com.mercadolibre.socialmeli_g3.repository.filters.IProductFilter;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -12,14 +14,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
     private List<Post> postsList;
     private static Integer POSTS_COUNTER;
+    private final FilterFactory filterFactory;
 
     public PostRepositoryImpl() throws IOException {
+        filterFactory = new FilterFactory();
         postsList=new ArrayList<>();
         loadDataBase();
     }
@@ -74,6 +79,19 @@ public class PostRepositoryImpl implements IPostRepository{
     }
 
     @Override
+    public List<Post> findPostsByProductAttributes(Map<String, String> filterParams) {
+        IProductFilter productFilter;
+        List<Post> posts = new ArrayList<>(postsList);
+
+        for(Map.Entry<String, String> criteria: filterParams.entrySet()) {
+            productFilter = filterFactory.getFilter(criteria.getKey());
+            posts = productFilter.filter(criteria.getValue(), posts);
+        }
+
+        return posts;
+    }
+
+    @Override
     public List<Post> findProductByPrice(double minPrice, double maxPrice) {
         return postsList.stream()
                 .filter(post -> post.getPrice() >= minPrice && post.getPrice() <= maxPrice)
@@ -90,10 +108,13 @@ public class PostRepositoryImpl implements IPostRepository{
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }
 
+
     @Override
     public void createPost(Post post) {
         POSTS_COUNTER++;
         post.setPostId(POSTS_COUNTER);
         postsList.add(post);
     }
+
+
 }
