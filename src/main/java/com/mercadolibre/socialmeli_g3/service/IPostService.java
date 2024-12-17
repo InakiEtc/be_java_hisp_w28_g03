@@ -17,6 +17,7 @@ public interface IPostService {
     MessageDTO createPost(ProductPostDTO productPostDTO);
     MessageDTO createPromoPost(PromoProductPostDTO promoProductPostDTO);
     PromoProductPostListDTO getProductsOnPromoByUser(String userId);
+    List<PostDTO> findProductByPrice(double minPrice, double maxPrice);
     List<PostDTO> findProductsByCategory(int category);
     List<PostDTO> getPostsByProductAttributes(Map<String, String> filterParams);
 }

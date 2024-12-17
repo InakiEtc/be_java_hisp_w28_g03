@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 
+
 @RestController
 public class PostController {
 
@@ -40,6 +41,11 @@ public class PostController {
         return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
     }
 
+    @GetMapping("/products/filter")
+    public ResponseEntity<List<PostDTO>> findProductByPrice(@RequestParam double minPrice, @RequestParam double maxPrice){
+        return new ResponseEntity<List<PostDTO>>(postService.findProductByPrice(minPrice,maxPrice), HttpStatus.OK);
+    }
+
     @GetMapping("/products/promo-post/count")
     public ResponseEntity<findProductsPromoResponseDTO> findProductsPromoCount(@RequestParam int user_id){
         return new ResponseEntity<findProductsPromoResponseDTO>(postService.findProductsPromoCount(user_id), HttpStatus.OK);
@@ -56,7 +62,7 @@ public class PostController {
     }
 
     @GetMapping("/products/promo-post/list")
-    public ResponseEntity<PromoProductPostListDTO> findProductsOnPromoByUser(@RequestParam String user_id){
+    public ResponseEntity<PromoProductPostListDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 

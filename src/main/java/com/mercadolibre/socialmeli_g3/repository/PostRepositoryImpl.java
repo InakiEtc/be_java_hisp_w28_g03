@@ -92,6 +92,14 @@ public class PostRepositoryImpl implements IPostRepository{
     }
 
     @Override
+    public List<Post> findProductByPrice(double minPrice, double maxPrice) {
+        return postsList.stream()
+                .filter(post -> post.getPrice() >= minPrice && post.getPrice() <= maxPrice)
+                .sorted((post1, post2) -> Double.compare(post1.getPrice(), post2.getPrice()))//ordena de precio mayor a menor
+                .toList();
+    }
+
+    @Override
     public List<Post> findPostbyCategory(int category) {
         return postsList.stream().filter( p-> p.getCategory()== category).toList();
     }
@@ -107,4 +115,6 @@ public class PostRepositoryImpl implements IPostRepository{
         post.setPostId(POSTS_COUNTER);
         postsList.add(post);
     }
+
+
 }
