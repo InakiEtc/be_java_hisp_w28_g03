@@ -4,12 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
-@Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class FollowedPostsDTO {
-    private int userId;
-    private List<PostDTO> posts;
+@NoArgsConstructor
+@Data
+public class ExceptionDTO {
+    private String message;
 }
