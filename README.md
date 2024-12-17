@@ -38,6 +38,8 @@ A continuación pueden acceder a nuestro tablero donde se presentan los tickets 
 
 [Tablero de GitHub con los tickets](https://github.com/users/InakiEtc/projects/1).
 
+[Documentación completa de los endpoints en PDF](src/main/resources/DocumentacionEndpoints.pdf) (Está ubicada en la carpeta "resources")
+
 # Pruebas (Postman)
 
 Una vez ejecutado el programa en el el IDE de IntelliJ, descargar de la carpeta *Resources* la colección de endpoints. Esta colección tiene las rutas y su respectivo número de US.
