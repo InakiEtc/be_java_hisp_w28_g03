@@ -73,6 +73,14 @@ public class PostRepositoryImpl implements IPostRepository{
                 .toList();
     }
 
+    @Override
+    public List<Post> findProductByPrice(double minPrice, double maxPrice) {
+        return postsList.stream()
+                .filter(post -> post.getPrice() >= minPrice && post.getPrice() <= maxPrice)
+                .sorted((post1, post2) -> Double.compare(post1.getPrice(), post2.getPrice()))//ordena de precio mayor a menor
+                .toList();
+    }
+
     private Post findPostById(Integer postId) {
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }

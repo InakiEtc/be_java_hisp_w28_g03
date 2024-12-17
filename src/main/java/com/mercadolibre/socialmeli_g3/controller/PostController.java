@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
+import com.mercadolibre.socialmeli_g3.dto.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 public class PostController {
@@ -32,6 +35,11 @@ public class PostController {
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
+    }
+
+    @GetMapping("/products/filter")
+    public ResponseEntity<List<PostDTO>> findProductByPrice(@RequestParam double minPrice, @RequestParam double maxPrice){
+        return new ResponseEntity<List<PostDTO>>(postService.findProductByPrice(minPrice,maxPrice), HttpStatus.OK);
     }
 
     @GetMapping("/products/promo-post/count")

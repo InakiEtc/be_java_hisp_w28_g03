@@ -12,4 +12,5 @@ public interface IPostRepository {
    int findProductsPromoCount(int userId);
    void createPost(Post post);
    List<Post> findAllPostsOnPromoByUser(int userId);
+   List<Post> findProductByPrice(double minPrice,double maxPrice);
 }
