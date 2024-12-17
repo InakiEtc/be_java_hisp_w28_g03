@@ -5,7 +5,6 @@ import com.mercadolibre.socialmeli_g3.dto.*;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
-import com.mercadolibre.socialmeli_g3.entity.User;
 
 import java.util.List;
 

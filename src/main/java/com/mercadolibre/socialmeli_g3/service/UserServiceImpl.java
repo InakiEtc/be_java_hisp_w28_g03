@@ -238,6 +238,22 @@ public class UserServiceImpl implements IUserService {
     }
 
 
+    public FollowersListDTO getFollowersByUsername(int userId, String username){
+        FollowersListDTO followersListByUsernameDTO = new FollowersListDTO();
+        User user = userRepository.findUserById(userId);
+        if(user==null) throw new NotFoundException("User not found");
+        List<UserDTO> followersByUsername = userRepository.getFollowers(userId).getFollowers()
+                .stream().filter(u-> u.getUserName().toLowerCase().contains(username.toLowerCase()))
+                .map(f-> new UserDTO(f.getUserId(), f.getUserName()))
+                .toList();
+        if(followersByUsername == null ||  followersByUsername.isEmpty()) throw new NotFoundException("Followers not found");
+        followersListByUsernameDTO.setUserId(user.getUserId());
+        followersListByUsernameDTO.setUserName(user.getUserName());
+        followersListByUsernameDTO.setFollowers(followersByUsername);
+        return followersListByUsernameDTO;
+    }
+
+
 
 
     private  void validateNameOrderParam(String order){

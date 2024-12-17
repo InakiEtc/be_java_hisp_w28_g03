@@ -13,13 +13,7 @@ import java.util.List;
 public class PromoProductPostListDTO {
     @JsonProperty("user_id")
     private int userId;
-    private String date;
-    private ProductDTO product;
-    private int category;
-    private double price;
-    @JsonProperty("has_promo")
-    private boolean hasPromo;
-    private double discount;
+    @JsonProperty("user_name")
     private String username;
     private List<PostDTO> posts;
 }
