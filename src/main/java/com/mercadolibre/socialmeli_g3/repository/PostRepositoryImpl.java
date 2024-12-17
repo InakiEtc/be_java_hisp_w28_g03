@@ -91,6 +91,11 @@ public class PostRepositoryImpl implements IPostRepository{
         return posts;
     }
 
+    @Override
+    public List<Post> findPostbyCategory(int category) {
+        return postsList.stream().filter( p-> p.getCategory()== category).toList();
+    }
+
     private Post findPostById(Integer postId) {
         return postsList.stream().filter(x -> x.getPostId() == postId).findFirst().orElse(null);
     }

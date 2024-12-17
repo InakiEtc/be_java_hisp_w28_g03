@@ -14,4 +14,5 @@ public interface IPostRepository {
    void createPost(Post post);
    List<Post> findAllPostsOnPromoByUser(int userId);
    List<Post> findPostsByProductAttributes(Map<String, String> filterCriteria);
+   List<Post> findPostbyCategory(int category);
 }
