@@ -48,7 +48,7 @@ public class UserServiceImpl implements IUserService {
 //        @Test manual prueba de error
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
-        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty())  throw new NotFoundException("The user" + user.getUserName() + " does not follow anyone");
+        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty())  throw new NotFoundException("The user " + user.getUserName() + " does not follow anyone");
 
         followedListDTO.setUserId(user.getUserId());
         followedListDTO.setUserName(user.getUserName());
@@ -116,7 +116,7 @@ public class UserServiceImpl implements IUserService {
        User user = userRepository.findUserById(userId);
        // si el usuario devuelve vacio
         if (user ==null){
-            throw new NotFoundException("The user with the id " + userId + "was not founded");
+            throw new NotFoundException("The user with the id " + userId + " was not founded");
         }
         // Obtengo la cantidad de followers
         List<User> followers = user.getFollowers();

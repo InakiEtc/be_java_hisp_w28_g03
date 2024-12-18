@@ -51,7 +51,7 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public List<Post> findProductByIdUser(int userId) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
         return postsList.stream()
                 .filter(post -> post.getUserId() == userId)
