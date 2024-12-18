@@ -11,6 +11,9 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -48,7 +51,18 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public List<Post> findProductByIdUser(int userId) {
-        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted((post1, post2) -> post2.getDate().compareTo(post1.getDate())).collect(Collectors.toList());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        return postsList.stream()
+                .filter(post -> post.getUserId() == userId)
+                .filter(post -> {
+                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
+                    LocalDate currentDate = LocalDate.now();
+                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
+                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
+                })
+                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
+                .collect(Collectors.toList());
     }
 
     @Override

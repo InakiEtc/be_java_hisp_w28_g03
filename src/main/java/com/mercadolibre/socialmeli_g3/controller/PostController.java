@@ -64,7 +64,7 @@ public class PostController {
 
     // US0012
     @GetMapping("/products/promo-post/list")
-    public ResponseEntity<PromoProductPostListDTO> findProdutsOnPromoByUser(@RequestParam String user_id){
+    public ResponseEntity<PromoProductPostListDTO> findProductsOnPromoByUser(@RequestParam String user_id){
         return new ResponseEntity<>(postService.getProductsOnPromoByUser(user_id), HttpStatus.OK);
     }
 
