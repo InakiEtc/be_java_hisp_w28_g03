@@ -11,7 +11,7 @@ Mercado Libre sigue creciendo y para el año que viene  tiene como objetivo empe
 
 La fecha de lanzamiento se aproxima, por lo cual es necesaria la presentación de una versión Beta de lo que va a ser conocido como “SocialMeli”, en donde los compradores van a poder seguir a sus vendedores favoritos y enterarse de todas las novedades que los mismos posteen.
 
-# Definiciones de equipo
+# 🤓☝🏻 Definiciones de equipo
 
 * **Clonar el repositorio**
 ````
@@ -32,7 +32,7 @@ git clone https://github.com/InakiEtc/be_java_hisp_w28_g03.git
 -> Apply"
 ```
 
-# Tablero de documentación y seguimiento
+# 📋 Tablero de documentación y seguimiento
 
 A continuación pueden acceder a nuestro tablero donde se presentan los tickets asignados así como la documentación.
 
@@ -40,10 +40,54 @@ A continuación pueden acceder a nuestro tablero donde se presentan los tickets 
 
 [Documentación completa de los endpoints en PDF](src/main/resources/DocumentacionEndpoints.pdf) (Está ubicada en la carpeta "resources")
 
-# Pruebas (Postman)
+
+# 🏄🏻‍♂️ Pruebas (Postman)
 
 Una vez ejecutado el programa en el el IDE de IntelliJ, descargar de la carpeta *Resources* la colección de endpoints. Esta colección tiene las rutas y su respectivo número de US.
 
+# 🤝🏻 Acuerdos del equipo
+
+El equipo de desarrollo ha definido las siguientes reglas y estándares con el objetivo de mantener una estructura ordenada, evitar inconsistencias y facilitar la colaboración.
+
+### 1️⃣ Creación de Posts
+- **Productos preexistentes**:  
+  Antes de crear un nuevo post, se debe asegurar de que los productos estén previamente creados en el sistema. Esto evita la duplicación y asegura la consistencia de los datos.
+
+### 2️⃣ Estándares de Codificación
+- **Uso de Camel Case**:  
+  Todos los identificadores (variables, funciones, etc.) deben seguir el estándar de camel case. Ejemplos:
+    - `productList`
+    - `getProductDetails`
+
+> [!NOTE]
+> Para las clases e interfaces, se debe usar UpperCamelCase. Ejemplo: ```java public class Product { ... }```
+
+- **Inyección de Dependencia con Constructores**:  
+  Se debe implementar inyección de dependencias a través de constructores para garantizar un código más flexible, modular y fácilmente testeable.
+
+### 3️⃣ Carga de Datos
+- **Data recargada con JSON**:  
+  Todos los datos iniciales y mock se deben cargar a través de archivos JSON. Esto permite mayor claridad en la estructura de los datos y facilita su reutilización durante el desarrollo.
+
+### 4️⃣ Control de Versiones
+- **Rama por persona**:  
+  Cada miembro del equipo debe trabajar en una rama específica asociada a su nombre. Esto minimiza conflictos y mantiene el control sobre los cambios.
+  Ejemplo:
+    - `/baron_santiago`
+    - `/bianchi_juan`
+
+    <br>
+
+- **Commit Convention**:  
+  Las descripciones de los commits deben seguir una convención predefinida. Esto ayuda a comprender rápidamente el propósito de cada cambio. Ejemplo de prefijos:
+    - `feat`: Para agregar nuevas funcionalidades.
+    - `fix`: Para solucionar errores.
+    - `docs`: Para cambios en documentación.
+    - `style`: Para ajustes relacionados con formato o estilo del código.
+
+### 5️⃣ Idioma
+- **Uso del Inglés**:  
+  Todo el código, nombres de variables, funciones, comentarios y documentación técnica deben estar en inglés. Esto asegura un estándar profesional y facilita la colaboración con equipos internacionales.
 
 ## 💻 Tecnologías usadas
 
@@ -95,3 +139,4 @@ Una vez ejecutado el programa en el el IDE de IntelliJ, descargar de la carpeta 
 # 🌅 Agradecimientos
 
 Un especial agradecimiento a nuestros instructores por su guía durante todo el proceso, así como a nuestros compañeros por llenarnos de conocimiento durante el corto tiempo que hemos compartido.
+
