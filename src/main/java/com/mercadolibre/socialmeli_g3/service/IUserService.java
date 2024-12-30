@@ -1,12 +1,9 @@
 package com.mercadolibre.socialmeli_g3.service;
-import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
-import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 
-import com.mercadolibre.socialmeli_g3.dto.FollowersCountDTO;
-import com.mercadolibre.socialmeli_g3.dto.UserDTO;
-
-import java.util.List;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
 
 public interface IUserService {
 

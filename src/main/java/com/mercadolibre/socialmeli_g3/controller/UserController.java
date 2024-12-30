@@ -1,7 +1,7 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
-import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
-import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.service.IUserService;
 import org.springframework.http.HttpStatus;
@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")

@@ -1,20 +1,17 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.FollowersCountDTO;
-import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
-import com.mercadolibre.socialmeli_g3.dto.UserDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
-import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.exception.ConflictException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 import java.util.List;
 import java.util.stream.Collectors;

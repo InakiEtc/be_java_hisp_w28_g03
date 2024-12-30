@@ -2,10 +2,7 @@ package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.*;
-import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;

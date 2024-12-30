@@ -2,11 +2,8 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
-import com.mercadolibre.socialmeli_g3.dto.UserDTO;
-import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
-import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -20,9 +17,11 @@ import java.util.List;
 public class UserRepositoryImpl implements IUserRepository{
 
     private List<User> usersList;
+    private final String path;
 
-    public UserRepositoryImpl() throws IOException {
+    public UserRepositoryImpl(@Value("${userDB.json.path}") String path) throws IOException {
         usersList=new ArrayList<>();
+        this.path = path;
         loadDataBase();
     }
 

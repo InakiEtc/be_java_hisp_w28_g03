@@ -6,6 +6,7 @@ import com.mercadolibre.socialmeli_g3.entity.Post;
 
 import com.mercadolibre.socialmeli_g3.repository.filters.FilterFactory;
 import com.mercadolibre.socialmeli_g3.repository.filters.IProductFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -25,10 +26,12 @@ public class PostRepositoryImpl implements IPostRepository{
     private List<Post> postsList;
     private static Integer POSTS_COUNTER;
     private final FilterFactory filterFactory;
+    private final String path;
 
-    public PostRepositoryImpl() throws IOException {
+    public PostRepositoryImpl(@Value("${postDB.json.path}") String path) throws IOException {
         filterFactory = new FilterFactory();
         postsList=new ArrayList<>();
+        this.path = path;
         loadDataBase();
     }
 
@@ -37,7 +40,7 @@ public class PostRepositoryImpl implements IPostRepository{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> posts ;
 
-        file= ResourceUtils.getFile("classpath:postDB.json");
+        file= ResourceUtils.getFile(path);
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
 
         postsList = posts;

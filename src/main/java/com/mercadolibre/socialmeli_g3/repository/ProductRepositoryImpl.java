@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.repository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.Product;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -16,9 +17,11 @@ import java.util.Optional;
 public class ProductRepositoryImpl implements IProductRepository{
 
     private List<Product> productsList;
+    private final String path;
 
-    public ProductRepositoryImpl() throws IOException {
+    public ProductRepositoryImpl(@Value("${productDB.json.path}") String path) throws IOException {
         productsList=new ArrayList<>();
+        this.path = path;
         loadDataBase();
     }
 
