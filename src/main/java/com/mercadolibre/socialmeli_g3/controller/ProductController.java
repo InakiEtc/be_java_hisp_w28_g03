@@ -18,11 +18,7 @@ public class ProductController {
         this.iProductService = iProductService;
     }
 
-    @GetMapping("/test")
-    public ResponseEntity<List<ProductDTO>> test(){
-        return new ResponseEntity<>(iProductService.searchProducts("Silla"), HttpStatus.OK);
-    }
-
+    // US0014
     @GetMapping("/search")
     public ResponseEntity<List<ProductDTO>> searchProducts(@RequestParam String keyword) {
         return new ResponseEntity<>(iProductService.searchProducts(keyword), HttpStatus.OK);

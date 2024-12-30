@@ -2,10 +2,7 @@ package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.*;
-import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.findProductsPromoResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
@@ -17,7 +14,6 @@ import com.mercadolibre.socialmeli_g3.repository.IProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -45,7 +41,7 @@ public class PostServiceImpl implements IPostService {
     @Override
     public ProductByIdUserResponseDTO findProductByIdUser(int userId, String order) {
         if(userId <= 0) {
-            throw new BadRequestException("El user id proporcionado no es válido");
+            throw new BadRequestException("The user id provided is not valid");
         }
         ProductByIdUserResponseDTO response = new ProductByIdUserResponseDTO();
         response.setUser_id(userId);
@@ -84,8 +80,8 @@ public class PostServiceImpl implements IPostService {
     }
 
     @Override
-    public findProductsPromoResponseDTO findProductsPromoCount(int userId) {
-        findProductsPromoResponseDTO response = new findProductsPromoResponseDTO();
+    public FindProductsPromoResponseDTO findProductsPromoCount(int userId) {
+        FindProductsPromoResponseDTO response = new FindProductsPromoResponseDTO();
         User usuario = userRepository.findUserById(userId);
         if(usuario == null){
             throw new NotFoundException("User not found");

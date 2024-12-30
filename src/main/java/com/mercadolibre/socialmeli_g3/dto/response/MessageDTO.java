@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class findProductsPromoResponseDTO {
-    private int user_id;
-    private String user_name;
-    private int promos_products_count;
+public class MessageDTO {
+    private String message;
 }

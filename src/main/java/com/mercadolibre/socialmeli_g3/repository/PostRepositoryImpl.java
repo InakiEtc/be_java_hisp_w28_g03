@@ -6,11 +6,15 @@ import com.mercadolibre.socialmeli_g3.entity.Post;
 
 import com.mercadolibre.socialmeli_g3.repository.filters.FilterFactory;
 import com.mercadolibre.socialmeli_g3.repository.filters.IProductFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -22,10 +26,12 @@ public class PostRepositoryImpl implements IPostRepository{
     private List<Post> postsList;
     private static Integer POSTS_COUNTER;
     private final FilterFactory filterFactory;
+    private final String path;
 
-    public PostRepositoryImpl() throws IOException {
+    public PostRepositoryImpl(@Value("${postDB.json.path}") String path) throws IOException {
         filterFactory = new FilterFactory();
         postsList=new ArrayList<>();
+        this.path = path;
         loadDataBase();
     }
 
@@ -34,7 +40,7 @@ public class PostRepositoryImpl implements IPostRepository{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> posts ;
 
-        file= ResourceUtils.getFile("classpath:postDB.json");
+        file= ResourceUtils.getFile(path);
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
 
         postsList = posts;
@@ -48,7 +54,18 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public List<Post> findProductByIdUser(int userId) {
-        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted((post1, post2) -> post2.getDate().compareTo(post1.getDate())).collect(Collectors.toList());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+        return postsList.stream()
+                .filter(post -> post.getUserId() == userId)
+                .filter(post -> {
+                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
+                    LocalDate currentDate = LocalDate.now();
+                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
+                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
+                })
+                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
+                .collect(Collectors.toList());
     }
 
     @Override

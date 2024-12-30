@@ -1,20 +1,17 @@
 package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.FollowersCountDTO;
-import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
-import com.mercadolibre.socialmeli_g3.dto.UserDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
-import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.exception.ConflictException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
-import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.stereotype.Service;
-
-import java.util.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -48,7 +45,7 @@ public class UserServiceImpl implements IUserService {
 //        @Test manual prueba de error
 //        List<UserDTO> followedUsersDTOS= new ArrayList<>();
 
-        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty())  throw new NotFoundException("The user" + user.getUserName() + " does not follow anyone");
+        if (followedUsersDTOS == null || followedUsersDTOS.isEmpty())  throw new NotFoundException("The user " + user.getUserName() + " does not follow anyone");
 
         followedListDTO.setUserId(user.getUserId());
         followedListDTO.setUserName(user.getUserName());
@@ -71,7 +68,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void unfollow(int userId, int userIdToUnfollow) {
+    public boolean unfollow(int userId, int userIdToUnfollow) {
         if (userId == userIdToUnfollow) throw new BadRequestException("You cannot unfollow yourself");
 
         User user = userRepository.findUserById(userId);
@@ -84,6 +81,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         userRepository.unfollow(user, userToUnfollow);
+        return true;
     }
 
     @Override
@@ -110,25 +108,13 @@ public class UserServiceImpl implements IUserService {
         return new FollowDTO(userId, userIdToFollow);
     }
 
-
-    @Override
-    public List<UserDTO> searchAllUser() {
-        ObjectMapper mapper = new ObjectMapper();
-        List<User> vehicleList = userRepository.findAllUsers();
-        if(vehicleList.isEmpty()){
-            throw new NotFoundException("Car not found");
-        }
-        return vehicleList.stream()
-                .map(v -> mapper.convertValue(v,UserDTO.class))
-                .collect(Collectors.toList());
-    }
     @Override
     public FollowersCountDTO getNumberFollowers(int userId) {
 
        User user = userRepository.findUserById(userId);
        // si el usuario devuelve vacio
         if (user ==null){
-            throw new NotFoundException("The user with the id " + userId + "was not founded");
+            throw new NotFoundException("The user with the id " + userId + " was not founded");
         }
         // Obtengo la cantidad de followers
         List<User> followers = user.getFollowers();
@@ -254,21 +240,10 @@ public class UserServiceImpl implements IUserService {
     }
 
 
-
-
     private  void validateNameOrderParam(String order){
 
         if(order!= null && !order.equalsIgnoreCase("name_asc") && !order.equalsIgnoreCase("name_desc")){
             throw new BadRequestException("The provided filter param is not valid ");
         }
     }
-
-
-
-
-
-
-
-
-
 }
