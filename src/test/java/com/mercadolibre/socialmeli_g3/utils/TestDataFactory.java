@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataFactory {
-    private final static User user1 = new User(1, "vendedor1", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-    private final static User user2 = new User(2, "usuario1", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-    private final static User user3 = new User(3, "usuario2", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
-    private final static User user6 = new User(6, "usuario 6", new ArrayList<>(), new ArrayList<>(), new ArrayList<>());
+    private final static User user1 = new User(1, "vendedor1", null, null, null);
+    private final static User user2 = new User(2, "usuario1", null, null, null);
+    private final static User user3 = new User(3, "usuario2", null, null, null);
+    private final static User user6 = new User(6, "usuario 6", null, null, null);
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
     private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");
@@ -19,7 +19,7 @@ public class TestDataFactory {
 
 
     public static List<User> getVendedor1FollowersAsc() {
-        return new ArrayList<>(List.of(user2, user3, user6));
+        return new ArrayList<>(List.of(user6, user2, user3));
     }
 
     public static List<User> getVendedor1FollowersDesc() {
@@ -32,7 +32,7 @@ public class TestDataFactory {
 
     public static FollowersListDTO getVendedor1FollowersDTOAsc() {
         FollowersListDTO user1Followers = new FollowersListDTO();
-        List<UserDTO> users = new ArrayList<>(List.of(user2DTO, user3DTO, user6DTO));
+        List<UserDTO> users = new ArrayList<>(List.of(user6DTO, user2DTO, user3DTO));
         user1Followers.setUserId(1);
         user1Followers.setUserName("vendedor1");
         user1Followers.setFollowers(users);

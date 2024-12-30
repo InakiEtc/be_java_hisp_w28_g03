@@ -107,7 +107,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("T-0004 - Method followersOrderBy should perform an descending alphabetical sorting when 'name_desc' request param is provided")
+    @DisplayName("T-0004 - Method followersOrderBy should perform a descending alphabetical sorting when 'name_desc' request param is provided")
     void test_followersOrderBy_should_perform_descending_alphabetical_sorting() {
         String sortingParam = "name_desc";
         int userId = 1;
