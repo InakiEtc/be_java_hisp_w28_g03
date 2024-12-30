@@ -30,7 +30,7 @@ public class ProductRepositoryImpl implements IProductRepository{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Product> products ;
 
-        file= ResourceUtils.getFile("classpath:productsDb.json");
+        file= ResourceUtils.getFile(path);
         products= objectMapper.readValue(file,new TypeReference<List<Product>>(){});
 
         productsList = products;

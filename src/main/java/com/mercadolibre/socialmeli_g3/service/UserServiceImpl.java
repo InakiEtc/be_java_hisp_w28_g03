@@ -68,7 +68,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public void unfollow(int userId, int userIdToUnfollow) {
+    public boolean unfollow(int userId, int userIdToUnfollow) {
         if (userId == userIdToUnfollow) throw new BadRequestException("You cannot unfollow yourself");
 
         User user = userRepository.findUserById(userId);
@@ -81,6 +81,7 @@ public class UserServiceImpl implements IUserService {
         }
 
         userRepository.unfollow(user, userToUnfollow);
+        return true;
     }
 
     @Override
