@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.unit.service;
 
+import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import com.mercadolibre.socialmeli_g3.repository.UserRepositoryImpl;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -42,6 +44,12 @@ class UserServiceImplTest {
                     List.of(new User(1, "vendedor1", null, null,null)),
                     null);
 
+    private static final User followUser =
+            new User(2, "usuario1",
+                    List.of(new User(3, "vendedor3", null, null,null)),
+                    List.of(new User(4, "vendedor3", null, null,null)),
+                    null);
+
     @Test
     @DisplayName("T-0002 - Verificar que el usuario a dejar de seguir exista.(US-0007) - OK")
     public void test_unfollow_should_return_true() {
@@ -59,7 +67,7 @@ class UserServiceImplTest {
         // Assert
         assertTrue(result);
         // Verifica que se llamó una vez
-        Mockito.verify(userRepository, times(1)).unfollow(user, unfollowUser);
+        verify(userRepository, times(1)).unfollow(user, unfollowUser);
     }
 
     @Test
@@ -80,6 +88,46 @@ class UserServiceImplTest {
 
         assertEquals("The user doesnt exist", exception.getMessage());
         // Verifica que no se llamó una vez
-        Mockito.verify(userRepository, times(0)).unfollow(user, unfollowUser);
+        verify(userRepository, times(0)).unfollow(user, unfollowUser);
     }
+
+    @Test
+    @DisplayName("T-0001 Verificar que el usuario a seguir exista. (US-0001) ")
+    public void test_follow_should_return_true(){
+        // Arrange
+        int userId = user.getUserId();
+        int followUserId = followUser.getUserId();
+
+        // Simula encontrar ambos usuarios
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(user);
+        Mockito.when(userRepository.findUserById(followUserId)).thenReturn(followUser);
+
+        // Act
+        FollowDTO result = userService.follow(userId, followUserId);
+
+        //Assert
+        assertEquals(result.getFollower, followUserId);
+        verify(userRepository, times(1)).follow(user, followUser);
+    }
+    @Test
+    @DisplayName("T-0001 Verificar que el usuario a seguir exista. (US-0001) - ERROR")
+    public void test_follow_should_throw_user_doesnt_exist() {
+        // Arrange
+        int userId = user.getUserId();
+        int followUserId = 99;
+
+        // Simula encontrar solo al usuario principal
+        Mockito.when(userRepository.findUserById(userId)).thenReturn(user);
+        Mockito.when(userRepository.findUserById(followUserId)).thenReturn(null);
+
+        // Act & Assert
+        NotFoundException exception = assertThrows(NotFoundException.class, () -> {
+            userService.unfollow(userId, followUserId);
+        });
+
+        assertEquals("The user doesnt exist", exception.getMessage());
+        // Verifica que no se llamó una vez
+        verify(userRepository, times(0)).unfollow(user, followUser);
+    }
+
 }
