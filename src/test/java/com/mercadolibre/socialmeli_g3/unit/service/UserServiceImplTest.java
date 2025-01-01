@@ -45,8 +45,8 @@ class UserServiceImplTest {
                     null);
 
     private static final User followUser =
-            new User(2, "usuario1",
-                    List.of(new User(3, "vendedor3", null, null,null)),
+            new User(3, "usuario1",
+                    List.of(new User(2, "vendedor3", null, null,null)),
                     List.of(new User(4, "vendedor3", null, null,null)),
                     null);
 
@@ -106,7 +106,7 @@ class UserServiceImplTest {
         FollowDTO result = userService.follow(userId, followUserId);
 
         //Assert
-        assertEquals(result.getFollower, followUserId);
+        assertEquals(result.getFollower(), followUserId);
         verify(userRepository, times(1)).follow(user, followUser);
     }
     @Test
