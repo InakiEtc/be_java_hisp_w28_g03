@@ -163,8 +163,8 @@ class UserControllerTest {
     @Test
     @DisplayName("T-0004 Get sellers followed by user should return FollowedListDTO response")
     void test_getSellersFollowedByUser_should_return_followedListDTOResponse() throws Exception {
-        FollowedListDTO followedListDTOResponse =new FollowedListDTO(1, "vendedor1",
-                List.of(new UserDTO(2, "usuario1"),
+        FollowedListDTO followedListDTOResponse = new FollowedListDTO(1, "vendedor1",
+                List.of(
                         new UserDTO(4, "vendedor2"),
                         new UserDTO(5, "vendedor3"),
                         new UserDTO(6, "usuario 6")
@@ -181,6 +181,19 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should return a 204 NO_CONTENT when unfollow is successful")
+    void should_return_a_204_NO_CONTENT_when_unfollow_is_successful() throws Exception {
+        int userId = 1;
+        int userIdToUnfollow = 2;
+
+        ResultMatcher expectedStatusCode = status().isNoContent();
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode);
+    }
+
+    @Test
     @DisplayName("BONUS T-0018 Get followers by username containing should return FollowersListDTO response")
     void test_getFollowersByUsernameContaining_should_return_followersListDTOResponse() throws Exception {
         FollowersListDTO followersListDTOResponse = new FollowersListDTO(3, "usuario2",
@@ -192,12 +205,133 @@ class UserControllerTest {
         int userId =  3;
         String partOfUsername = "vende";
 
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(followersListDTOResponse));
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType(MediaType.APPLICATION_JSON);
+
         mockMvc.perform(get("/users/{userId}/followers", userId)
                         .param("username", partOfUsername))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().json(mapper.writeValueAsString(followersListDTOResponse)))
-                .andExpect(status().isOk())
+                .andExpect(expectedContentType)
+                .andExpect(expectedBody)
+                .andExpect(expectedStatusCode)
                 .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userId is not positive")
+    void should_throw_a_NotFoundException_when_userId_is_negative_unfollowing() throws Exception {
+
+        int userId = -1;
+        int userIdToUnfollow = 2;
+        List<String> errorMessage = new ArrayList<>(List.of("userId: The user id must be a positive number"));
+        String errorDetails = errorMessage.toString();
+
+        ExceptionDTO expectedException = new ExceptionDTO("Data request invalid", errorDetails);
+
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userIdToUnfollow is not positive")
+    void should_throw_a_NotFoundException_when_userIdToUnfollow_is_negative_unfollowing() throws Exception {
+
+        int userId = 1;
+        int userIdToUnfollow = -2;
+        List<String> errorMessage = new ArrayList<>(List.of("userIdToUnfollow: The user id to unfollow must be a positive number"));
+        String errorDetails = errorMessage.toString();
+
+        ExceptionDTO expectedException = new ExceptionDTO("Data request invalid", errorDetails);
+
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userId is not found")
+    void should_throw_a_NotFoundException_when_userId_is_not_found_unfollowing() throws Exception {
+        int userId = 120;
+        int userIdToUnfollow = 2;
+        String errorMessage = "User not found";
+        ExceptionDTO expectedException = new ExceptionDTO(errorMessage, null);
+
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userIdToUnfollow is not found")
+    void should_throw_a_NotFoundException_when_userIdToUnfollow_is_not_found_unfollowing() throws Exception {
+        int userId = 1;
+        int userIdToUnfollow = 120;
+        String errorMessage = "User not found";
+        ExceptionDTO expectedException = new ExceptionDTO(errorMessage, null);
+
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a BadRequestException when userId equals to userIdToUnfollow")
+    void should_throw_a_BadRequestException_when_userId_equals_to_userIdToUnfollow() throws Exception {
+        int userId = 1;
+        int userIdToUnfollow = 1;
+        String errorMessage = "You cannot unfollow yourself";
+
+        ExceptionDTO expectedException = new ExceptionDTO(errorMessage, null);
+
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userIdToUnfollow is not a follower of userId")
+    void should_throw_a_NotFoundException_when_userIdToUnfollow_is_not_a_follower_of_userId() throws Exception {
+        int userId = 1;
+        int userIdToUnfollow = 3;
+        String errorMessage = "The user is not in the following list";
+        ExceptionDTO expectedException = new ExceptionDTO(errorMessage, null);
+
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/unfollow/{userIdToUnfollow}", userId, userIdToUnfollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody);
     }
 
 }

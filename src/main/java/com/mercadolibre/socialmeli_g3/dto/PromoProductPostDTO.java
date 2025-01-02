@@ -31,7 +31,7 @@ public class PromoProductPostDTO {
     @Valid
     private ProductDTO product;
 
-    @NotBlank(message = "The category must be provided")
+    @NotNull(message = "The category must be provided")
     private Integer category;
 
     @NotNull(message = "The price must be provided")
