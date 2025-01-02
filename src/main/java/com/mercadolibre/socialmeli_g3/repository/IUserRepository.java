@@ -8,7 +8,6 @@ import com.mercadolibre.socialmeli_g3.entity.User;
 
 public interface IUserRepository {
     List<User> findAllUsers();
-    User getFollowers(int userId);
     User findUserById(int userId);
     void unfollow(User user, User userToUnfollow);
     User follow(User user, User userToFollow);

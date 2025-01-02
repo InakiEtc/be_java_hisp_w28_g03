@@ -20,7 +20,7 @@ class UserRepositoryImplTest {
     private IUserRepository userRepository;
 
     @Test
-    @DisplayName("Buscar usuario por ID - OK")
+    @DisplayName("T-0002 - Should search by userId - OK")
     public void test_findUserById_should_return_user() {
         // Arrange
         int userId = 1;
@@ -33,7 +33,7 @@ class UserRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("Buscar usuario por ID - ERROR")
+    @DisplayName("T-0002 - Should return a null when user is not found.")
     public void test_findUserById_should_return_user_not_found() {
         // Arrange
         int userId = 99;

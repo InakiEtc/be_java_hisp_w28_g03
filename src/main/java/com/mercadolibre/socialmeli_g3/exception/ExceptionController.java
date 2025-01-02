@@ -1,8 +1,6 @@
 package com.mercadolibre.socialmeli_g3.exception;
 
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.stream.Collectors;

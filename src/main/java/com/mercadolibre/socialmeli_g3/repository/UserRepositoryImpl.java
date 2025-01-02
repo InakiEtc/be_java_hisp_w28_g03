@@ -47,10 +47,10 @@ public class UserRepositoryImpl implements IUserRepository{
 
         List<User> listFilter= findUserById(id).getFollowers();
         if( order.equalsIgnoreCase("name_asc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName))).toList();
         }
          else if( order.equalsIgnoreCase("name_desc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName)).reversed()).toList();
         }
         return listFilter ;
     }
@@ -59,17 +59,12 @@ public class UserRepositoryImpl implements IUserRepository{
     public List<User> findFollowedOrderedByName(int id, String order){
         List<User> listFilter= findUserById(id).getFollowed();
         if( order.equalsIgnoreCase("name_asc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName))).toList();
         }
         else if( order.equalsIgnoreCase("name_desc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName)).reversed()).toList();
         }
         return listFilter ;
-    }
-
-    @Override
-    public User getFollowers(int userId) {
-        return findUserById(userId);
     }
 
     @Override

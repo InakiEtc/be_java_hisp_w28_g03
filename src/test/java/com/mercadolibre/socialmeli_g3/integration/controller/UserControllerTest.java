@@ -48,7 +48,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("IT-0001 - The endpoint /{userId}/follow/{userIdToFollow} should throw a BadResquestException when userId is not positive or userIdTofollow is not positive")
+    @DisplayName("IT-0001 - The endpoint /{userId}/follow/{userIdToFollow} should throw a BadRequestException when userId is not positive or userIdTofollow is not positive")
     void should_throw_a_BadRequestException_when_userId_is_null() throws Exception {
         int userId = -1;
         int userIdToFollow = 6;
@@ -91,7 +91,7 @@ class UserControllerTest {
     void should_throw_a_NotFoundException_when_userId_is_not_found() throws Exception {
         int userId = 120;
         int userIdToFollow = 1;
-        String errorMessage = "The user does not exist";
+        String errorMessage = "User not found";
 
         ExceptionDTO expectedException = new ExceptionDTO(errorMessage);
 
