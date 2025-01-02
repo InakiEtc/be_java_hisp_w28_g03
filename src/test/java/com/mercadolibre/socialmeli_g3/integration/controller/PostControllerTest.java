@@ -185,6 +185,7 @@ public class PostControllerTest {
     }
 
     @Test
+    @DisplayName("IT-0013 - The endpoint /products/promo-post/list should return PromoProductPostListDTO successfully")
     public void test_makePostAPromo_should_return_200() throws Exception {
         // Expected
         ResultMatcher expectedStatusCode = status().isOk();
@@ -203,6 +204,7 @@ public class PostControllerTest {
     }
 
     @Test
+    @DisplayName("IT-0013 - The endpoint /products/promo-post/list should return 400 when the post is already a promo post")
     public void test_makePostAPromo_should_return_400() throws Exception {
         // Expected
         ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Post is already a promo post")));
@@ -217,6 +219,7 @@ public class PostControllerTest {
     }
 
     @Test
+    @DisplayName("IT-0013 - The endpoint /products/promo-post/list should return 404 when the post does not exist")
     public void test_makePostAPromo_should_return_404() throws Exception {
         // Arrange
         int postId = 999;
@@ -232,7 +235,7 @@ public class PostControllerTest {
     }
 
     @Test
-    @DisplayName("findProductsPromoCount ok")
+    @DisplayName("IT-0006 - The endpoint /products/filter should return a list of posts successfully")
     public void findProductByIdUser_ok() throws Exception {
 
         ResultMatcher status = status().isOk();
@@ -248,9 +251,10 @@ public class PostControllerTest {
                 .andDo(print());
 
     }
+
     //US009 date_asc
     @Test
-    @DisplayName("findProductByIdUser order date asc ok")
+    @DisplayName("IT-0009 - The endpoint /products/followed/{userId}/list should return a list of products ordered by date ascendant")
     public void findProductByIdUser_order_date_asc_ok() throws Exception {
 
         ResultMatcher status = status().isOk();
@@ -266,9 +270,10 @@ public class PostControllerTest {
                 .andDo(print());
 
     }
+
     //US009 date_desc
     @Test
-    @DisplayName("findProductByIdUser order date desc ok")
+    @DisplayName("IT-0009 - The endpoint /products/followed/{userId}/list should return a list of products ordered by date descendant")
     public void findProductByIdUser_order_date_desc_ok() throws Exception {
 
         ResultMatcher status = status().isOk();
