@@ -242,7 +242,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("T0007 - Followers count when user exists")
+    @DisplayName("T-0007 - Followers count when user exists")
     public void getNumberFollowers_should_return_followers_count_when_user_exists() {
         User user = new User();
         user.setUserId(1);
@@ -255,7 +255,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("T0007 - Followers count when user does not exist")
+    @DisplayName("T-0007 - Followers count when user does not exist")
     public void getNumberFollowers_should_throw_NotFoundException_when_user_does_not_exist() {
         Mockito.when(userRepository.findUserById(1)).thenReturn(null);
         NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
@@ -264,7 +264,7 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("T0007 - No followers count when user exists")
+    @DisplayName("T-0007 - No followers count when user exists")
     public void getNumberFollowers_should_return_zero_when_user_has_no_followers() {
         User user = new User();
         user.setUserId(1);

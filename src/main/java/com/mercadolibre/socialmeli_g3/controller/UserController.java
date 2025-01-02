@@ -33,7 +33,11 @@ public class UserController {
 
     // US 003 / 008
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<?> getSellersFollowersByUser(@PathVariable int userId, @RequestParam (required = false) String order){
+    public ResponseEntity<FollowersListDTO> getSellersFollowersByUser(
+            @PathVariable
+            @Positive(message = "The user id must be a positive number")
+            Integer userId,
+            @RequestParam (required = false) String order){
         return new ResponseEntity<>(userService.followersOrderBy(userId, order), HttpStatus.OK);
     }
 

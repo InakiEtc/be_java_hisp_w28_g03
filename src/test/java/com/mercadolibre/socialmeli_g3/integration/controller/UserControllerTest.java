@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.integration.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getVendedor1FollowDTOUser6;
+import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getVendedor1FollowersListDTO;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -104,4 +107,59 @@ class UserControllerTest {
                 .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("IT-0003 - The endpoint /users/{userId}/followers/list should return a FollowersListDTO of an given user")
+    void should_return_a_followersListDTO_of_an_given_user() throws Exception {
+        int userId = 1;
+        FollowersListDTO expectedFollowersListDTO = getVendedor1FollowersListDTO();
+
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedFollowersListDTO));
+
+        mockMvc.perform(get("/users/{userId}/followers/list", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0003 - The endpoint /users/{userId}/followers/list should throw a NotFoundException when userId is not positive")
+    void should_throw_a_NotFoundException_when_userId_is_null() throws Exception {
+
+        int userId = -1;
+        List<String> errorMessage = new ArrayList<>(List.of("userId: The user id must be a positive number"));
+        String errorDetails = errorMessage.toString();
+
+        ExceptionDTO expectedException = new ExceptionDTO("Data request invalid", errorDetails);
+
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(get("/users/{userId}/followers/list", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+
+    }
+
+    @Test
+    @DisplayName("IT-0003 - The endpoint /users/{userId}/followers/list should throw a NotFoundException when userId is not found")
+    void should_throw_a_NotFoundException_when_userId_is_not_found_on_followers_list() throws Exception {
+        int userId = 120;
+
+        ExceptionDTO expectedException = new ExceptionDTO("User not found", null);
+
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(get("/users/{userId}/followers/list", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
 }
