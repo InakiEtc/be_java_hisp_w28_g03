@@ -30,7 +30,7 @@ public class PostController {
         return new ResponseEntity<>(postService.getPosts(), HttpStatus.OK);
     }
 
-    // US006 - US 009
+    // US006 - US009
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
