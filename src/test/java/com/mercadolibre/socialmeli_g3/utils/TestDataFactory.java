@@ -5,6 +5,7 @@ import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 
@@ -53,6 +54,16 @@ public class TestDataFactory {
             new ProductDTO(999,"Fake Product", "Fake Category", "Fake Brand", "Fake Color", "Fake Model"),
             100, 1500.50, true, 33.33);
 
+    private final static PostDTO makePromo200 = new PostDTO(
+            204,2, "12-09-2024",
+            new ProductDTO(104, "Monitor Gamer", "Gamer", "AOC", "Black", "Curved"),
+            60,240.00, false, 0.00);
+
+    private final static PostDTO makePromo400 = new PostDTO(
+            201,1, "1-12-2024",
+            new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
+            100, 1500.50, true, 0.40);
+
 
     public static ProductPostDTO getPost200() { return post200; }
     public static ProductPostDTO getPost400() { return post400; }
@@ -60,6 +71,8 @@ public class TestDataFactory {
     public static PromoProductPostDTO getPromoPost200() { return promoPost200; }
     public static PromoProductPostDTO getPromoPost400() { return promoPost400; }
     public static PromoProductPostDTO getPromoPost404() { return promoPost404; }
+    public static PostDTO getMakePromo200() { return makePromo200; }
+    public static PostDTO getMakePromo400() { return makePromo400; }
 
     public static List<User> getVendedor1FollowersAsc() {
         return new ArrayList<>(List.of(user6, user2, user3));

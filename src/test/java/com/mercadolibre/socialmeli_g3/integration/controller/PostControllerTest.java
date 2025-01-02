@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.integration.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
@@ -7,6 +8,7 @@ import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.MessageDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.PostDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class PostControllerTest {
     private static final PromoProductPostDTO promoPost200 = getPromoPost200();
     private static final PromoProductPostDTO promoPost400 = getPromoPost400();
     private static final PromoProductPostDTO promoPost404 = getPromoPost404();
+    private static final PostDTO makePromo200 = getMakePromo200();
+    private static final PostDTO makePromo400 = getMakePromo400();
 
     private static final FindProductsPromoResponseDTO promoPost = new FindProductsPromoResponseDTO(
             1,
@@ -93,7 +97,7 @@ public class PostControllerTest {
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         String body = writer.writeValueAsString(post400);
             // Expected (400 hay varios error messages pero probe uno solo)
-        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new MessageDTO("Post already exists for this user and product")));
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Post already exists for this user and product")));
         ResultMatcher expectedStatusCode = status().isBadRequest();
         ResultMatcher expectedContentType = content().contentType("application/json");
 
@@ -150,7 +154,7 @@ public class PostControllerTest {
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         String body = writer.writeValueAsString(promoPost400);
         // Expected (400 hay varios error messages pero probe uno solo)
-        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new MessageDTO("Discount must be between 0 and 1")));
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Discount must be between 0 and 1")));
         ResultMatcher expectedStatusCode = status().isBadRequest();
         ResultMatcher expectedContentType = content().contentType("application/json");
 
@@ -176,6 +180,53 @@ public class PostControllerTest {
         mockMvc.perform(post("/products/promo-post")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(body))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    public void test_makePostAPromo_should_return_200() throws Exception {
+        // Expected
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+
+        PromoProductPostDTO makePromoResponse = mapper.convertValue(makePromo200, PromoProductPostDTO.class);
+        makePromoResponse.setHasPromo(true);
+        makePromoResponse.setDiscount(0.75);
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(makePromoResponse));
+
+        // ACT & ASSERT
+        mockMvc.perform(put("/products/post/{postId}", makePromo200.getPostId())
+                        .param("discount", "0.75"))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    public void test_makePostAPromo_should_return_400() throws Exception {
+        // Expected
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Post is already a promo post")));
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+
+        // ACT & ASSERT
+        mockMvc.perform(put("/products/post/{postId}", makePromo400.getPostId())
+                        .param("discount", "0.25"))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    public void test_makePostAPromo_should_return_404() throws Exception {
+        // Arrange
+        int postId = 999;
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Post not found")));
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+
+        // ACT & ASSERT
+        mockMvc.perform(put("/products/post/{postId}", postId)
+                        .param("discount", "0.25"))
                 .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
     }
