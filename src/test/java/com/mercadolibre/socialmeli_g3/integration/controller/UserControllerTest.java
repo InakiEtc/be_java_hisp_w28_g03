@@ -1,9 +1,7 @@
 package com.mercadolibre.socialmeli_g3.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,6 +157,46 @@ class UserControllerTest {
         mockMvc.perform(get("/users/{userId}/followers/list", userId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("T-0004 Get sellers followed by user should return FollowedListDTO response")
+    void test_getSellersFollowedByUser_should_return_followedListDTOResponse() throws Exception {
+        FollowedListDTO followedListDTOResponse =new FollowedListDTO(1, "vendedor1",
+                List.of(new UserDTO(2, "usuario1"),
+                        new UserDTO(4, "vendedor2"),
+                        new UserDTO(5, "vendedor3"),
+                        new UserDTO(6, "usuario 6")
+                )
+        );
+
+        String userId = "1";
+
+        mockMvc.perform(get("/users/{userId}/followed/list", userId))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(mapper.writeValueAsString(followedListDTOResponse)))
+                .andExpect(status().isOk())
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("BONUS T-0018 Get followers by username containing should return FollowersListDTO response")
+    void test_getFollowersByUsernameContaining_should_return_followersListDTOResponse() throws Exception {
+        FollowersListDTO followersListDTOResponse = new FollowersListDTO(3, "usuario2",
+                List.of(
+                        new UserDTO(1, "vendedor1")
+                )
+        );
+
+        int userId =  3;
+        String partOfUsername = "vende";
+
+        mockMvc.perform(get("/users/{userId}/followers", userId)
+                        .param("username", partOfUsername))
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(mapper.writeValueAsString(followersListDTOResponse)))
+                .andExpect(status().isOk())
                 .andDo(print());
     }
 
