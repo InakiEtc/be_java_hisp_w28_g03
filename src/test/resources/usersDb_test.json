@@ -89,11 +89,13 @@
     "user_id": 6,
     "user_name": "usuario 6",
     "followers": [
+
+    ],
+    "followed": [
       {
         "user_id": 1,
         "user_name": "vendedor1"
       }
-    ],
-    "followed": []
+    ]
   }
 ]

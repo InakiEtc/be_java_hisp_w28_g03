@@ -11,5 +11,6 @@ import lombok.NoArgsConstructor;
 public class FollowDTO {
     @JsonProperty("user_id")
     private int userId;
-    private int follower;
+    private int followed;
+
 }
