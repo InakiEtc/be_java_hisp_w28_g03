@@ -230,4 +230,58 @@ public class PostControllerTest {
                 .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("findProductsPromoCount ok")
+    public void findProductByIdUser_ok() throws Exception {
+
+        ResultMatcher status = status().isOk();
+        ResultMatcher contentType = content().contentType("application/json");
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getProductByIdUserResponseDTO()));
+
+        int userIdSearch = 1;
+
+        mockMvc.perform(get("/products/followed/{userId}/list",userIdSearch))
+                .andExpect(status)
+                .andExpect(contentType)
+                .andExpect(bodyContent)
+                .andDo(print());
+
+    }
+    //US009 date_asc
+    @Test
+    @DisplayName("findProductByIdUser order date asc ok")
+    public void findProductByIdUser_order_date_asc_ok() throws Exception {
+
+        ResultMatcher status = status().isOk();
+        ResultMatcher contentType = content().contentType("application/json");
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getProductByIdUserResponseDTO()));
+
+        int userIdSearch = 1;
+
+        mockMvc.perform(get("/products/followed/{userId}/list?order=date_asc",userIdSearch))
+                .andExpect(status)
+                .andExpect(contentType)
+                .andExpect(bodyContent)
+                .andDo(print());
+
+    }
+    //US009 date_desc
+    @Test
+    @DisplayName("findProductByIdUser order date desc ok")
+    public void findProductByIdUser_order_date_desc_ok() throws Exception {
+
+        ResultMatcher status = status().isOk();
+        ResultMatcher contentType = content().contentType("application/json");
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getproductByIdUserResponseDTOByOrderDesc()));
+
+        int userIdSearch = 1;
+
+        mockMvc.perform(get("/products/followed/{userId}/list?order=date_desc",userIdSearch))
+                .andExpect(status)
+                .andExpect(contentType)
+                .andExpect(bodyContent)
+                .andDo(print());
+
+    }
 }
