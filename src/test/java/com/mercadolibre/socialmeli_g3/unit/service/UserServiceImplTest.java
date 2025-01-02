@@ -260,7 +260,7 @@ class UserServiceImplTest {
         Mockito.when(userRepository.findUserById(1)).thenReturn(null);
         NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
                 () -> userService.getNumberFollowers(1));
-        Assertions.assertEquals("The user with the id 1 was not founded", exception.getMessage());
+        Assertions.assertEquals("User not found", exception.getMessage());
     }
 
     @Test
