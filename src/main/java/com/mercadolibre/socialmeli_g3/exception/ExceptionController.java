@@ -1,17 +1,15 @@
 package com.mercadolibre.socialmeli_g3.exception;
 
 import jakarta.validation.ConstraintViolationException;
-import jakarta.validation.Valid;
-import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +32,12 @@ public class ExceptionController {
     public ResponseEntity<?> invalidOperation(ConflictException e){
         ExceptionDTO exceptionDto = new ExceptionDTO(e.getMessage());
         return new ResponseEntity<>(exceptionDto, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<?> missingServletRequestParameterException(MissingServletRequestParameterException e){
+        ExceptionDTO exceptionDto = new ExceptionDTO("Required request parameter '" + e.getParameterName() + "' is missing");
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
