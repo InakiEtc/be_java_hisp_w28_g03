@@ -18,6 +18,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
+import java.util.List;
+
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -286,6 +288,22 @@ public class PostControllerTest {
                 .andExpect(status)
                 .andExpect(contentType)
                 .andExpect(bodyContent)
+                .andDo(print());
+
+    }
+
+
+    @Test
+    @DisplayName("IT -0016 - The endpoint users/products/post/category/{category} should return List<PostDTO> and statusCode Ok(200) ")
+    void should_getCategory_ok() throws Exception{
+        int category= 100;
+        List<PostDTO> postDTOList = getListCategory();
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(postDTOList));
+        mockMvc.perform(get("/products/post/category/{category}", category)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
 
     }

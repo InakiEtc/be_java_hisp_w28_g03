@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
@@ -45,6 +46,23 @@ public class TestDataFactory {
             1500.50,
             true,
             0.40
+    );
+
+    private final static PostDTO postDTOCategory= new PostDTO(
+          201,
+            1,
+            "20-12-2024",
+            new ProductDTO(101,
+                            "Silla Gamer",
+                            "Gamer",
+                            "Racer",
+                            "Red & Black",
+                            "Special Edition"),
+    100,
+            1500.50,
+            true,
+            0.40
+
     );
     private final static Post post2 = new Post (
             1002,
@@ -288,5 +306,9 @@ public class TestDataFactory {
         return user1Followed;
     }
 
+    public static List<PostDTO> getListCategory(){
+        List<PostDTO> postDTOS= new ArrayList<>(List.of(postDTOCategory));
+        return  postDTOS;
+    }
 
 }
