@@ -18,21 +18,38 @@ public class TestDataFactory {
     private final static User user1 = new User(1, "vendedor1", new ArrayList<>(List.of(user6, user2, user3)), new ArrayList<>(List.of(user2, user4, user5)), null);
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
-    private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");
+    private final static UserDTO user6DTO = new UserDTO(6, "usuario 6");
     private final static FollowDTO followDTO = new FollowDTO(1, 6);
+    private final static Product product1001 = new Product(
+            1002,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
+    private final static Product product1003 = new Product(
+            1003,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
+    private final static Product product1004 = new Product(
+            1004,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
     private final static FindProductsPromoResponseDTO promoPost = new FindProductsPromoResponseDTO(1, "vendedor1", 3);
     private final static  Post post = new Post (
             1001,
             1000,
             null,
-            new Product(
-                    1002,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1001,
             100,
             1500.50,
             true,
@@ -42,14 +59,7 @@ public class TestDataFactory {
             1002,
             1000,
             null,
-            new Product(
-                    1003,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1003,
             100,
             1500.50,
             true,
@@ -59,14 +69,7 @@ public class TestDataFactory {
             1003,
             1000,
             null,
-            new Product(
-                    1004,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1004,
             100,
             1500.50,
             true,
@@ -104,7 +107,6 @@ public class TestDataFactory {
             productResponseDTO,
             100,
             1500.5
-
     );
     private final static PostResponseDto post2ResponseDTO = new PostResponseDto(
             202,
@@ -113,7 +115,6 @@ public class TestDataFactory {
             product2ResponseDTO,
             58,
             250.0
-
     );
     private final static PostResponseDto post3ResponseDTO = new PostResponseDto(
             203,
@@ -122,7 +123,6 @@ public class TestDataFactory {
             product3ResponseDTO,
             60,
             120.0
-
     );
 
     private final static ProductByIdUserResponseDTO productByIdUserResponseDTO =  new ProductByIdUserResponseDTO( 1,new ArrayList<>(List.of(postResponseDTO)));
