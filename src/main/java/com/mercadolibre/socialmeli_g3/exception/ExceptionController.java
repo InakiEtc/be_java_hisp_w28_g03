@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.exception;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,24 @@ public class ExceptionController {
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.toList());
+
+        ExceptionDTO exceptionDto = new ExceptionDTO("Data request invalid", errors.toString());
+        return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ExceptionDTO> handleValidationExceptions(ConstraintViolationException ex) {
+        List<String> errors = ex.getConstraintViolations()
+                .stream()
+                .map(violation -> {
+                    String propertyPath = violation.getPropertyPath().toString();
+                    int lastDotIndex = propertyPath.lastIndexOf('.');
+                    if (lastDotIndex > -1) {
+                        propertyPath = propertyPath.substring(lastDotIndex + 1);  // Get only the field name
+                    }
+                    return propertyPath + ": " + violation.getMessage();
+                })
+                .toList();
 
         ExceptionDTO exceptionDto = new ExceptionDTO("Data request invalid", errors.toString());
         return new ResponseEntity<>(exceptionDto, HttpStatus.BAD_REQUEST);

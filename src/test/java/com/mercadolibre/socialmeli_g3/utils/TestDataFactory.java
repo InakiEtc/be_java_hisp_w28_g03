@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
+import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
@@ -15,6 +16,7 @@ public class TestDataFactory {
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
     private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");
+    private final static FollowDTO followDTO = new FollowDTO(1, 6);
 
 
 
@@ -48,5 +50,9 @@ public class TestDataFactory {
         user1Followers.setFollowers(users);
 
         return user1Followers;
+    }
+
+    public static FollowDTO getVendedor1FollowDTOUser6() {
+        return followDTO;
     }
 }
