@@ -86,19 +86,13 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public FollowDTO follow(int userId, int userIdToFollow) {
-        if (userId <= 0) {
-            throw new BadRequestException("The id of the follower is not valid");
-        }
-        if(userIdToFollow <= 0) {
-            throw new BadRequestException("The id of the user to follow is not valid");
-        }
 
         User user = userRepository.findUserById(userId);
         if (user == null) throw new NotFoundException("The user does not exist");
         User userToFollow = userRepository.findUserById(userIdToFollow);
         if (userToFollow == null) throw new NotFoundException("The user does not exist");
 
-        if (userId == userIdToFollow) throw new BadRequestException("You cant follow yourself");
+        if (userId == userIdToFollow) throw new ConflictException("You cant follow yourself");
 
         if (user.getFollowed().contains(userToFollow) || userToFollow.getFollowers().contains(user)) {
             throw new ConflictException("The user is already in the following list");
