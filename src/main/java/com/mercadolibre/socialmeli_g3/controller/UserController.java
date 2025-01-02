@@ -4,8 +4,11 @@ import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.service.IUserService;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
+@Validated
 public class UserController {
 
     private final IUserService userService;
@@ -54,7 +58,14 @@ public class UserController {
 
     // US 001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public ResponseEntity<FollowDTO> follow(@PathVariable int userId, @PathVariable int userIdToFollow) {
+    public ResponseEntity<FollowDTO> follow(
+            @PathVariable
+            @Positive(message = "The user id must be a positive number")
+            Integer userId,
+            @PathVariable
+            @Positive(message = "The user id to follow must be a positive number")
+            Integer userIdToFollow
+    ) {
         return new ResponseEntity<>(userService.follow(userId, userIdToFollow), HttpStatus.OK);
     }
 
