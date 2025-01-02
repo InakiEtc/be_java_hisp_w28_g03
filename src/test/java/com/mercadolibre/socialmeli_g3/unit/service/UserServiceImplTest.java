@@ -1,13 +1,14 @@
 package com.mercadolibre.socialmeli_g3.unit.service;
 
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
 import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
-import com.mercadolibre.socialmeli_g3.repository.UserRepositoryImpl;
 import com.mercadolibre.socialmeli_g3.service.UserServiceImpl;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.*;
@@ -243,5 +245,40 @@ class UserServiceImplTest {
         FollowersListDTO obtainedVendedor1Followers = userService.followersOrderBy(userId, sortingParam);
 
         assertEquals(expectedVendedor1Followers, obtainedVendedor1Followers);
+    }
+
+    @Test
+    @DisplayName("T0007 - Followers count when user exists")
+    public void getNumberFollowers_should_return_followers_count_when_user_exists() {
+        User user = new User();
+        user.setUserId(1);
+        user.setUserName("Testing User");
+        user.setFollowers(Arrays.asList(new User(), new User())); // Simula 2 followers
+
+        Mockito.when(userRepository.findUserById(1)).thenReturn(user);
+        FollowersCountDTO result = userService.getNumberFollowers(1);
+        Assertions.assertEquals(2, result.getFollowersCount());
+    }
+
+    @Test
+    @DisplayName("T0007 - Followers count when user does not exist")
+    public void getNumberFollowers_should_throw_NotFoundException_when_user_does_not_exist() {
+        Mockito.when(userRepository.findUserById(1)).thenReturn(null);
+        NotFoundException exception = Assertions.assertThrows(NotFoundException.class,
+                () -> userService.getNumberFollowers(1));
+        Assertions.assertEquals("The user with the id 1 was not founded", exception.getMessage());
+    }
+
+    @Test
+    @DisplayName("T0007 - No followers count when user exists")
+    public void getNumberFollowers_should_return_zero_when_user_has_no_followers() {
+        User user = new User();
+        user.setUserId(1);
+        user.setUserName("Testing User");
+        user.setFollowers(null);
+
+        Mockito.when(userRepository.findUserById(1)).thenReturn(user);
+        FollowersCountDTO result = userService.getNumberFollowers(1);
+        Assertions.assertEquals(0, result.getFollowersCount());
     }
 }
