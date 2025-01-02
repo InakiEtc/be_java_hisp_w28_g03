@@ -165,6 +165,16 @@ public class TestDataFactory {
         return user1Followers;
     }
 
+    public static FollowersListDTO getVendedor1FollowersListDTO() {
+        FollowersListDTO user1Followers = new FollowersListDTO();
+        List<UserDTO> users = new ArrayList<>(List.of(user2DTO, user3DTO, user6DTO));
+        user1Followers.setUserId(1);
+        user1Followers.setUserName("vendedor1");
+        user1Followers.setFollowers(users);
+
+        return user1Followers;
+    }
+
     public static FollowersListDTO getVendedor1FollowersDTODesc() {
         FollowersListDTO user1Followers = new FollowersListDTO();
         List<UserDTO> users = new ArrayList<>(List.of(user3DTO, user2DTO, user6DTO));
