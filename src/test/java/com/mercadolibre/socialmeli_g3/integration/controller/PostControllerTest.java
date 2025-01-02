@@ -9,6 +9,7 @@ import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.MessageDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.PostDTO;
+import com.mercadolibre.socialmeli_g3.entity.Post;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -290,12 +294,13 @@ public class PostControllerTest {
 
     }
 
-    /*@Test
+    @Test
     @DisplayName("IT-00015 - The endpoint /products/filter should return a List of PostDTO successfully")
     public void findProductByPrice_ok() throws Exception {
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
-        ResultMatcher bodyContent = content().json(mapper.writeValueAsString());
+        List<Post> listPosts = new ArrayList<Post>(List.of(getPost6(),getPost7(),getPost5()));
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(listPosts));
 
         int minPrice = 20;
         int maxPrice = 500;
@@ -308,5 +313,38 @@ public class PostControllerTest {
                 .andExpect(bodyContent)
                 .andDo(print());
 
-    }*/
+    }
+
+    @Test
+    @DisplayName("IT-00015 - The endpoint /products/filter should return 400 error without args maxprice minprice")
+    public void findProductByPrice_without_args_should_return_400() throws Exception {
+        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+        String body = writer.writeValueAsString(null);
+        // Expected (400 hay varios error messages pero probe uno solo)
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Required request parameter 'minPrice' is missing")));
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        // ACT & ASSERT
+        mockMvc.perform(get("/products/filter"))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+    @Test
+    @DisplayName("IT-00015 - The endpoint /products/filter should return 400 error with invalid price")
+    public void findProductByPrice_invalid_price_should_return_400() throws Exception {
+        ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
+        String body = writer.writeValueAsString(null);
+        // Expected (400 hay varios error messages pero probe uno solo)
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("The provided price is not valid")));
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        int minPrice = 0;
+        int maxPrice = 0;
+        // ACT & ASSERT
+        mockMvc.perform(get("/products/filter").
+                        param("minPrice", String.valueOf(minPrice))
+                        .param("maxPrice", String.valueOf(maxPrice)))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
 }
