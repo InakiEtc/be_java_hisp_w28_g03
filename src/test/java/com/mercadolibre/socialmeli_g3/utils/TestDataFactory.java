@@ -1,10 +1,13 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
+import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.Product;
 import com.mercadolibre.socialmeli_g3.entity.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -124,6 +127,23 @@ public class TestDataFactory {
             60,
             120.0
     );
+    private final static PostDTO postDTO =new PostDTO(
+            201,
+            1,
+            "20-12-2024",
+            new ProductDTO(
+                 101,
+                 "Silla Gamer",
+                 "Gamer",
+                 "Racer",
+                 "Red & Black",
+                 "Special Edition"
+            ),
+            100,
+            1500.50,
+            true,
+            0.40
+    );
 
     private final static ProductByIdUserResponseDTO productByIdUserResponseDTO =  new ProductByIdUserResponseDTO( 1,new ArrayList<>(List.of(postResponseDTO)));
     private final static ProductByIdUserResponseDTO productByIdUserResponseDTOByOrderDesc =  new ProductByIdUserResponseDTO( 1,new ArrayList<>(List.of(post3ResponseDTO,postResponseDTO,post2ResponseDTO)));
@@ -136,6 +156,10 @@ public class TestDataFactory {
     public static Post getPost2() {return post2;}
 
     public static Post getPost3() {return post3;}
+
+    public static List<PostDTO> getListPostDTO() {
+        return new ArrayList<>(List.of(postDTO));
+    }
 
     public static List<Post> getListPost() {return new ArrayList<>(List.of(post,post2,post3));}
 
@@ -187,5 +211,17 @@ public class TestDataFactory {
 
     public static FollowDTO getVendedor1FollowDTOUser6() {
         return followDTO;
+    }
+
+    public static String getDate(Integer subtractDays) {
+        //Obtiene la fecha
+        LocalDate dateTimeNow = LocalDate.now();
+        //Validamos los dias que se quieran restar
+        if (subtractDays != null && subtractDays > 0) {
+            dateTimeNow = dateTimeNow.minusDays(subtractDays);
+        }
+        //Retornamos con el formato adecuado
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return dateTimeNow.format(formateador);
     }
 }

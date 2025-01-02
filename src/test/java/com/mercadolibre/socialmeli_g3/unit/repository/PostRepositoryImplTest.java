@@ -2,16 +2,14 @@ package com.mercadolibre.socialmeli_g3.unit.repository;
 
 
 import com.mercadolibre.socialmeli_g3.entity.Post;
-import com.mercadolibre.socialmeli_g3.entity.Product;
 import com.mercadolibre.socialmeli_g3.repository.PostRepositoryImpl;
+import com.mercadolibre.socialmeli_g3.utils.TestDataFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,7 +33,7 @@ public class PostRepositoryImplTest {
         Post post = getPost();
         post.setUserId(1005);
         int param = post.getUserId();
-        post.setDate(getDate(15));
+        post.setDate(TestDataFactory.getDate(15));
         //act
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
@@ -53,9 +51,9 @@ public class PostRepositoryImplTest {
         Post post2 = getPost2();
         Post post3 = getPost3();
         int param = post.getUserId();
-        post.setDate(getDate(1));
-        post2.setDate(getDate(2));
-        post3.setDate(getDate(3));
+        post.setDate(TestDataFactory.getDate(1));
+        post2.setDate(TestDataFactory.getDate(2));
+        post3.setDate(TestDataFactory.getDate(3));
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
             repository.createPost(post2);
@@ -78,9 +76,9 @@ public class PostRepositoryImplTest {
         Post post2 = getPost2();
         Post post3 = getPost3();
         int param = post.getUserId();
-        post.setDate(getDate(6));
-        post2.setDate(getDate(3));
-        post3.setDate(getDate(1));
+        post.setDate(TestDataFactory.getDate(6));
+        post2.setDate(TestDataFactory.getDate(3));
+        post3.setDate(TestDataFactory.getDate(1));
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
             repository.createPost(post2);
@@ -94,15 +92,5 @@ public class PostRepositoryImplTest {
         Assertions.assertNotNull(listResult);
         Assertions.assertEquals(listResult,listOrderedExpected);
     }
-    public static String getDate(Integer subtractDays) {
-        //Obtiene la fecha
-        LocalDate dateTimeNow = LocalDate.now();
-        //Validamos los dias que se quieran restar
-        if (subtractDays != null && subtractDays > 0) {
-            dateTimeNow = dateTimeNow.minusDays(subtractDays);
-        }
-        //Retornamos con el formato adecuado
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return dateTimeNow.format(formateador);
-    }
+
 }
