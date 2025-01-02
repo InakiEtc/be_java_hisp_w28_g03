@@ -36,7 +36,7 @@
   {
     "post_id": 202,
     "user_id": 1,
-    "date": "02-11-2024",
+    "date": "21-11-2024",
     "product": {
       "product_id": 102,
       "product_name": "Teclado Mecánico",
@@ -84,4 +84,5 @@
     "has_promo": false,
     "discount": 0.00
   }
+
 ]

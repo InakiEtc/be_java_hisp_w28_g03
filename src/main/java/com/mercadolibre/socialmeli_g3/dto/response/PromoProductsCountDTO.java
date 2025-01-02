@@ -5,12 +5,16 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@AllArgsConstructor
-@NoArgsConstructor
 @Data
-public class FollowDTO {
+@NoArgsConstructor
+@AllArgsConstructor
+public class PromoProductsCountDTO {
     @JsonProperty("user_id")
     private int userId;
-    private int followed;
 
+    @JsonProperty("user_name")
+    private String userName;
+
+    @JsonProperty("promo_products_count")
+    private int promoProductsCount;
 }

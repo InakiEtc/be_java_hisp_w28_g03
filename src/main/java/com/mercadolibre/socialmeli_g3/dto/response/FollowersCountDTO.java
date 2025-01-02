@@ -1,4 +1,4 @@
-package com.mercadolibre.socialmeli_g3.dto;
+package com.mercadolibre.socialmeli_g3.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

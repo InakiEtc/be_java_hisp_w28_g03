@@ -2,10 +2,7 @@ package com.mercadolibre.socialmeli_g3.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.*;
-import com.mercadolibre.socialmeli_g3.dto.response.PostResponseDto;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
@@ -85,10 +82,7 @@ public class PostServiceImpl implements IPostService {
     @Override
     public FindProductsPromoResponseDTO findProductsPromoCount(int userId) {
         FindProductsPromoResponseDTO response = new FindProductsPromoResponseDTO();
-        User usuario = userRepository.findUserById(userId);
-        if(usuario == null){
-            throw new NotFoundException("User not found");
-        }
+        User usuario = validateUser(userId);
         response.setUser_id(userId);
         response.setUser_name(usuario.getUserName());
         response.setPromos_products_count(postRepository.findProductsPromoCount(userId));
@@ -121,10 +115,12 @@ public class PostServiceImpl implements IPostService {
     }
 
     // region Validations for Post methods
-    private void validateUser(int userId) {
-        if (userRepository.findUserById(userId) == null) {
-            throw new BadRequestException("User not found");
+    private User validateUser(int userId) {
+        User user = userRepository.findUserById(userId);
+        if (user == null) {
+            throw new NotFoundException("User not found");
         }
+        return user;
     }
 
     private void validatePostExistence(int userId, int productId, boolean isPromo) {
@@ -167,8 +163,7 @@ public class PostServiceImpl implements IPostService {
         try {
             int userIdParsed = Integer.parseInt(userId);
             PromoProductPostListDTO promoProductPostListDTO = new PromoProductPostListDTO();
-            User user = userRepository.findUserById(userIdParsed);
-            if (user == null) throw new NotFoundException("User not found by userId");
+            User user = validateUser(userIdParsed);
 
             List<Post> postsOnPromoByUser = postRepository.findAllPostsOnPromoByUser(userIdParsed);
             if (postsOnPromoByUser == null || postsOnPromoByUser.isEmpty())

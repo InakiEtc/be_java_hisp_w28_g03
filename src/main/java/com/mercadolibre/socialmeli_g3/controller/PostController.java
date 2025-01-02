@@ -1,12 +1,13 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
-import com.mercadolibre.socialmeli_g3.dto.PostDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.PostDTO;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
-import com.mercadolibre.socialmeli_g3.dto.PromoProductPostListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.PromoProductPostListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
 import com.mercadolibre.socialmeli_g3.service.IPostService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class PostController {
         return new ResponseEntity<>(postService.getPosts(), HttpStatus.OK);
     }
 
-    // US006 - US 009
+    // US006 - US009
     @GetMapping("/products/followed/{userId}/list")
     public ResponseEntity<ProductByIdUserResponseDTO> findProductByIdUser(@PathVariable int userId, @RequestParam(required = false) String order){
         return new ResponseEntity<ProductByIdUserResponseDTO>(postService.findProductByIdUser(userId, order), HttpStatus.OK);
@@ -49,13 +50,13 @@ public class PostController {
 
     // US0005
     @PostMapping("/products/post")
-    public ResponseEntity<?> createPost(@RequestBody ProductPostDTO productPostDTO){
+    public ResponseEntity<?> createPost(@Valid @RequestBody ProductPostDTO productPostDTO){
         return new ResponseEntity<>(postService.createPost(productPostDTO),HttpStatus.OK);
     }
 
     // US0010
     @PostMapping("/products/promo-post")
-    public ResponseEntity<?> createPromoPost(@RequestBody PromoProductPostDTO promoProductPostDTO){
+    public ResponseEntity<?> createPromoPost(@Valid @RequestBody PromoProductPostDTO promoProductPostDTO){
         return new ResponseEntity<>(postService.createPromoPost(promoProductPostDTO),HttpStatus.OK);
     }
 
