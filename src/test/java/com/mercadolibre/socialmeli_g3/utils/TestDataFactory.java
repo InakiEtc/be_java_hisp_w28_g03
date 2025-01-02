@@ -111,6 +111,7 @@ public class TestDataFactory {
             "Wireless"
     );
 
+
     private final static PostResponseDto postResponseDTO = new PostResponseDto(
             201,
             1,
@@ -128,6 +129,7 @@ public class TestDataFactory {
             58,
             250.0
     );
+
     private final static PostResponseDto post3ResponseDTO = new PostResponseDto(
             203,
             1,

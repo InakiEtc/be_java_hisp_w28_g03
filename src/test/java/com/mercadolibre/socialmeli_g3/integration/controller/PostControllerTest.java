@@ -79,6 +79,8 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0005 - The endpoint /products/post should return a correctly message when the post is created")
     public void test_createPost_should_return_200() throws Exception {
+
+
         // Arrange
             // Entry
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
@@ -142,20 +144,12 @@ public class PostControllerTest {
     @DisplayName("IT-0012 Find products on promo by user should return PromoProductPostListDTO")
     void test_findProductsOnPromoByUser_should_return_PromoProductPostListDTO() throws Exception {
         String userId = "1";
-        PromoProductPostListDTO responseWaited = new PromoProductPostListDTO(1, "vendedor1",
-                Arrays.asList(
-                        new PostDTO(201, 1, "20-12-2024",
-                                new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
-                                100, 1500.50, true, 0.40),
+        PromoProductPostListDTO responseWaited = new PromoProductPostListDTO(1, "vendedor1", Arrays.asList(
+                new PostDTO(201, 1, "20-12-2024", new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.50, true, 0.40),
+                new PostDTO(202, 1, "21-11-2024", new ProductDTO(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"), 58, 250.00, true, 0.30),
+                new PostDTO(203, 1, "03-08-2023", new ProductDTO(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"), 60, 120.00, true, 0.25)
+        ));
 
-                        new PostDTO(202, 1, "21-11-2024",
-                                new ProductDTO(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"),
-                                58, 250.00, true, 0.30),
-
-                        new PostDTO(203, 1, "03-08-2023",
-                                new ProductDTO(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"),
-                                60, 120.00, true, 0.25)
-                ));
 
         ResultMatcher expectedBody = content().json((mapper.writeValueAsString(responseWaited)));
         ResultMatcher expectedStatusCode = status().isOk();
@@ -295,10 +289,42 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0006 - The endpoint /products/filter should return a list of posts successfully")
     public void findProductByIdUser_ok() throws Exception {
+        ProductByIdUserResponseDTO productByIdUserResponseDTO =new ProductByIdUserResponseDTO(1,Arrays.asList(
+                new PostResponseDto(
+                        210,
+                        1,
+                        "29-12-2024",
+                        new ProductResponseDTO(
+                                110,
+                                "Standing Desk",
+                                "Gamer",
+                                "Racer",
+                                "Red & Black",
+                                "Special Edition"
+                        ),
+                        100,
+                        1500.5
+                ),
+                new PostResponseDto(
+                        201,
+                        1,
+                        "20-12-2024",
+                        new ProductResponseDTO(
+                                101,
+                                "Silla Gamer",
+                                "Gamer",
+                                "Racer",
+                                "Red & Black",
+                                "Special Edition"
+                        ),
+                        100,
+                        1500.5
+                )
+        ));
 
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
-        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getProductByIdUserResponseDTO()));
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(productByIdUserResponseDTO));
 
         int userIdSearch = 1;
 
@@ -314,10 +340,14 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0009 - The endpoint /products/followed/{userId}/list should return a list of products ordered by date ascendant")
     public void findProductByIdUser_order_date_asc_ok() throws Exception {
+        ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(
+                new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5),
+                new PostResponseDto(201, 1, "20-12-2024", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
+        ));
 
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
-        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getProductByIdUserResponseDTO()));
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(productByIdUserResponseDTO));
 
         int userIdSearch = 1;
 
@@ -333,10 +363,14 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0009 - The endpoint /products/followed/{userId}/list should return a list of products ordered by date descendant")
     public void findProductByIdUser_order_date_desc_ok() throws Exception {
+        ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(
+                new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5),
+                new PostResponseDto(201, 1, "20-12-2024", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
+        ));
 
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
-        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(getproductByIdUserResponseDTOByOrderDesc()));
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString(productByIdUserResponseDTO));
 
         int userIdSearch = 1;
 

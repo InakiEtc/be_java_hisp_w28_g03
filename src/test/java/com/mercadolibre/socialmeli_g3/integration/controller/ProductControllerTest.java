@@ -114,7 +114,6 @@ public class ProductControllerTest {
     @Test
     @DisplayName("IT-0014 - The endpoint product/search should return a list of products filtered by keyword (Multiple products found)")
     void searchProducts_should_return_a_list_of_products_filtered_by_keyword() throws Exception {
-
         List<ProductDTO> productDTOS = new ArrayList<>();
 
         productDTOS.add(productDTO1);

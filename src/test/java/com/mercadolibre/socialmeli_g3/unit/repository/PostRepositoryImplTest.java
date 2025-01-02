@@ -24,8 +24,6 @@ import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getPost3;
 @SpringBootTest
 public class PostRepositoryImplTest {
 
-
-
     @Autowired
     private PostRepositoryImpl repository;
 
@@ -119,8 +117,11 @@ public class PostRepositoryImplTest {
         int idMock = 1;
         String orderMock = "date_asc";
         List<Post> postsWaited = Arrays.asList(
-                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4)
+                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4),
+                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0)
         );
+
+
 
         List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
 
@@ -134,20 +135,9 @@ public class PostRepositoryImplTest {
         int idMock = 1;
         String orderMock = "date_desc";
         List<Post> postsWaited = Arrays.asList(
-                new Post(203, 1, "03-08-2023",
-                        new Product(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"),
-                        60, 120.0, true, 0.25
-                ),
-                new Post(201, 1, "20-12-2024",
-                        new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
-                        100, 1500.5, true, 0.4
-                ),
-                new Post(202, 1, "21-11-2024",
-                        new Product(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"),
-                        58, 250.0, true, 0.3
-                )
+                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0),
+                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4)
         );
-
 
         List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
 

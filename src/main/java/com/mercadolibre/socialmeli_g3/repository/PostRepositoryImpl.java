@@ -53,32 +53,68 @@ public class PostRepositoryImpl implements IPostRepository{
         return postsList;
     }
 
+//    @Override
+//    public List<Post> findProductByIdUser(int userId) {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+//
+//        return postsList.stream()
+//                .filter(post -> post.getUserId() == userId)
+//                .filter(post -> {
+//                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
+//                    LocalDate currentDate = LocalDate.now();
+//                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
+//                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
+//                })
+//                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
+//                .collect(Collectors.toList());
+//    }
+
     @Override
     public List<Post> findProductByIdUser(int userId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        LocalDate currentDate = LocalDate.now();
 
         return postsList.stream()
                 .filter(post -> post.getUserId() == userId)
-                .filter(post -> {
-                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
-                    LocalDate currentDate = LocalDate.now();
-                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
-                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
-                })
+                .filter(post -> LocalDate.parse(post.getDate(), formatter)
+                        .isAfter(currentDate.minusDays(14))
+                )
                 .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
-                .collect(Collectors.toList());
+                .toList();
     }
+
+
 
     @Override
     public List<Post> findProductByIdUserOrderedByDate(int userId, String order) {
         if (!order.equals("date_asc") && !order.equals("date_desc")) {
             throw new BadRequestException("Sort type is not valid");
         }
-        if(order.equalsIgnoreCase("date_asc")) {
-            return findProductByIdUser(userId);
+        List<Post> postsInTheLast14days = findProductByIdUser(userId);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        if(order.equals("date_asc")){
+            return postsInTheLast14days.stream()
+                    .filter(post -> post.getUserId() == userId)
+                    .sorted((post1, post2) -> LocalDate.parse(post1.getDate(), formatter).compareTo(LocalDate.parse(post2.getDate(), formatter)))
+                    .toList();
         }
-        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted(Comparator.comparing(Post::getDate)).toList();
+        return postsInTheLast14days.stream()
+                .filter(post -> post.getUserId() == userId)
+                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
+                .toList();
     }
+
+
+//    @Override
+//    public List<Post> findProductByIdUserOrderedByDate(int userId, String order) {
+//        if (!order.equals("date_asc") && !order.equals("date_desc")) {
+//            throw new BadRequestException("Sort type is not valid");
+//        }
+//        if(order.equalsIgnoreCase("date_asc")) {
+//            return findProductByIdUser(userId);
+//        }
+//        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted(Comparator.comparing(Post::getDate)).toList();
+//    }
 
     @Override
     public int findProductsPromoCount(int userId) {

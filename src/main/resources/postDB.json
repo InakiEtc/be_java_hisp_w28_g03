@@ -17,6 +17,23 @@
     "discount": 0.40
   },
   {
+    "post_id": 210,
+    "user_id": 1,
+    "date": "29-12-2024",
+    "product": {
+      "product_id": 110,
+      "product_name": "Standing Desk",
+      "type": "Gamer",
+      "brand": "Racer",
+      "color": "Red & Black",
+      "notes": "Special Edition"
+    },
+    "category": 100,
+    "price": 1500.50,
+    "has_promo": false,
+    "discount": 0.0
+  },
+  {
     "post_id": 202,
     "user_id": 1,
     "date": "02-11-2024",
