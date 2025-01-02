@@ -1,9 +1,6 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
-import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.entity.User;
 
 import java.util.ArrayList;
@@ -13,13 +10,18 @@ public class TestDataFactory {
     private final static User user2 = new User(2, "usuario1", null, null, null);
     private final static User user3 = new User(3, "usuario2", null, null, null);
     private final static User user6 = new User(6, "usuario 6", null, null, null);
-    private final static User user1 = new User(1, "vendedor1", new ArrayList<>(List.of(user6, user2, user3)), null, null);
+    private final static User user4 = new User(4, "vendedor2", null, null,null);
+    private final static User user5 = new User(5, "vendedor3", null, null,null);
+    private final static User user1 = new User(1, "vendedor1", new ArrayList<>(List.of(user6, user2, user3)), new ArrayList<>(List.of(user2, user4, user5)), null);
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
     private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");
     private final static FollowDTO followDTO = new FollowDTO(1, 6);
 
 
+    private final static UserDTO user4DTO = new UserDTO(4, "vendedor2");
+    private final static UserDTO user5DTO = new UserDTO(5, "vendedor3");
+    private final static UserDTO user1DTO = new UserDTO(1, "vendedor1");
 
     public static List<User> getVendedor1FollowersAsc() {
         return new ArrayList<>(List.of(user6, user2, user3));
@@ -28,6 +30,7 @@ public class TestDataFactory {
     public static List<User> getVendedor1FollowersDesc() {
         return new ArrayList<>(List.of(user3, user2, user6));
     }
+
 
     public static User getVendedor1() {
         return user1;
@@ -67,6 +70,32 @@ public class TestDataFactory {
         return user1Followers;
     }
 
+
+
+    public static FollowedListDTO getVendedor1FollowedDTOAsc() {
+        FollowedListDTO user1Followed = new FollowedListDTO();
+        List<UserDTO> users = new ArrayList<>(List.of( user2DTO,user4DTO, user5DTO));
+        user1Followed.setUserId(1);
+        user1Followed.setUserName("vendedor1");
+        user1Followed.setFollowed(users);
+
+
+        return user1Followed;
+    }
+
+
+
+
+    public static FollowedListDTO getVendedor1FollowedDTODesc() {
+
+        FollowedListDTO user1Followed = new FollowedListDTO();
+        List<UserDTO> users = new ArrayList<>(List.of(user1DTO));
+        user1Followed.setUserId(2);
+        user1Followed.setUserName("usuario1");
+        user1Followed.setFollowed(users);
+
+        return user1Followed;
+    }
 
 
 }
