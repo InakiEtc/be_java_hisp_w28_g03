@@ -118,7 +118,7 @@ public class PostServiceImpl implements IPostService {
     private User validateUser(int userId) {
         User user = userRepository.findUserById(userId);
         if (user == null) {
-            throw new BadRequestException("User not found");
+            throw new NotFoundException("User not found");
         }
         return user;
     }

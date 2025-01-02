@@ -1,5 +1,6 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
+import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
@@ -14,6 +15,8 @@ import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.Product;
 import com.mercadolibre.socialmeli_g3.entity.User;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,21 +30,38 @@ public class TestDataFactory {
     private final static User user1 = new User(1, "vendedor1", new ArrayList<>(List.of(user6, user2, user3)), new ArrayList<>(List.of(user2, user4, user5)), null);
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
-    private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");
+    private final static UserDTO user6DTO = new UserDTO(6, "usuario 6");
     private final static FollowDTO followDTO = new FollowDTO(1, 6);
+    private final static Product product1001 = new Product(
+            1002,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
+    private final static Product product1003 = new Product(
+            1003,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
+    private final static Product product1004 = new Product(
+            1004,
+            "Silla Gamer",
+            "Gamer",
+            "Racer",
+            "Red & Black",
+            "Special Edition"
+    );
     private final static FindProductsPromoResponseDTO promoPost = new FindProductsPromoResponseDTO(1, "vendedor1", 3);
     private final static  Post post = new Post (
             1001,
             1000,
             null,
-            new Product(
-                    1002,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1001,
             100,
             1500.50,
             true,
@@ -49,33 +69,27 @@ public class TestDataFactory {
     );
 
     private final static PostDTO postDTOCategory= new PostDTO(
-          201,
+          202,
             1,
-            "20-12-2024",
-            new ProductDTO(101,
-                            "Silla Gamer",
-                            "Gamer",
-                            "Racer",
-                            "Red & Black",
-                            "Special Edition"),
-    100,
-            1500.50,
+            "21-11-2024",
+            new ProductDTO(102,
+                    "Teclado Mecánico",
+                            "Teclado",
+                            "Logitech",
+                            "Black",
+                            "RGB Backlit"),
+            58,
+            250.00,
             true,
-            0.40
+            0.30
+
 
     );
     private final static Post post2 = new Post (
             1002,
             1000,
             null,
-            new Product(
-                    1003,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1003,
             100,
             1500.50,
             true,
@@ -85,14 +99,7 @@ public class TestDataFactory {
             1003,
             1000,
             null,
-            new Product(
-                    1004,
-                    "Silla Gamer",
-                    "Gamer",
-                    "Racer",
-                    "Red & Black",
-                    "Special Edition"
-            ),
+            product1004,
             100,
             1500.50,
             true,
@@ -139,7 +146,6 @@ public class TestDataFactory {
             product2ResponseDTO,
             58,
             250.0
-
     );
     private final static PostResponseDto post3ResponseDTO = new PostResponseDto(
             203,
@@ -148,7 +154,23 @@ public class TestDataFactory {
             product3ResponseDTO,
             60,
             120.0
-
+    );
+    private final static PostDTO postDTO =new PostDTO(
+            201,
+            1,
+            "20-12-2024",
+            new ProductDTO(
+                 101,
+                 "Silla Gamer",
+                 "Gamer",
+                 "Racer",
+                 "Red & Black",
+                 "Special Edition"
+            ),
+            100,
+            1500.50,
+            true,
+            0.40
     );
 
     private final static ProductByIdUserResponseDTO productByIdUserResponseDTO =  new ProductByIdUserResponseDTO( 1,new ArrayList<>(List.of(postResponseDTO)));
@@ -216,6 +238,10 @@ public class TestDataFactory {
     public static Post getPost2() {return post2;}
 
 
+    public static List<PostDTO> getListPostDTO() {
+        return new ArrayList<>(List.of(postDTO));
+    }
+
     public static List<Post> getListPost() {return new ArrayList<>(List.of(post,post2,post3));}
 
     public static List<User> getVendedor1FollowersAsc() {
@@ -269,6 +295,17 @@ public class TestDataFactory {
         return followDTO;
     }
 
+    public static String getDate(Integer subtractDays) {
+        //Obtiene la fecha
+        LocalDate dateTimeNow = LocalDate.now();
+        //Validamos los dias que se quieran restar
+        if (subtractDays != null && subtractDays > 0) {
+            dateTimeNow = dateTimeNow.minusDays(subtractDays);
+        }
+        //Retornamos con el formato adecuado
+        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return dateTimeNow.format(formateador);
+    }
 
     public static FollowersCountDTO getFollowersCountDTO() {
         FollowersCountDTO user1Followers = new FollowersCountDTO();
@@ -278,8 +315,6 @@ public class TestDataFactory {
 
         return user1Followers;
     }
-
-
 
     public static FollowedListDTO getVendedor1FollowedDTOAsc() {
         FollowedListDTO user1Followed = new FollowedListDTO();
@@ -291,9 +326,6 @@ public class TestDataFactory {
 
         return user1Followed;
     }
-
-
-
 
     public static FollowedListDTO getVendedor1FollowedDTODesc() {
 

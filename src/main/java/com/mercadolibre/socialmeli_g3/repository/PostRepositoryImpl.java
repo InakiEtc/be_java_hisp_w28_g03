@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
+import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.filters.FilterFactory;
 import com.mercadolibre.socialmeli_g3.repository.filters.IProductFilter;
 import org.springframework.beans.factory.annotation.Value;
@@ -70,6 +71,9 @@ public class PostRepositoryImpl implements IPostRepository{
 
     @Override
     public List<Post> findProductByIdUserOrderedByDate(int userId, String order) {
+        if (!order.equals("date_asc") && !order.equals("date_desc")) {
+            throw new BadRequestException("Sort type is not valid");
+        }
         if(order.equalsIgnoreCase("date_asc")) {
             return findProductByIdUser(userId);
         }
