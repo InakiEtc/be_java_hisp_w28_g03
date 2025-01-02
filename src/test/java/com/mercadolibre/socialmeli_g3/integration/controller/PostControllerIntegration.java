@@ -1,6 +1,5 @@
-package com.mercadolibre.socialmeli_g3.integration;
+package com.mercadolibre.socialmeli_g3.integration.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
 import org.junit.jupiter.api.DisplayName;
