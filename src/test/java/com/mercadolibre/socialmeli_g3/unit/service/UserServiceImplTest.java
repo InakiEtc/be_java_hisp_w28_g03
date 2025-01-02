@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.unit.service;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.UserDTO;
 import com.mercadolibre.socialmeli_g3.entity.User;
 import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.IUserRepository;
@@ -274,5 +275,74 @@ class UserServiceImplTest {
         Mockito.when(userRepository.findUserById(1)).thenReturn(user);
         FollowersCountDTO result = userService.getNumberFollowers(1);
         Assertions.assertEquals(0, result.getFollowersCount());
+    }
+
+    @Test
+    @DisplayName("BONUS T-0018 Get followers by username when user not found should throw NotFoundException")
+    void getFollowersByUsername_UserNotFound_ShouldThrowException() {
+        Mockito.when(userRepository.findUserById(1)).thenReturn(null);
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            userService.getFollowersByUsername(1, "vendedor1");
+        });
+
+        assertEquals("User not found", exception.getMessage());
+    }
+
+
+    @Test
+    @DisplayName("BONUS T-0018 Get followers by username when no followers found should throw NotFoundException")
+    void getFollowersByUsername_NoFollowers_ShouldThrow_NotFoundException() {
+        User mockUser = new User(1, "vendedor1",null,null,null);
+        User followers = new User(1, "vendedor1",
+                Arrays.asList(
+                        new User(2, "usuario1",null,null,null),
+                        new User(3, "usuario2",null,null,null),
+                        new User(6, "usuario6",null,null,null)
+                ),
+                null,null
+        );
+
+        Mockito.when(userRepository.findUserById(1)).thenReturn(mockUser);
+        Mockito.when(userRepository.findUserById(1)).thenReturn(followers);
+
+        Exception exception = assertThrows(NotFoundException.class, () -> {
+            userService.getFollowersByUsername(1, "test");
+        });
+
+        assertEquals("Followers not found", exception.getMessage());
+        Mockito.verify(userRepository, times(1)).findUserById(1);
+    }
+
+
+    @Test
+    @DisplayName("BONUS T-0018 Get followers by username should return FollowersListDTO response")
+    void test_getFollowersByUsername_should_return_followedListDTOResponse() {
+        User mockUser = new User(3, "usuario2",null,null,null);
+        User followers = new User(3, "usuario2",
+                Arrays.asList(
+                        new User(1, "vendedor1",null,null,null)
+                ),
+                null,null
+        );
+
+        FollowersListDTO followerListDTOResponse =new FollowersListDTO(3, "usuario2",
+                List.of(
+                        new UserDTO(1, "vendedor1")
+                )
+        );
+
+
+        Mockito.when(userRepository.findUserById(3)).thenReturn(mockUser);
+
+        Mockito.when(userRepository.findUserById(3)).thenReturn(followers);
+
+        FollowersListDTO result = userService.getFollowersByUsername(3, "vende");
+
+        assertNotNull(result);
+        assertEquals(1, result.getFollowers().size());
+        assertEquals(followerListDTOResponse, result);
+        Mockito.verify(userRepository, times(1)).findUserById(3);
+        Mockito.verify(userRepository, times(1)).findUserById(3);
     }
 }

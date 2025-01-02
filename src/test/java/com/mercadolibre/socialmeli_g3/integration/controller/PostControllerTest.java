@@ -1,9 +1,10 @@
 package com.mercadolibre.socialmeli_g3.integration.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
+import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductPostDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
@@ -18,12 +19,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
+import java.util.Arrays;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import java.util.List;
+import java.util.Map;
+import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getListPostDTO;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -97,11 +108,11 @@ public class PostControllerTest {
     @DisplayName("IT-0005 - The endpoint /products/post should return a 400 error when the request is invalid")
     public void test_createPost_should_return_400() throws Exception {
         // Arrange
-            // Entry
+        // Entry
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         String body = writer.writeValueAsString(post400);
-            // Expected (400 hay varios error messages pero probe uno solo)
-        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Post already exists for this user and product")));
+        // Expected (404 hay varios error messages pero probe uno solo)
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new MessageDTO("Post already exists for this user and product")));
         ResultMatcher expectedStatusCode = status().isBadRequest();
         ResultMatcher expectedContentType = content().contentType("application/json");
 
@@ -117,10 +128,10 @@ public class PostControllerTest {
     @DisplayName("IT-0005 - The endpoint /products/post should return a 404 error when the product does not exist")
     public void test_createPost_should_return_404() throws Exception {
         // Arrange
-            // Entry
+        // Entry
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
         String body = writer.writeValueAsString(post404);
-            // Expected
+        // Expected
         ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("Product Not Found")));
         ResultMatcher expectedStatusCode = status().isNotFound();
         ResultMatcher expectedContentType = content().contentType("application/json");
@@ -135,6 +146,56 @@ public class PostControllerTest {
     }
 
     @Test
+    @DisplayName("IT-0012 Find products on promo by user should return PromoProductPostListDTO")
+    void test_findProductsOnPromoByUser_should_return_PromoProductPostListDTO() throws Exception {
+        String userId = "1";
+        PromoProductPostListDTO responseWaited = new PromoProductPostListDTO(1, "vendedor1",
+                Arrays.asList(
+                        new PostDTO(201, 1, "20-12-2024",
+                                new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
+                                100, 1500.50, true, 0.40),
+
+                        new PostDTO(202, 1, "21-11-2024",
+                                new ProductDTO(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"),
+                                58, 250.00, true, 0.30),
+
+                        new PostDTO(203, 1, "03-08-2023",
+                                new ProductDTO(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"),
+                                60, 120.00, true, 0.25)
+                ));
+
+        ResultMatcher expectedBody = content().json((mapper.writeValueAsString(responseWaited)));
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(get("/products/promo-post/list")
+                        .param("user_id", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(expectedContentType)
+                .andExpect(expectedBody)
+                .andExpect(expectedStatusCode)
+                .andDo(print());
+    }
+
+
+    @Test
+    @DisplayName("IT-0012 Find products on promo by user should return NotFoundException")
+    void test_findProductsOnPromoByUser_should_throw_error() throws Exception {
+        String userId = "100";
+
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("User not found")));
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType(MediaType.APPLICATION_JSON);
+
+        mockMvc.perform(get("/products/promo-post/list")
+                        .param("user_id", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(expectedContentType)
+                .andExpect(expectedBody)
+                .andExpect(expectedStatusCode)
+                .andDo(print());
+    }
+
     @DisplayName("IT-00010 - The endpoint /products/promo-post should return a message when the promo post is created")
     public void test_createPromoPost_should_return_200() throws Exception {
         ObjectWriter writer = mapper.writerWithDefaultPrettyPrinter();
@@ -286,10 +347,74 @@ public class PostControllerTest {
 
         int userIdSearch = 1;
 
-        mockMvc.perform(get("/products/followed/{userId}/list?order=date_desc",userIdSearch))
+        mockMvc.perform(get("/products/followed/{userId}/list?order=date_desc", userIdSearch))
                 .andExpect(status)
                 .andExpect(contentType)
                 .andExpect(bodyContent)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0017 - The endpoint /products/posts/by-product-attributes/ should return filtered posts successfully")
+    public void should_return_a_list_of_PostDTO_filtered_by_productName_brand_color_or_type_successfully() throws Exception {
+        Map<String, String> params = Map.of(
+                "product_name", "Silla",
+                "brand", "Racer",
+                "type", "gamer",
+                "color", "Red"
+        );
+        List<PostDTO> expectedPosts = getListPostDTO();
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedPosts));
+
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.setAll(params);
+
+        mockMvc.perform(get("/products/posts/by-product-attributes/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .params(multiValueMap))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0017 - The endpoint /products/posts/by-product-attributes/ should throw a NotFoundException when no posts are found with the given params")
+    public void should_throw_a_NotFoundException_when_no_posts_are_found() throws Exception {
+        Map<String, String> params = Map.of(
+                "product_name", "pepe",
+                "brand", "Racer",
+                "type", "gamer",
+                "color", "Red"
+        );
+        ExceptionDTO expectedException = new ExceptionDTO("No posts have been found with the provided filters");
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        MultiValueMap<String, String> multiValueMap = new LinkedMultiValueMap<>();
+        multiValueMap.setAll(params);
+
+        mockMvc.perform(get("/products/posts/by-product-attributes/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .params(multiValueMap))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+
+    }
+
+
+    @Test
+    @DisplayName("IT -0016 - The endpoint users/products/post/category/{category} should return List<PostDTO> and statusCode Ok(200) ")
+    void should_getCategory_ok() throws Exception{
+        int category= 58;
+        List<PostDTO> postDTOList = getListCategory();
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(postDTOList));
+        mockMvc.perform(get("/products/post/category/{category}", category)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
 
     }

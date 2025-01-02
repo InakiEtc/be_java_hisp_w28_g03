@@ -1,5 +1,5 @@
 
-# Sprint I - Java Spring Boot
+# Sprint I y II - Java Spring Boot
 
 ## 🎯 Objetivo
 
@@ -7,9 +7,17 @@ Desarrollar una API para un escenario determinado de manera grupal. En el la sig
 
 ## 📍Escenario y requerimientos iniciales
 
+### Sprint I
+
 Mercado Libre sigue creciendo y para el año que viene  tiene como objetivo empezar a implementar una serie de herramientas que permitan a los compradores y vendedores tener una experiencia totalmente innovadora, en donde el lazo que los una sea mucho más cercano.
 
 La fecha de lanzamiento se aproxima, por lo cual es necesaria la presentación de una versión Beta de lo que va a ser conocido como “SocialMeli”, en donde los compradores van a poder seguir a sus vendedores favoritos y enterarse de todas las novedades que los mismos posteen.
+
+### Sprint II
+
+SocialMeli, la nueva implementación de MercadoLibre que fue realizada por el equipo de desarrollo “Bootcamp” se ha convertido en ¡Todo un éxito!. Dado esto y a que MeLi tiene unos estándares de calidad muy altos con respecto a los productos de software que utiliza, estableció una serie de validaciones que considera que sean necesarias tener en cuenta a la hora de incorporar datos como así también diferentes test unitarios que aseguren el correcto funcionamiento de cada una de las funcionalidades que incluye.
+
+Para llevar a cabo estas implementaciones, se deberá tomar como base el proyecto desarrollado de forma grupal en el Sprint Nº 1. A partir de él, se llevarán a cabo cada una de las validaciones y tests unitarios correspondientes.
 
 # 🤓☝🏻 Definiciones de equipo
 
@@ -56,8 +64,8 @@ El equipo de desarrollo ha definido las siguientes reglas y estándares con el o
 ### 2️⃣ Estándares de Codificación
 - **Uso de Camel Case**:  
   Todos los identificadores (variables, funciones, etc.) deben seguir el estándar de camel case. Ejemplos:
-    - `productList`
-    - `getProductDetails`
+  - `productList`
+  - `getProductDetails`
 
 > [!NOTE]
 > Para las clases e interfaces, se debe usar UpperCamelCase. Ejemplo: ```java public class Product { ... }```
@@ -73,28 +81,36 @@ El equipo de desarrollo ha definido las siguientes reglas y estándares con el o
 - **Rama por persona**:  
   Cada miembro del equipo debe trabajar en una rama específica asociada a su nombre. Esto minimiza conflictos y mantiene el control sobre los cambios.
   Ejemplo:
-    - `/baron_santiago`
-    - `/bianchi_juan`
+  - `/baron_santiago`
+  - `/bianchi_juan`
 
     <br>
 
 - **Commit Convention**:  
   Las descripciones de los commits deben seguir una convención predefinida. Esto ayuda a comprender rápidamente el propósito de cada cambio. Ejemplo de prefijos:
-    - `feat`: Para agregar nuevas funcionalidades.
-    - `fix`: Para solucionar errores.
-    - `docs`: Para cambios en documentación.
-    - `style`: Para ajustes relacionados con formato o estilo del código.
+  - `feat`: Para agregar nuevas funcionalidades.
+  - `fix`: Para solucionar errores.
+  - `docs`: Para cambios en documentación.
+  - `style`: Para ajustes relacionados con formato o estilo del código.
+  - `test`: Para cambios en los test unitarios y de integración.
 
 ### 5️⃣ Idioma
 - **Uso del Inglés**:  
   Todo el código, nombres de variables, funciones, comentarios y documentación técnica deben estar en inglés. Esto asegura un estándar profesional y facilita la colaboración con equipos internacionales.
 
+### 6️⃣ Tests unitarios y de integración
+- **Tests unitarios y de integración**:
+  El formato de nombre para los tests unitarios debe ser `T-0001` donde `0001` es el número del test. Y para el nombre de los test de integración debe ser `IT-0001` donde `0001` es el número de la historia de usuario.
+- **Nombre de las funciones de los tests unitarios y de integración**:
+  El formato de nombre para las funciones de los tests unitarios y de integración debe ser `test_<nombre de la función>_should_<lo que debe retornar>_when<cuando suceda algo>`.
 ## 💻 Tecnologías usadas
 
     1. Java 21
     2. Spring Boot
-    3. Spring boot Devtools
+    3. Spring Boot Devtools
     4. Lombok
+    5. Spring Boot Starter Test
+    6. Mockito
 
 ## 🏃🏻‍➡️ Integrantes del equipo
 
@@ -135,8 +151,58 @@ El equipo de desarrollo ha definido las siguientes reglas y estándares con el o
 | US0017 |  Filtrar post por distintos atributos de productos | Juan Bianchi | Gabriel Viloria |
 | US0018 |  Seguidores por nombre de usuario | Lucas Bianchi | Gabriel Viloria |
 
+# Test unitarios y de integración
+
+## 🧩 Test unitarios
+A continuación se presentan los test unitarios que se han realizado para la aplicación.
+
+| Código | Historia de usuario   |      Responsable      |    Revisores     
+|--------|:-------------|:-------------:|:----------------:|
+| T-0001 |  Verificar que el usuario a seguir exista | Julieta Noguera | Iñaki Etchegoyen |
+| T-0002 |  Verificar que el usuario a dejar de seguir exista | Iñaki Etchegoyen |   Juan Bianchi   |
+| T-0003 |  Verificar que el tipo de ordenamiento alfabético exista | Juan Bianchi | Iñaki Etchegoyen |
+| T-0004 |  Verificar el correcto ordenamiento ascendente y descendente por nombre | Juan Bianchi | Iñaki Etchegoyen |
+| T-0005 |  Filtrar post por distintos atributos de productos | Lucas Bianchi | Gabriel Viloria  |
+| T-0006 |  Seguidores por nombre de usuario | Lucas Bianchi | Gabriel Viloria  |
+| T-0007 |  Verificar que la cantidad de seguidores de un determinado usuario sea correcta | Santiago Baron |   Juan Bianchi   |
+| T-0008 |  Verificar que la consulta de publicaciones realizadas en las últimas dos semanas de un determinado vendedor sean efectivamente de las últimas dos semanas | Gabriel Viloria |   Juan Bianchi   |
+
+
+## ⚙️ Test de integración
+
+A continuación se presentan los test de integración que se han realizado para la aplicación.
+
+| Código | Historia de usuario   |      Responsable      |    Revisores     |
+|------|:-------------|:-------------:|:----------------:|
+| IT-0001 |  Dar follow a un determinado vendedor| Juan Bianchi | Gabriel Viloria  |
+| IT-0002 | Cantidad de usuarios que siguen a un determinado vendedor| Julieta Noguera | Gabriel Viloria  |
+| IT-0003 |  Obtener listado de usuarios que siguen a determinado vendedor| Santiago Baron | Gabriel Viloria  |
+| IT-0004 |  Listado de todos los vendedores a los cuales sigue un determinado usuario| Lucas Bianchi |  Santiago Baron  |
+| IT-0005 |  Dar de alta una nueva publicación | Iñaki Etchegoyen|   Juan Bianchi   |
+| IT-0006 |  Listar publicaciones recientes de vendedores seguidos en las ultimas 2 semanas | Gabriel Viloria |  Santiago Baron  |
+| IT-0007 |  Poder realizar la acción de “Unfollow” a determino usuario | Santiago Baron | Iñaki Etchegoyen |
+| IT-0008 |  Ordenamiento alfabético ascendente y descendente | Julieta Noguera | Gabriel Viloria  |
+| IT-0009 |  Ordenamiento por fecha ascendente y descendente | Juan Bianchi | Iñaki Etchegoyen |
+| IT-0010 |  Llevar a cabo la publicación de un nuevo producto en promoción | Iñaki Etchegoyen |  Santiago Baron  |
+| IT-0011 |  Obtener la cantidad de productos en promoción de un determinado vendedor | Gabriel Viloria |  Lucas Bianchi   |
+| IT-0012 |  Obtener un listado de todos los productos en promoción de un determinado vendedor | Lucas Bianchi |  Santiago Baron  |
+
+
+## 🍄 Bonus integración y unitarios
+
+A continuación se presentan los test de integración y unitarios que se han realizado para la aplicación a modo de bonus.
+
+| Código        | Historia de usuario                                         |   Responsable    |    Revisores     |
+|---------------|:------------------------------------------------------------|:----------------:|:----------------:|
+| BONUS IT-0013 | Convertir un post normal en un promo Post                   | Iñaki Etchegoyen | Julieta Noguera  |
+| BONUS IT-0014 | Filtrar producto por palabra clave                          |  Santiago Baron  | Iñaki Etchegoyen |
+| BONUS IT-0015 | Filtrar productos por rango de precio                       | Gabriel Viloria  |  Santiago Baron  |
+| BONUS IT-0016 | Filtrar los post por categoria                              | Julieta Noguera  |   Juan Bianchi   |
+| BONUS IT-0017 | Verificar el filtro en los productos                        |   Juan Bianchi   |  Santiago Baron  |
+| BONUS IT-0018 | Filtrar por followers de un usuario con condición de nombre |  Lucas Bianchi   |  Santiago Baron  |
 
 # 🌅 Agradecimientos
 
 Un especial agradecimiento a nuestros instructores por su guía durante todo el proceso, así como a nuestros compañeros por llenarnos de conocimiento durante el corto tiempo que hemos compartido.
+
 

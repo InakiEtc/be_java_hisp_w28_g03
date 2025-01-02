@@ -3,7 +3,9 @@ package com.mercadolibre.socialmeli_g3.unit.repository;
 
 import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.Product;
+import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.PostRepositoryImpl;
+import com.mercadolibre.socialmeli_g3.utils.TestDataFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +37,7 @@ public class PostRepositoryImplTest {
         Post post = getPost();
         post.setUserId(1005);
         int param = post.getUserId();
-        post.setDate(getDate(15));
+        post.setDate(TestDataFactory.getDate(15));
         //act
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
@@ -53,9 +55,9 @@ public class PostRepositoryImplTest {
         Post post2 = getPost2();
         Post post3 = getPost3();
         int param = post.getUserId();
-        post.setDate(getDate(1));
-        post2.setDate(getDate(2));
-        post3.setDate(getDate(3));
+        post.setDate(TestDataFactory.getDate(1));
+        post2.setDate(TestDataFactory.getDate(2));
+        post3.setDate(TestDataFactory.getDate(3));
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
             repository.createPost(post2);
@@ -78,9 +80,9 @@ public class PostRepositoryImplTest {
         Post post2 = getPost2();
         Post post3 = getPost3();
         int param = post.getUserId();
-        post.setDate(getDate(6));
-        post2.setDate(getDate(3));
-        post3.setDate(getDate(1));
+        post.setDate(TestDataFactory.getDate(6));
+        post2.setDate(TestDataFactory.getDate(3));
+        post3.setDate(TestDataFactory.getDate(1));
         if(repository.findProductByIdUser(param).size() == 0){
             repository.createPost(post);
             repository.createPost(post2);
@@ -94,15 +96,64 @@ public class PostRepositoryImplTest {
         Assertions.assertNotNull(listResult);
         Assertions.assertEquals(listResult,listOrderedExpected);
     }
-    public static String getDate(Integer subtractDays) {
-        //Obtiene la fecha
-        LocalDate dateTimeNow = LocalDate.now();
-        //Validamos los dias que se quieran restar
-        if (subtractDays != null && subtractDays > 0) {
-            dateTimeNow = dateTimeNow.minusDays(subtractDays);
-        }
-        //Retornamos con el formato adecuado
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return dateTimeNow.format(formateador);
+
+    @Test
+    @DisplayName("T-0005 Search products with invalid parameters throws BadRequestException (US-0009)")
+    void test_findProductByIdUserOrderedByDate_invalidOrder_throwsException() {
+        int idMock = 1;
+        String invalidOrderMock = "invalid_order";
+
+        Exception exception = Assertions.assertThrows(BadRequestException.class, () -> {
+            repository.findProductByIdUserOrderedByDate(idMock, invalidOrderMock);
+        });
+
+        String expectedMessage = "Sort type is not valid";
+        String actualMessage = exception.getMessage();
+
+        Assertions.assertTrue(actualMessage.contains(expectedMessage));
     }
+
+    @Test
+    @DisplayName("T-0005 Search products by user ID ordered by date ascending returns posts (US-0009)")
+    void test_findProductByIdUserOrderedByDateASC_return_posts() {
+        int idMock = 1;
+        String orderMock = "date_asc";
+        List<Post> postsWaited = Arrays.asList(
+                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4)
+        );
+
+        List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
+
+        Assertions.assertNotNull(postsResponse);
+        Assertions.assertEquals(postsWaited,postsResponse);
+    }
+
+    @Test
+    @DisplayName("T-0005 Search products by user ID ordered by date descending returns posts (US-0009)")
+    void test_findProductByIdUserOrderedByDateDESC_return_posts() {
+        int idMock = 1;
+        String orderMock = "date_desc";
+        List<Post> postsWaited = Arrays.asList(
+                new Post(203, 1, "03-08-2023",
+                        new Product(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"),
+                        60, 120.0, true, 0.25
+                ),
+                new Post(201, 1, "20-12-2024",
+                        new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
+                        100, 1500.5, true, 0.4
+                ),
+                new Post(202, 1, "21-11-2024",
+                        new Product(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"),
+                        58, 250.0, true, 0.3
+                )
+        );
+
+
+        List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
+
+        Assertions.assertNotNull(postsResponse);
+        Assertions.assertEquals(postsWaited,postsResponse);
+    }
+
+
 }
