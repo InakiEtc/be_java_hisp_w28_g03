@@ -160,6 +160,7 @@ public class PostRepositoryImpl implements IPostRepository{
         POSTS_COUNTER++;
         post.setPostId(POSTS_COUNTER);
         postsList.add(post);
+
     }
 
     @Override
