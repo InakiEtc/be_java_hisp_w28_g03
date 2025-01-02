@@ -156,16 +156,4 @@ public class PostRepositoryImplTest {
     }
 
 
-    public static String getDate(Integer subtractDays) {
-        //Obtiene la fecha
-        LocalDate dateTimeNow = LocalDate.now();
-        //Validamos los dias que se quieran restar
-        if (subtractDays != null && subtractDays > 0) {
-            dateTimeNow = dateTimeNow.minusDays(subtractDays);
-        }
-        //Retornamos con el formato adecuado
-        DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        return dateTimeNow.format(formateador);
-    }
-
 }
