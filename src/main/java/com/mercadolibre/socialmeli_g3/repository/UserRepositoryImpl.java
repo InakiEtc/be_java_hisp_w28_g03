@@ -2,8 +2,11 @@ package com.mercadolibre.socialmeli_g3.repository;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.UserDTO;
+import com.mercadolibre.socialmeli_g3.entity.Post;
 import com.mercadolibre.socialmeli_g3.entity.User;
-import org.springframework.beans.factory.annotation.Value;
+import com.mercadolibre.socialmeli_g3.exception.NotFoundException;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -17,11 +20,9 @@ import java.util.List;
 public class UserRepositoryImpl implements IUserRepository{
 
     private List<User> usersList;
-    private final String path;
 
-    public UserRepositoryImpl(@Value("${userDB.json.path}") String path) throws IOException {
+    public UserRepositoryImpl() throws IOException {
         usersList=new ArrayList<>();
-        this.path = path;
         loadDataBase();
     }
 
@@ -29,7 +30,7 @@ public class UserRepositoryImpl implements IUserRepository{
         File file;
         ObjectMapper objectMapper = new ObjectMapper();
         List<User> users ;
-        file= ResourceUtils.getFile(path);
+        file= ResourceUtils.getFile("classpath:usersDb.json");
         users= objectMapper.readValue(file,new TypeReference<List<User>>(){});
         usersList = users;
     }
@@ -47,10 +48,10 @@ public class UserRepositoryImpl implements IUserRepository{
 
         List<User> listFilter= findUserById(id).getFollowers();
         if( order.equalsIgnoreCase("name_asc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName))).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
         }
          else if( order.equalsIgnoreCase("name_desc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName)).reversed()).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
         }
         return listFilter ;
     }
@@ -59,12 +60,17 @@ public class UserRepositoryImpl implements IUserRepository{
     public List<User> findFollowedOrderedByName(int id, String order){
         List<User> listFilter= findUserById(id).getFollowed();
         if( order.equalsIgnoreCase("name_asc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName))).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId))).toList();
         }
         else if( order.equalsIgnoreCase("name_desc")){
-            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserName)).reversed()).toList();
+            listFilter = listFilter.stream().sorted((Comparator.comparing(User::getUserId)).reversed()).toList();
         }
         return listFilter ;
+    }
+
+    @Override
+    public User getFollowers(int userId) {
+        return findUserById(userId);
     }
 
     @Override

@@ -4,10 +4,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
-import com.mercadolibre.socialmeli_g3.exception.BadRequestException;
 import com.mercadolibre.socialmeli_g3.repository.filters.FilterFactory;
 import com.mercadolibre.socialmeli_g3.repository.filters.IProductFilter;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -27,12 +25,10 @@ public class PostRepositoryImpl implements IPostRepository{
     private List<Post> postsList;
     private static Integer POSTS_COUNTER;
     private final FilterFactory filterFactory;
-    private final String path;
 
-    public PostRepositoryImpl(@Value("${postDB.json.path}") String path) throws IOException {
+    public PostRepositoryImpl() throws IOException {
         filterFactory = new FilterFactory();
         postsList=new ArrayList<>();
-        this.path = path;
         loadDataBase();
     }
 
@@ -41,7 +37,7 @@ public class PostRepositoryImpl implements IPostRepository{
         ObjectMapper objectMapper = new ObjectMapper();
         List<Post> posts ;
 
-        file= ResourceUtils.getFile(path);
+        file= ResourceUtils.getFile("classpath:postDB.json");
         posts= objectMapper.readValue(file,new TypeReference<List<Post>>(){});
 
         postsList = posts;
@@ -53,55 +49,28 @@ public class PostRepositoryImpl implements IPostRepository{
         return postsList;
     }
 
-//    @Override
-//    public List<Post> findProductByIdUser(int userId) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//
-//        return postsList.stream()
-//                .filter(post -> post.getUserId() == userId)
-//                .filter(post -> {
-//                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
-//                    LocalDate currentDate = LocalDate.now();
-//                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
-//                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
-//                })
-//                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
-//                .collect(Collectors.toList());
-//    }
-
     @Override
     public List<Post> findProductByIdUser(int userId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        LocalDate currentDate = LocalDate.now();
 
         return postsList.stream()
                 .filter(post -> post.getUserId() == userId)
-                .filter(post -> LocalDate.parse(post.getDate(), formatter)
-                        .isAfter(currentDate.minusDays(14))
-                )
+                .filter(post -> {
+                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
+                    LocalDate currentDate = LocalDate.now();
+                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
+                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
+                })
                 .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
-                .toList();
+                .collect(Collectors.toList());
     }
-
-
 
     @Override
     public List<Post> findProductByIdUserOrderedByDate(int userId, String order) {
-        if (!order.equals("date_asc") && !order.equals("date_desc")) {
-            throw new BadRequestException("Sort type is not valid");
+        if(order.equalsIgnoreCase("date_asc")) {
+            return findProductByIdUser(userId);
         }
-        List<Post> postsInTheLast14days = findProductByIdUser(userId);
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        if(order.equals("date_asc")){
-            return postsInTheLast14days.stream()
-                    .filter(post -> post.getUserId() == userId)
-                    .sorted((post1, post2) -> LocalDate.parse(post1.getDate(), formatter).compareTo(LocalDate.parse(post2.getDate(), formatter)))
-                    .toList();
-        }
-        return postsInTheLast14days.stream()
-                .filter(post -> post.getUserId() == userId)
-                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
-                .toList();
+        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted(Comparator.comparing(Post::getDate)).toList();
     }
 
     @Override

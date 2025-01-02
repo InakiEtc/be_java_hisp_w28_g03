@@ -2,7 +2,8 @@ package com.mercadolibre.socialmeli_g3.service;
 
 
 import com.mercadolibre.socialmeli_g3.dto.*;
-import com.mercadolibre.socialmeli_g3.dto.response.*;
+import com.mercadolibre.socialmeli_g3.dto.response.ProductByIdUserResponseDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FindProductsPromoResponseDTO;
 import com.mercadolibre.socialmeli_g3.entity.Post;
 
 import java.util.List;

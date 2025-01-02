@@ -1,22 +1,20 @@
 package com.mercadolibre.socialmeli_g3.controller;
 
-import com.mercadolibre.socialmeli_g3.dto.response.FollowedListDTO;
-import com.mercadolibre.socialmeli_g3.dto.response.FollowersListDTO;
+import com.mercadolibre.socialmeli_g3.dto.FollowedListDTO;
+import com.mercadolibre.socialmeli_g3.dto.FollowersListDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.service.IUserService;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/users")
-@Validated
 public class UserController {
 
     private final IUserService userService;
@@ -33,11 +31,7 @@ public class UserController {
 
     // US 003 / 008
     @GetMapping("/{userId}/followers/list")
-    public ResponseEntity<FollowersListDTO> getSellersFollowersByUser(
-            @PathVariable
-            @Positive(message = "The user id must be a positive number")
-            Integer userId,
-            @RequestParam (required = false) String order){
+    public ResponseEntity<?> getSellersFollowersByUser(@PathVariable int userId, @RequestParam (required = false) String order){
         return new ResponseEntity<>(userService.followersOrderBy(userId, order), HttpStatus.OK);
     }
 
@@ -55,28 +49,14 @@ public class UserController {
 
     // US 007
     @PostMapping("/{userId}/unfollow/{userIdToUnfollow}")
-    public ResponseEntity<?> unfollow(
-            @PathVariable
-            @Positive(message = "The user id must be a positive number")
-            Integer userId,
-            @PathVariable
-            @Positive(message = "The user id to unfollow must be a positive number")
-            Integer userIdToUnfollow
-    ){
+    public ResponseEntity<?> unfollow(@PathVariable int userId, @PathVariable int userIdToUnfollow){
         userService.unfollow(userId, userIdToUnfollow);
         return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
     }
 
     // US 001
     @PostMapping("/{userId}/follow/{userIdToFollow}")
-    public ResponseEntity<FollowDTO> follow(
-            @PathVariable
-            @Positive(message = "The user id must be a positive number")
-            Integer userId,
-            @PathVariable
-            @Positive(message = "The user id to follow must be a positive number")
-            Integer userIdToFollow
-    ) {
+    public ResponseEntity<FollowDTO> follow(@PathVariable int userId, @PathVariable int userIdToFollow) {
         return new ResponseEntity<>(userService.follow(userId, userIdToFollow), HttpStatus.OK);
     }
 

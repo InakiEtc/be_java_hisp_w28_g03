@@ -1,15 +1,14 @@
-package com.mercadolibre.socialmeli_g3.dto.response;
+package com.mercadolibre.socialmeli_g3.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class FollowedPostsDTO {
+public class PromoProductsCountDTO {
     private int userId;
-    private List<PostDTO> posts;
+    private String userName;
+    private int promoProductsCount;
 }
