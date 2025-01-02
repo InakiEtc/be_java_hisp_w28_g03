@@ -105,6 +105,74 @@ public class TestDataFactory {
             true,
             0.40
     );
+    private final static  Post post4 = new Post (
+            201,
+            1,
+            "20-12-2024",
+            new Product(
+                    101,
+                    "Silla Gamer",
+                    "Gamer",
+                    "Racer",
+                    "Red & Black",
+                    "Special Edition"
+            ),
+            100,
+            1500.50,
+            true,
+            0.40
+    );
+    private final static Post post5 = new Post (
+            202,
+            1,
+            "21-11-2024",
+            new Product(
+                    102,
+                    "Teclado Mecánico",
+                    "Teclado",
+                    "Logitech",
+                    "Black",
+                    "RGB Backlit"
+            ),
+            58,
+            250.0,
+            true,
+            0.30
+    );
+    private final static Post post6 = new Post (
+            203,
+            1,
+            "03-08-2023",
+            new Product(
+                    103,
+                    "Mouse Gamer",
+                    "Gamer",
+                    "Razer",
+                    "Green",
+                    "Wireless"
+            ),
+            60,
+            120.00,
+            true,
+            0.25
+    );
+    private final static Post post7 = new Post (
+            204,
+            2,
+            "12-09-2024",
+            new Product(
+                    104,
+                    "Monitor Gamer",
+                    "Gamer",
+                    "AOC",
+                    "Black",
+                    "Curved"
+            ),
+            60,
+            240.0,
+            true,
+            0.75
+    );
     private final static ProductResponseDTO productResponseDTO = new ProductResponseDTO(
             101,
             "Silla Gamer",
@@ -234,6 +302,10 @@ public class TestDataFactory {
     public static PostDTO getMakePromo200() { return makePromo200; }
     public static PostDTO getMakePromo400() { return makePromo400; }
 
+    public static Post getPost7() {return post7;}
+    public static Post getPost6() {return post6;}
+    public static Post getPost5() {return post5;}
+    public static Post getPost4() {return post4;}
     public static Post getPost3() {return post3;}
     public static Post getPost2() {return post2;}
 
