@@ -289,4 +289,24 @@ public class PostControllerTest {
                 .andDo(print());
 
     }
+
+    /*@Test
+    @DisplayName("IT-00015 - The endpoint /products/filter should return a List of PostDTO successfully")
+    public void findProductByPrice_ok() throws Exception {
+        ResultMatcher status = status().isOk();
+        ResultMatcher contentType = content().contentType("application/json");
+        ResultMatcher bodyContent = content().json(mapper.writeValueAsString());
+
+        int minPrice = 20;
+        int maxPrice = 500;
+
+        mockMvc.perform(get("/products/filter").
+                        param("minPrice", String.valueOf(minPrice))
+                        .param("maxPrice", String.valueOf(maxPrice)))
+                .andExpect(status)
+                .andExpect(contentType)
+                .andExpect(bodyContent)
+                .andDo(print());
+
+    }*/
 }
