@@ -104,18 +104,6 @@ public class PostRepositoryImpl implements IPostRepository{
                 .toList();
     }
 
-
-//    @Override
-//    public List<Post> findProductByIdUserOrderedByDate(int userId, String order) {
-//        if (!order.equals("date_asc") && !order.equals("date_desc")) {
-//            throw new BadRequestException("Sort type is not valid");
-//        }
-//        if(order.equalsIgnoreCase("date_asc")) {
-//            return findProductByIdUser(userId);
-//        }
-//        return postsList.stream().filter( post ->  post.getUserId() == userId).sorted(Comparator.comparing(Post::getDate)).toList();
-//    }
-
     @Override
     public int findProductsPromoCount(int userId) {
         List<Post> listProm = postsList.stream().filter(x -> x.getUserId() == userId).toList();

@@ -55,11 +55,31 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("IT-0001 - The endpoint /{userId}/follow/{userIdToFollow} should throw a BadRequestException when userId is not positive or userIdTofollow is not positive")
+    @DisplayName("IT-0001 - The endpoint /{userId}/follow/{userIdToFollow} should throw a BadRequestException when userId is not positive")
     void should_throw_a_BadRequestException_when_userId_is_null() throws Exception {
         int userId = -1;
         int userIdToFollow = 6;
         List<String> errorMessage = new ArrayList<>(List.of("userId: The user id must be a positive number"));
+        String errorDetails = errorMessage.toString();
+
+        ExceptionDTO expectedException = new ExceptionDTO("Data request invalid", errorDetails);
+
+        ResultMatcher expectedStatusCode = status().isBadRequest();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(post("/users/{userId}/follow/{userIdToFollow}", userId, userIdToFollow)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
+    @DisplayName("IT-0001 - The endpoint /{userId}/follow/{userIdToFollow} should throw a BadRequestException when userIdToFollow is not positive")
+    void should_throw_a_BadRequestException_when_userIdToFollow_is_null() throws Exception {
+        int userId = 1;
+        int userIdToFollow = -6;
+        List<String> errorMessage = new ArrayList<>(List.of("userIdToFollow: The user id to follow must be a positive number"));
         String errorDetails = errorMessage.toString();
 
         ExceptionDTO expectedException = new ExceptionDTO("Data request invalid", errorDetails);
