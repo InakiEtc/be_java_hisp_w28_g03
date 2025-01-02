@@ -32,16 +32,6 @@ class UserServiceImplTest {
     @InjectMocks
     private UserServiceImpl userService;
 
-    private static final User user =
-            new User(1, "vendedor1",
-                    List.of(new User(2, "usuario1", null, null,null),
-                            new User(3, "usuario2", null, null,null),
-                            new User(6, "usuario 6", null, null,null)),
-                    List.of(new User(2, "usuario1", null, null,null),
-                            new User(4, "vendedor2", null, null,null),
-                            new User(5, "vendedor3", null, null,null)),
-                    null);
-
     private static final User unfollowUser =
             new User(2, "usuario1",
                     List.of(new User(1, "vendedor1", null, null,null)),
@@ -55,9 +45,10 @@ class UserServiceImplTest {
                     null);
 
     @Test
-    @DisplayName("T-0002 - Verificar que el usuario a dejar de seguir exista.(US-0007) - OK")
+    @DisplayName("T-0002 - User that is going to be unfollowed should exists.(US-0007)")
     public void test_unfollow_should_return_true() {
         // Arrange
+        User user = getVendedor1();
         int userId = user.getUserId();
         int unfollowUserId = unfollowUser.getUserId();
 
@@ -75,9 +66,10 @@ class UserServiceImplTest {
     }
 
     @Test
-    @DisplayName("T-0002 - Verificar que el usuario a dejar de seguir exista.(US-0007) - ERROR")
+    @DisplayName("T-0002 - Should throw a NotFoundEception when user to unfollow does not exist.(US-0007)")
     public void test_unfollow_should_throw_user_doesnt_exist() {
         // Arrange
+        User user = getVendedor1();
         int userId = user.getUserId();
         int unfollowUserId = 99;
 
@@ -90,15 +82,16 @@ class UserServiceImplTest {
             userService.unfollow(userId, unfollowUserId);
         });
 
-        assertEquals("The user doesnt exist", exception.getMessage());
+        assertEquals("User not found", exception.getMessage());
         // Verifica que no se llamó una vez
         verify(userRepository, times(0)).unfollow(user, unfollowUser);
     }
 
     @Test
-    @DisplayName("T-0001 Verificar que el usuario a seguir exista. (US-0001) ")
+    @DisplayName("T-0001 - Should return true when user exists. (US-0001) ")
     public void test_follow_should_return_true(){
         // Arrange
+        User user = getVendedor1();
         int userId = user.getUserId();
         int followUserId = followUser.getUserId();
 
@@ -114,9 +107,10 @@ class UserServiceImplTest {
         verify(userRepository, times(1)).follow(user, followUser);
     }
     @Test
-    @DisplayName("T-0001 Verificar que el usuario a seguir exista. (US-0001) - ERROR")
+    @DisplayName("T-0001 - Should throw a NotFoundException when userId does not exist. (US-0001)")
     public void test_follow_should_throw_user_doesnt_exist() {
         // Arrange
+        User user = getVendedor1();
         int userId = user.getUserId();
         int followUserId = 99;
 
@@ -129,7 +123,7 @@ class UserServiceImplTest {
             userService.unfollow(userId, followUserId);
         });
 
-        assertEquals("The user doesnt exist", exception.getMessage());
+        assertEquals("User not found", exception.getMessage());
         // Verifica que no se llamó una vez
         verify(userRepository, times(0)).unfollow(user, followUser);
     }

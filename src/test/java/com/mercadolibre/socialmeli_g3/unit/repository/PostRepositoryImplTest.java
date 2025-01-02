@@ -76,7 +76,7 @@ public class PostRepositoryImplTest {
     private PostRepositoryImpl repository;
 
     @Test
-    @DisplayName("findProductByIdUser should return list empty when product  is before than from last 2 weeks")
+    @DisplayName("T-0008 - findProductByIdUser should return list empty when product  is before than from last 2 weeks")
     public void findProductByIdUser_should_return_list_empty_when_product_is_before_than_from_last_2_weeks(){
         //arrange
         List<Post> listExpect = new ArrayList<>();
@@ -93,7 +93,7 @@ public class PostRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("findProductByIdUser with 3 is function that should return in this case 3 products list of product when product is from last 2 weeks")
+    @DisplayName("T-0008 - findProductByIdUser with 3 is function that should return in this case 3 products list of product when product is from last 2 weeks")
     public void findProductByIdUser_with_3_products_should_return_list_product_when_product_from_last_2_weeks(){
         //arrange
         int param = post.getUserId();
@@ -115,7 +115,7 @@ public class PostRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("findProductByIdUser Order Last datefirst with 3 is function that should return in this case 3 products list of product when product is from last 2 weeks")
+    @DisplayName("T-0008 - findProductByIdUser Order Last datefirst with 3 is function that should return in this case 3 products list of product when product is from last 2 weeks")
     public void findProductByIdUser_order_Last_date_first_with_3_products_should_return_list_product_when_product_from_last_2_weeks(){
         //arrange
         int param = post.getUserId();
