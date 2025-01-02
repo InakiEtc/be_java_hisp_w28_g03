@@ -172,11 +172,14 @@ class UserControllerTest {
         );
 
         String userId = "1";
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(followedListDTOResponse));
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(get("/users/{userId}/followed/list", userId))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().json(mapper.writeValueAsString(followedListDTOResponse)))
-                .andExpect(status().isOk())
+                .andExpect(expectedContentType)
+                .andExpect(expectedBody)
+                .andExpect(expectedStatusCode)
                 .andDo(print());
     }
 
@@ -192,11 +195,15 @@ class UserControllerTest {
         int userId =  3;
         String partOfUsername = "vende";
 
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(followersListDTOResponse));
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType(MediaType.APPLICATION_JSON);
+
         mockMvc.perform(get("/users/{userId}/followers", userId)
                         .param("username", partOfUsername))
-                .andExpect(content().contentType("application/json"))
-                .andExpect(content().json(mapper.writeValueAsString(followersListDTOResponse)))
-                .andExpect(status().isOk())
+                .andExpect(expectedContentType)
+                .andExpect(expectedBody)
+                .andExpect(expectedStatusCode)
                 .andDo(print());
     }
 
