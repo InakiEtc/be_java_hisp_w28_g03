@@ -3,6 +3,7 @@ package com.mercadolibre.socialmeli_g3.integration.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.socialmeli_g3.dto.response.ExceptionDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.FollowersCountDTO;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,9 @@ import org.springframework.test.web.servlet.ResultMatcher;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getFollowersCountDTO;
 import static com.mercadolibre.socialmeli_g3.utils.TestDataFactory.getVendedor1FollowDTOUser6;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -104,4 +107,26 @@ class UserControllerTest {
                 .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
                 .andDo(print());
     }
+
+    @Test
+    @DisplayName("IT-0002 - The endpoint users/{userId}/followers/count should return a FollowCountDTO and StatusCode OK(200)")
+    void should_countFollowers_when_ok() throws Exception {
+        int userId = 1;
+        FollowersCountDTO followersCountDTODTO = getFollowersCountDTO();
+
+        ResultMatcher expectedStatusCode = status().isOk();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(followersCountDTODTO));
+
+        mockMvc.perform(get("/users/{userId}/followers/count", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+
+
+
+
+
 }
