@@ -124,6 +124,25 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("IT-0002 - The endpoint users/{userId}/followers/count should return a FollowCountDTO and StatusCode OK(200)")
+    void should_countFollowers_when_idNotFound() throws Exception {
+        int userId = 100;
+        FollowersCountDTO followersCountDTODTO = getFollowersCountDTO();
+        String errorMessage = "The user with the id " + userId + " was not founded";
+
+        ExceptionDTO expectedException = new ExceptionDTO(errorMessage);
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(expectedException));
+
+        mockMvc.perform(get("/users/{userId}/followers/count", userId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+
 
 
 
