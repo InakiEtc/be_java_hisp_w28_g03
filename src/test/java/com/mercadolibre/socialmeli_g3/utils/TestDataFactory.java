@@ -1,6 +1,7 @@
 package com.mercadolibre.socialmeli_g3.utils;
 
 import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
+import com.mercadolibre.socialmeli_g3.dto.response.*;
 import com.mercadolibre.socialmeli_g3.dto.PromoProductPostDTO;
 import com.mercadolibre.socialmeli_g3.dto.response.FollowDTO;
 import com.mercadolibre.socialmeli_g3.dto.ProductDTO;
@@ -181,6 +182,9 @@ public class TestDataFactory {
             new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
             100, 1500.50, true, 0.25);
 
+    private final static UserDTO user4DTO = new UserDTO(4, "vendedor2");
+    private final static UserDTO user5DTO = new UserDTO(5, "vendedor3");
+    private final static UserDTO user1DTO = new UserDTO(1, "vendedor1");
     private final static PromoProductPostDTO promoPost400 = new PromoProductPostDTO(
             2, "29-04-2021",
             new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"),
@@ -228,6 +232,7 @@ public class TestDataFactory {
     public static List<User> getVendedor1FollowersDesc() {
         return new ArrayList<>(List.of(user3, user2, user6));
     }
+
 
     public static User getVendedor1() {
         return user1;
@@ -281,5 +286,36 @@ public class TestDataFactory {
         //Retornamos con el formato adecuado
         DateTimeFormatter formateador = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         return dateTimeNow.format(formateador);
+    }
+
+    public static FollowersCountDTO getFollowersCountDTO() {
+        FollowersCountDTO user1Followers = new FollowersCountDTO();
+        user1Followers.setUserId(user1.getUserId());
+        user1Followers.setUserName(user1.getUserName());
+        user1Followers.setFollowersCount(user1.getFollowers().size());
+
+        return user1Followers;
+    }
+
+    public static FollowedListDTO getVendedor1FollowedDTOAsc() {
+        FollowedListDTO user1Followed = new FollowedListDTO();
+        List<UserDTO> users = new ArrayList<>(List.of( user2DTO,user4DTO, user5DTO));
+        user1Followed.setUserId(1);
+        user1Followed.setUserName("vendedor1");
+        user1Followed.setFollowed(users);
+
+
+        return user1Followed;
+    }
+
+    public static FollowedListDTO getVendedor1FollowedDTODesc() {
+
+        FollowedListDTO user1Followed = new FollowedListDTO();
+        List<UserDTO> users = new ArrayList<>(List.of(user1DTO));
+        user1Followed.setUserId(2);
+        user1Followed.setUserName("usuario1");
+        user1Followed.setFollowed(users);
+
+        return user1Followed;
     }
 }
