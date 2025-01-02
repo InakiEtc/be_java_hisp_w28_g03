@@ -133,7 +133,7 @@ public class PostControllerTest {
     }
 
     @Test
-    @DisplayName("T-0012 Find products on promo by user should return PromoProductPostListDTO")
+    @DisplayName("IT-0012 Find products on promo by user should return PromoProductPostListDTO")
     void test_findProductsOnPromoByUser_should_return_PromoProductPostListDTO() throws Exception {
         String userId = "1";
         PromoProductPostListDTO responseWaited = new PromoProductPostListDTO(1, "vendedor1",
@@ -166,7 +166,7 @@ public class PostControllerTest {
 
 
     @Test
-    @DisplayName("T-0012 Find products on promo by user should return NotFoundException")
+    @DisplayName("IT-0012 Find products on promo by user should return NotFoundException")
     void test_findProductsOnPromoByUser_should_throw_error() throws Exception {
         String userId = "100";
 

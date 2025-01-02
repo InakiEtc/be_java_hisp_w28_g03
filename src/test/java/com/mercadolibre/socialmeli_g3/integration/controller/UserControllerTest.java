@@ -200,7 +200,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("BONUS T-0018 Get followers by username containing should return FollowersListDTO response")
+    @DisplayName("BONUS IT-0018 Get followers by username containing should return FollowersListDTO response")
     void test_getFollowersByUsernameContaining_should_return_followersListDTOResponse() throws Exception {
         FollowersListDTO followersListDTOResponse = new FollowersListDTO(3, "usuario2",
                 List.of(
