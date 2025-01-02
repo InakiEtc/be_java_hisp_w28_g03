@@ -110,7 +110,7 @@ class UserServiceImplTest {
         FollowDTO result = userService.follow(userId, followUserId);
 
         //Assert
-        assertEquals(result.getFollower(), followUserId);
+        assertEquals(result.getFollowed(), followUserId);
         verify(userRepository, times(1)).follow(user, followUser);
     }
     @Test
