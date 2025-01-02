@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TestDataFactory {
-    private final static User user1 = new User(1, "vendedor1", null, null, null);
     private final static User user2 = new User(2, "usuario1", null, null, null);
     private final static User user3 = new User(3, "usuario2", null, null, null);
     private final static User user6 = new User(6, "usuario 6", null, null, null);
+    private final static User user1 = new User(1, "vendedor1", new ArrayList<>(List.of(user6, user2, user3)), null, null);
     private final static UserDTO user2DTO = new UserDTO(2, "usuario1");
     private final static UserDTO user3DTO = new UserDTO(3, "usuario2");
     private final static  UserDTO user6DTO = new UserDTO(6, "usuario 6");

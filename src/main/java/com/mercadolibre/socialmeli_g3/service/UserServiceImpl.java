@@ -243,7 +243,7 @@ public class UserServiceImpl implements IUserService {
     private  void validateNameOrderParam(String order){
 
         if(order!= null && !order.equalsIgnoreCase("name_asc") && !order.equalsIgnoreCase("name_desc")){
-            throw new BadRequestException("The provided filter param is not valid ");
+            throw new BadRequestException("The provided filter param is not valid");
         }
     }
 }
