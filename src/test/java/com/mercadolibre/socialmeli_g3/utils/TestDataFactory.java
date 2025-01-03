@@ -108,7 +108,7 @@ public class TestDataFactory {
     private final static  Post post4 = new Post (
             201,
             1,
-            "20-12-2024",
+            "03-01-2025",
             new Product(
                     101,
                     "Silla Gamer",
@@ -202,7 +202,7 @@ public class TestDataFactory {
     private final static PostResponseDto postResponseDTO = new PostResponseDto(
             201,
             1,
-            "20-12-2024",
+            "03-01-2025",
             productResponseDTO,
             100,
             1500.5
@@ -228,7 +228,7 @@ public class TestDataFactory {
     private final static PostDTO postDTO =new PostDTO(
             201,
             1,
-            "20-12-2024",
+            "03-01-2025",
             new ProductDTO(
                  101,
                  "Silla Gamer",
