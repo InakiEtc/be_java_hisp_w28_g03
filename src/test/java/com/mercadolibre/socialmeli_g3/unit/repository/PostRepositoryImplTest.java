@@ -129,6 +129,7 @@ public class PostRepositoryImplTest {
     @Test
     @DisplayName("T-0005 - T-006 - Search products by user ID ordered by date descending returns posts (US-0009)")
     void test_findProductByIdUserOrderedByDateDESC_return_posts() {
+
         int idMock = 1;
         String orderMock = "date_desc";
         List<Post> postsWaited = Arrays.asList(
