@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +23,7 @@ public class PromoProductPostDTO {
     private Integer userId;
 
     @NotNull(message = "The date must be provided")
+    @Pattern(regexp = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})$", message = "The date must be in the format dd-mm-yyyy")
     private String date;
 
     @Valid
@@ -40,7 +38,8 @@ public class PromoProductPostDTO {
     private Double price;
 
     @JsonProperty("has_promo")
+    @NotNull(message = "The hasPromo property must be provided")
     private Boolean hasPromo;
-
+    @NotNull(message = "The discount must be provided")
     private Double discount;
 }
