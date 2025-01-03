@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "2d360ef2-c646-4614-84e7-db2a0091d3e8",
+		"_postman_id": "cbadc13d-575c-4ba6-a226-f66a37f4771f",
 		"name": "Social Meli",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "39887858"
+		"_exporter_id": "40276515"
 	},
 	"item": [
 		{
@@ -452,14 +452,14 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/products/posts/by-product-attributes/",
+							"raw": "{{base_url}}/products/posts/by-products-attributes/",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"products",
 								"posts",
-								"by-product-attributes",
+								"by-products-attributes",
 								""
 							],
 							"query": [
@@ -506,6 +506,67 @@
 							]
 						},
 						"description": "**Filtros/Parámetros:**\n\n- **userId** (Int): Número que identifica al usuario actual\n    \n\n**Responses**\n\n**Status Code 200** (todo OK) - bodyless or dto\n\n- **user_id** (int): ID del usuario obtenido.\n- **user_name** (string): username del usuario obtenido.\n- **followers_count** (int): cantidad de seguidores del usuario.\n    \n\n**Status Code 400** (Bad Request) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. Parametros invalidos.\n    \n\n**Status Code 404** (Not found) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. No se encontro el usuario."
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Errors",
+			"item": [
+				{
+					"name": "US 0005 - Create Post - Validation Errors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 2,\n    \"date\": \"29-04-2021\",\n    \"product\": {\n        \"product_id\": 104,\n        \"product_name\": \"Monitor Gamer\",\n        \"type\": \"Gamer\",\n        \"brand\": \"AOC\",\n        \"color\": \"Black\",\n        \"notes\": \"Curved\"\n    },\n    \"category\": 100,\n    \"price\": 1500.50\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/post",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"post"
+							]
+						},
+						"description": "**Filtros/Parámetros:**\n\n**Request Body**\n\n- **user_id** (Int): Número que identifica al usuario actual\n- **date** (LocalDate): Fecha de alta de la publicacion en formato \"DD-MM-YYYY\".\n- **product** (object):\n    - **product_id** (int): ID del producto de la publicacion.\n    - **product_name** (string): Nombre del producto.\n    - **type** (string): Tipo del producto\n    - **brand** (string): Marca del producto.\n    - **color** (string): Color del producto.\n    - **notes** (string): Notas del producto.\n- **category** (int): Numero de categoria de la publicacion.\n- **price** (double): Precio de la publicacion.\n    \n\n**Responses**\n\n**Status Code 200** (todo OK) - bodyless or dto\n\n- **message** (string): Mensaje de exito para el usuario.\n    \n- **user_id** (Int): Número que identifica al usuario actual\n    \n- **date** (LocalDate): Fecha de alta de la publicacion en formato \"DD-MM-YYYY\".\n    \n- **product** (object):\n    \n    - **product_id** (int): ID del producto de la publicacion.\n        \n    - **product_name** (string): Nombre del producto.\n        \n    - **type** (string): Tipo del producto\n        \n    - **brand** (string): Marca del producto.\n        \n    - **color** (string): Color del producto.\n        \n    - **notes** (string): Notas del producto.\n        \n- **category** (int): Numero de categoria de la publicacion.\n    \n- **price** (double): Precio de la publicacion.\n    \n\n**Status Code 400** (Bad Request) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. Parametros invalidos.\n    \n\n**Status Code 404** (Not found) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. No se encontro el usuario."
+					},
+					"response": []
+				},
+				{
+					"name": "US 0010 - Create Post Promo - Validation Errors",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"user_id\": 1,\n    \"date\": \"29-04-2021\",\n    \"product\": {\n        \"product_id\": 101,\n        \"product_name\": \"Silla Gamer\",\n        \"type\": \"Gamer\",\n        \"brand\": \"Racer\",\n        \"color\": \"Red & Black\",\n        \"notes\": \"Special Edition\"\n    },\n    \"category\": 100,\n    \"price\": 1500.50,\n    \"has_promo\": true,\n    \"discount\": 0.25\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/products/promo-post",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"products",
+								"promo-post"
+							]
+						},
+						"description": "**Filtros/Parámetros:**\n\n**Request Body**\n\n- **user_id** (Int): Número que identifica al usuario actual\n- **date** (LocalDate): Fecha de alta de la publicacion en formato \"DD-MM-YYYY\".\n- **product** (object):\n    - **product_id** (int): ID del producto de la publicacion.\n    - **product_name** (string): Nombre del producto.\n    - **type** (string): Tipo del producto\n    - **brand** (string): Marca del producto.\n    - **color** (string): Color del producto.\n    - **notes** (string): Notas del producto.\n- **category** (int): Numero de categoria de la publicacion.\n- **has_promo** (boolean): Booleano que indica si el producto tiene promocion.\n- **discount** (double): Monto del descuento\n    \n\n**Responses**\n\n**Status Code 200** (todo OK) - bodyless or dto\n\n- **message** (string): Mensaje de exito para el usuario.\n- **user_id** (Int): Número que identifica al usuario actual\n- **date** (LocalDate): Fecha de alta de la publicacion en formato \"DD-MM-YYYY\".\n- **product** (object):\n    - **product_id** (int): ID del producto de la publicacion.\n    - **product_name** (string): Nombre del producto.\n    - **type** (string): Tipo del producto\n    - **brand** (string): Marca del producto.\n    - **color** (string): Color del producto.\n    - **notes** (string): Notas del producto.\n- **category** (int): Numero de categoria de la publicacion.\n- **price** (double): Precio de la publicacion.\n    \n\n**Status Code 400** (Bad Request) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. Parametros invalidos.\n    \n\n**Status Code 404** (Not found) - bodyless or dto\n\n- **error** (string): Mensaje de error para el usuario. No se encontro alguno de los productos."
 					},
 					"response": []
 				}

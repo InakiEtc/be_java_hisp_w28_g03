@@ -185,6 +185,9 @@ ordenada, evitar inconsistencias y facilitar la colaboración.
 
 # Test unitarios y de integración
 
+# 🚀 Coverage alcanzado
+![img.png](img.png)
+
 ## 🧩 Test unitarios
 
 A continuación se presentan los test unitarios que se han realizado para la aplicación.
