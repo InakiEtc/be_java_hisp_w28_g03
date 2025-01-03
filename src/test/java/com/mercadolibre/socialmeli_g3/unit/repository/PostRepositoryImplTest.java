@@ -117,8 +117,9 @@ public class PostRepositoryImplTest {
         int idMock = 1;
         String orderMock = "date_asc";
         List<Post> postsWaited = Arrays.asList(
-                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4),
-                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0)
+                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0),
+                new Post(201, 1, "03-01-2025", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4)
+
         );
 
 
@@ -135,8 +136,8 @@ public class PostRepositoryImplTest {
         int idMock = 1;
         String orderMock = "date_desc";
         List<Post> postsWaited = Arrays.asList(
-                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0),
-                new Post(201, 1, "20-12-2024", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4)
+                new Post(201, 1, "03-01-2025", new Product(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, true, 0.4),
+                new Post(210, 1, "29-12-2024", new Product(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5, false, 0.0)
         );
 
         List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
