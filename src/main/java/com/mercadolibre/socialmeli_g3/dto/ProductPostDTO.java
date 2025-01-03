@@ -19,6 +19,7 @@ public class ProductPostDTO {
     private Integer userId;
 
     @NotNull(message = "The date must be provided")
+    @Pattern(regexp = "^(0[1-9]|[12][0-9]|3[01])-(0[1-9]|1[0-2])-(\\d{4})$", message = "The date must be in the format dd-mm-yyyy")
     private String date;
 
     @Valid

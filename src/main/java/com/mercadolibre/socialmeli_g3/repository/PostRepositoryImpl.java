@@ -15,12 +15,10 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Repository
 public class PostRepositoryImpl implements IPostRepository{
@@ -53,22 +51,6 @@ public class PostRepositoryImpl implements IPostRepository{
         return postsList;
     }
 
-//    @Override
-//    public List<Post> findProductByIdUser(int userId) {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-//
-//        return postsList.stream()
-//                .filter(post -> post.getUserId() == userId)
-//                .filter(post -> {
-//                    LocalDate postDate = LocalDate.parse(post.getDate(), formatter);
-//                    LocalDate currentDate = LocalDate.now();
-//                    long daysBetween = ChronoUnit.DAYS.between(postDate, currentDate);
-//                    return daysBetween <= 14; // Filtrar posts más antiguos que 14 días
-//                })
-//                .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
-//                .collect(Collectors.toList());
-//    }
-
     @Override
     public List<Post> findProductByIdUser(int userId) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
@@ -82,7 +64,6 @@ public class PostRepositoryImpl implements IPostRepository{
                 .sorted((post1, post2) -> LocalDate.parse(post2.getDate(), formatter).compareTo(LocalDate.parse(post1.getDate(), formatter)))
                 .toList();
     }
-
 
 
     @Override
@@ -160,6 +141,7 @@ public class PostRepositoryImpl implements IPostRepository{
         POSTS_COUNTER++;
         post.setPostId(POSTS_COUNTER);
         postsList.add(post);
+
     }
 
     @Override

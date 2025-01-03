@@ -152,7 +152,7 @@ public class PostControllerTest {
     void test_findProductsOnPromoByUser_should_return_PromoProductPostListDTO() throws Exception {
         String userId = "1";
         PromoProductPostListDTO responseWaited = new PromoProductPostListDTO(1, "vendedor1", Arrays.asList(
-                new PostDTO(201, 1, "20-12-2024", new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.50, true, 0.40),
+                new PostDTO(201, 1, "03-01-2025", new ProductDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.50, true, 0.40),
                 new PostDTO(202, 1, "21-11-2024", new ProductDTO(102, "Teclado Mecánico", "Teclado", "Logitech", "Black", "RGB Backlit"), 58, 250.00, true, 0.30),
                 new PostDTO(203, 1, "03-08-2023", new ProductDTO(103, "Mouse Gamer", "Gamer", "Razer", "Green", "Wireless"), 60, 120.00, true, 0.25)
         ));
@@ -296,38 +296,7 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0006 - The endpoint /products/filter should return a list of posts successfully")
     public void findProductByIdUser_ok() throws Exception {
-        ProductByIdUserResponseDTO productByIdUserResponseDTO =new ProductByIdUserResponseDTO(1,Arrays.asList(
-                new PostResponseDto(
-                        210,
-                        1,
-                        "29-12-2024",
-                        new ProductResponseDTO(
-                                110,
-                                "Standing Desk",
-                                "Gamer",
-                                "Racer",
-                                "Red & Black",
-                                "Special Edition"
-                        ),
-                        100,
-                        1500.5
-                ),
-                new PostResponseDto(
-                        201,
-                        1,
-                        "20-12-2024",
-                        new ProductResponseDTO(
-                                101,
-                                "Silla Gamer",
-                                "Gamer",
-                                "Racer",
-                                "Red & Black",
-                                "Special Edition"
-                        ),
-                        100,
-                        1500.5
-                )
-        ));
+        ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5), new PostResponseDto(201, 1, "03-01-2025", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)));
 
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
@@ -349,7 +318,7 @@ public class PostControllerTest {
     public void findProductByIdUser_order_date_asc_ok() throws Exception {
         ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(
                 new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5),
-                new PostResponseDto(201, 1, "20-12-2024", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
+                new PostResponseDto(201, 1, "03-01-2025", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
         ));
 
         ResultMatcher status = status().isOk();
@@ -372,7 +341,7 @@ public class PostControllerTest {
     public void findProductByIdUser_order_date_desc_ok() throws Exception {
         ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(
                 new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5),
-                new PostResponseDto(201, 1, "20-12-2024", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
+                new PostResponseDto(201, 1, "03-01-2025", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)
         ));
 
         ResultMatcher status = status().isOk();

@@ -2,6 +2,7 @@ package com.mercadolibre.socialmeli_g3.integration.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectWriter;
 import com.mercadolibre.socialmeli_g3.dto.response.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Order;
@@ -207,6 +208,26 @@ class UserControllerTest {
     }
 
     @Test
+    @DisplayName("T-0004 Get sellers followed by user should return a 404 error when the userId does not exist")
+    void test_getSellersFollowedByUser_should_throw_NotFoundException() throws Exception {
+        int userIdNonExist = 100;
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("User not found")));
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+        FollowedListDTO followedListDTOResponse = new FollowedListDTO(userIdNonExist, "vendedor1",
+                List.of(
+                        new UserDTO(4, "vendedor2"),
+                        new UserDTO(5, "vendedor3"),
+                        new UserDTO(6, "usuario 6")
+                )
+        );
+
+        mockMvc.perform(get("/users/{userId}/followed/list", userIdNonExist))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
+
+    @Test
     @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should return a 204 NO_CONTENT when unfollow is successful")
     void should_return_a_204_NO_CONTENT_when_unfollow_is_successful() throws Exception {
         int userId = 1;
@@ -243,6 +264,21 @@ class UserControllerTest {
                 .andDo(print());
     }
 
+    @Test
+    @DisplayName("BONUS IT-0018 Get followers by username containing should throw 404 error when the userId does not exist")
+    void test_getFollowersByUsernameContaining_should_throw_NotFoundException() throws Exception {
+        int userIdNonExist = 100;
+        String partOfUsername = "vende";
+
+        ResultMatcher expectedBody = content().json(mapper.writeValueAsString(new ExceptionDTO("User not found")));
+        ResultMatcher expectedStatusCode = status().isNotFound();
+        ResultMatcher expectedContentType = content().contentType("application/json");
+
+        mockMvc.perform(get("/users/{userId}/followers", userIdNonExist)
+                        .param("username", partOfUsername))
+                .andExpectAll(expectedStatusCode, expectedContentType, expectedBody)
+                .andDo(print());
+    }
 
     @Test
     @DisplayName("IT-0007 - The endpoint /{userId}/unfollow/{userIdToUnfollow} should throw a NotFoundException when userId is not positive")
