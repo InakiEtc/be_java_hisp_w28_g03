@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -112,7 +110,7 @@ public class PostRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("T-0005 Search products by user ID ordered by date ascending returns posts (US-0009)")
+    @DisplayName("T-0005 - T-006 - Search products by user ID ordered by date ascending returns posts (US-0009)")
     void test_findProductByIdUserOrderedByDateASC_return_posts() {
         int idMock = 1;
         String orderMock = "date_asc";
@@ -122,8 +120,6 @@ public class PostRepositoryImplTest {
 
         );
 
-
-
         List<Post> postsResponse = repository.findProductByIdUserOrderedByDate(idMock,orderMock);
 
         Assertions.assertNotNull(postsResponse);
@@ -131,7 +127,7 @@ public class PostRepositoryImplTest {
     }
 
     @Test
-    @DisplayName("T-0005 Search products by user ID ordered by date descending returns posts (US-0009)")
+    @DisplayName("T-0005 - T-006 - Search products by user ID ordered by date descending returns posts (US-0009)")
     void test_findProductByIdUserOrderedByDateDESC_return_posts() {
         int idMock = 1;
         String orderMock = "date_desc";

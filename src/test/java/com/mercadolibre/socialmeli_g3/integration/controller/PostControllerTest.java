@@ -296,38 +296,7 @@ public class PostControllerTest {
     @Test
     @DisplayName("IT-0006 - The endpoint /products/filter should return a list of posts successfully")
     public void findProductByIdUser_ok() throws Exception {
-        ProductByIdUserResponseDTO productByIdUserResponseDTO =new ProductByIdUserResponseDTO(1,Arrays.asList(
-                new PostResponseDto(
-                        210,
-                        1,
-                        "29-12-2024",
-                        new ProductResponseDTO(
-                                110,
-                                "Standing Desk",
-                                "Gamer",
-                                "Racer",
-                                "Red & Black",
-                                "Special Edition"
-                        ),
-                        100,
-                        1500.5
-                ),
-                new PostResponseDto(
-                        201,
-                        1,
-                        "03-01-2025",
-                        new ProductResponseDTO(
-                                101,
-                                "Silla Gamer",
-                                "Gamer",
-                                "Racer",
-                                "Red & Black",
-                                "Special Edition"
-                        ),
-                        100,
-                        1500.5
-                )
-        ));
+        ProductByIdUserResponseDTO productByIdUserResponseDTO = new ProductByIdUserResponseDTO(1, Arrays.asList(new PostResponseDto(210, 1, "29-12-2024", new ProductResponseDTO(110, "Standing Desk", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5), new PostResponseDto(201, 1, "03-01-2025", new ProductResponseDTO(101, "Silla Gamer", "Gamer", "Racer", "Red & Black", "Special Edition"), 100, 1500.5)));
 
         ResultMatcher status = status().isOk();
         ResultMatcher contentType = content().contentType("application/json");
