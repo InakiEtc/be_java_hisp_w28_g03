@@ -142,5 +142,4 @@ public class PostRepositoryImplTest {
         Assertions.assertEquals(postsWaited,postsResponse);
     }
 
-
 }
